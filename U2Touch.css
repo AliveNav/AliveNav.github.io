@@ -13,7 +13,7 @@
   --drag-box-height: 200px;
 
   --theme-color1: #bfe7da;
-  --theme-color2: #f0e9e6;
+  --theme-color2: #f7f1cd;
   --background-color: #e8ecf2;
   --box-shadow: -5px -5px 10px rgba(255, 255, 255, 0.8),
     5px 5px 10px rgba(0, 0, 0, 0.25);
@@ -125,21 +125,6 @@ button {
   justify-content: space-between;
   align-items: center;
 
-  /* background-color: aqua; */
-
-  /* border-right: 2px solid;
-     border-image:
-     linear-gradient(
-       to top, 
-       rgba(255, 0, 0, 0), 
-       #00daff,
-       rgba(255, 0, 0, 0)
-     ) 1 100%; */
-
-  /* border-radius: 1em;
-  
-    box-shadow: -5px -5px 10px rgba(255, 255, 255, 0.8),
-      5px 5px 10px rgba(0, 0, 0, 0.25); */
 }
 .value-Rang {
   width: 250px;
@@ -397,18 +382,20 @@ button {
 }
 
 
+/* ipad pro virtical */
+
 @media (max-width: 1026px){
   :root{
   --container-width: 100%;
   --container-height: 100vh;
-  --header-width: 1000px;
+  --header-width: 900px;
   --header-height: 200px;
-  --main-width: 1000px;
-  --main-height: 1000px;
-  --left-width: 1000px;
-  --left-height: 780px;
-  --right-width: 1000px;
-  --right-height: 200px;
+  --main-width: 900px;
+  --main-height: 900px;
+  --left-width: 900px;
+  --left-height: 700px;
+  --right-width: 900px;
+  --right-height: 170px;
   --drag-box-width: 200px;
   --drag-box-height: 200px;
   }
@@ -430,11 +417,107 @@ button {
     height: var(--right-height);
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
     box-shadow: var(--box-shadow);
     border-radius: 2em;
     background-color: var(--theme-color2);
   
   }
+  .dragBox:first-child {
+    width: 100px;
+    height: 100px;
+  }
+  .img1 {
+    width: 25px;
+    height: 18px;
+  }
+  .img2 {
+    width: 25px;
+    height: 130px;
+  }
+  .img3 {
+    width: 140px;
+    height: 135px;
+  }
+  .img4 {
+    width: 170px;
+    height: 150px;
+  }
+}
+
+
+@media (max-width: 1367px) and (min-width:1025px){
+  :root{
+  --container-width: 100%;
+  --container-height: 100vh;
+  --header-width: 1200px;
+  --header-height: 180px;
+  --main-width: 1200px;
+  --main-height: 650px;
+  --left-width: 1000px;
+  --left-height: 650px;
+  --right-width: 180px;
+  --right-height: 650px;
+  --drag-box-width: 180px;
+  --drag-box-height: 200px;
+  }
+  .btns {
+    width: var(--header-width);
+    height: 50px;
+  
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+  
+  }
+  .btnBox {
+    width: 800px;
+    height: 50px;
+    display: flex;
+    justify-content: space-evenly;
+    /* background-color: #ecbbb5; */
+    align-items: center;
+  }
+  .randomNumber {
+    color: #a2d1c2;
+    font-size: 20px;
+    font-weight: 400;
+  }
+  .showNumber {
+    width: 400px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    /* visibility: hidden; */
+    /* background-color: blue; */
+  
+    /* background-color: #ca3d2b; */
+  }
+  
+  .secondLine {
+    font-size: 15px;
+    font-weight: 400;
+    color: #73787d;
+  }
+  .firstLine {
+    color: #a2d1c2;
+    font-size: 20px;
+    font-weight: 400;
+  }
+  .lineAfter {
+    font-size: 15px;
+    font-weight: 400;
+    color: #73787d;
+  }
+  .lineFalsch {
+    color: #ecbbb5;
+    font-size: 20px;
+    font-weight: 400;
+  }
+
+  
 }
