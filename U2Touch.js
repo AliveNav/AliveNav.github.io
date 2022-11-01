@@ -129,28 +129,31 @@ $("#dropbox").droppable({
         createElement(zehnerID);
         counterEiner = 0;
         counterZehner++;
-        console.log("done");
+        
         $("[id=cloneElement]").remove();
       }
       if (counterZehner == 10) {
         createElement(hunderterID);
         counterZehner = 0;
         counterHunderter++;
-        console.log("done");
+       
         $("[id=cloneElement2]").remove();
       }
       if (counterHunderter == 10) {
         createElement(tausenderID);
         counterHunderter = 0;
         counterTausender++;
-        console.log("done");
+       
         $("[id=cloneElement3]").remove();
       }
       if (counterTausender == 10) {
         alert("mehr als 10 Tausender block ist nicht erlaubt!");
         $("[id=cloneElement4]").remove();
         counterTausender = 0;
+        counter = 0
       }
+      counter = counterEiner*1 + counterZehner*10 + counterHunderter*100 + counterTausender*1000
+      console.log(counter + " " + counterEiner + " " + counterZehner +" "+ counterHunderter +" " + counterTausender);
     }
   },
 });
@@ -163,6 +166,7 @@ function createElement(elID) {
   newElement.addClass("canvas-element");
   newElement.addClass("collision2");
 
+  var dropboxwidth = $canvas.width()
   if (elID == "#imgZehner") {
     // elements which was created from 10 "Einer" , 10 "Zehner"  or 10 "tausender" will have the id = cloneElment2/3/4
     // ( which is a "Zehner/ Hunderter" object) we need it for removing them once there are 10 of them
@@ -178,7 +182,7 @@ function createElement(elID) {
   });
   $canvas.append(newElement);
   newElement.css({
-    left: $canvas.position().left + 800,
+    left: $canvas.position().left + (dropboxwidth -200),
     top: $canvas.position().top,
     position: "absolute",
   });
@@ -306,53 +310,81 @@ function sortElements() {
   var el1000 = $("[id=cloneElement4]");
   var dropBox = $("#dropbox");
 
-  var spaceX = 30;
-  var spaceY = 20;
+  
 
   var positionLeft = dropBox.position().left;
   var positionTop = dropBox.position().top;
+  var dropBoxWidth = dropBox.width()
+  var dropBoxHeight = dropBox.height()
+  var spaceX = 5;
+  var spaceY = 5;
+  var spacetemp = 0 
+  var spacetempx = 0
+  console.log(dropBoxWidth)
+  console.log(dropBoxHeight)
 
   el1.each(function (index, el) {
+    var el1Width = $(this).width()
+    var el1Height = $(this).height()
+    spacetemp = el1Height
     $(this).css({
       left: positionLeft + spaceX,
       top: positionTop + spaceY,
       position: "absolute",
     });
+    
 
-    spaceX += 30;
+    spaceX += el1Width + 5;
+    
   });
 
-  spaceX = 30;
-  spaceY = 60;
+  spaceX = 5;
+  spacetemp = spacetemp*2 + 5
+  spaceY = spacetemp;
 
   // sorting "zehner" Boxes all of them in 2nd row
   el10.each(function (index, el) {
+    var el10Width = $(this).width()
+    var el10Height = $(this).height()
+    if(index == 0){
+      spacetemp += el10Height
+    }
+    
     $(this).css({
       left: positionLeft + spaceX,
       top: positionTop + spaceY,
       position: "absolute",
     });
 
-    spaceX += 30;
+    spaceX += el10Width + 5;
   });
 
-  spaceX = 30;
-  spaceY = 220;
+  spaceX = 5;
+  spacetemp = spacetemp + 5
+  
+  spaceY = spacetemp;
 
   // sorting "Hunderter" Boxes 6 boxes in 3rd row the last 3 in 2nd row
   el100.each(function (index, el) {
-    if (index < 6) {
+    var el100Width = $(this).width()
+    var el100Height = $(this).height()
+    if(index == 0){
+      spacetemp += el100Height
+    }
+    var temp = (dropBoxWidth/(el100Width+5))>>0 // how many "Zehner" Box fits in one line for sorting purposes
+    console.log(temp)
+    if (index < temp) {
       $(this).css({
         left: positionLeft + spaceX,
         top: positionTop + spaceY,
         position: "absolute",
       });
-      spaceX += 160;
+      spaceX += el100Width + 5;
 
-      console.log(index);
-    } else if (index == 6) {
-      spaceX = 350;
-      spaceY = 60;
+    } else if (index == temp) {
+      spaceX = 5;
+      spaceY = spacetemp + 5;
+      spacetemp = spacetemp + 5
 
       $(this).css({
         left: positionLeft + spaceX,
@@ -360,8 +392,7 @@ function sortElements() {
         position: "absolute",
       });
     } else {
-      spaceY = 60;
-      spaceX += 160;
+      spaceX += el100Width + 5;
       $(this).css({
         left: positionLeft + spaceX,
         top: positionTop + spaceY,
@@ -371,21 +402,33 @@ function sortElements() {
   });
 
   // sorting "tausender" boxes 5 Boxes in 4th row 4 Boxes in 5th row
-  spaceX = 25;
-  spaceY = 360;
+
+  spaceY = spacetemp;
   el1000.each(function (index, el) {
-    if (index < 5) {
+    var el1000Width = $(this).width()
+    var el1000Height = $(this).height()
+    
+    if(index == 0){
+      spacetemp += el1000Height + 5
+      if(counterHunderter > 6){
+        spaceX += el1000Width -20
+      }else{
+        spaceX = 5
+      }
+      
+    }
+    if (index < 3) {
       $(this).css({
         left: positionLeft + spaceX,
         top: positionTop + spaceY,
         position: "absolute",
       });
-      spaceX += 165;
+      spaceX += el1000Width - 25;
 
       console.log(index);
-    } else if (index == 5) {
-      spaceX = 25;
-      spaceY = 530;
+    } else if (index == 3) {
+      spaceX = 5;
+      spaceY = spacetemp;
 
       $(this).css({
         left: positionLeft + spaceX,
@@ -393,8 +436,8 @@ function sortElements() {
         position: "absolute",
       });
     } else {
-      spaceY = 530;
-      spaceX += 165;
+      spaceY = spacetemp;
+      spaceX += el1000Width - 25;
       $(this).css({
         left: positionLeft + spaceX,
         top: positionTop + spaceY,
