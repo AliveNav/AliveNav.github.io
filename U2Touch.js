@@ -178,13 +178,14 @@ function createElement(elID) {
   });
   $canvas.append(newElement);
   newElement.css({
-    left: $canvas.position().left,
-    top: $canvas.position().top + 400,
+    left: $canvas.position().left + 800,
+    top: $canvas.position().top,
     position: "absolute",
   });
 }
 
-// start Button display the random number  between two values, which is set by user using slider
+// start Button display the random number  between two values, which is set by user using slider and check button is off
+$("#checkbtn").prop("disabled", true);
 
 function randomNumberGenerator() {
   //get the min and max values set by user
@@ -240,7 +241,7 @@ function randomNumberGenerator() {
   });
 
   // disable the start button once clicked
-
+  $("#checkbtn").prop("disabled", false);
   $("#valuebtn").prop("disabled", true);
 }
 
@@ -346,7 +347,7 @@ function sortElements() {
         top: positionTop + spaceY,
         position: "absolute",
       });
-      spaceX += 170;
+      spaceX += 160;
 
       console.log(index);
     } else if (index == 6) {
@@ -360,7 +361,7 @@ function sortElements() {
       });
     } else {
       spaceY = 60;
-      spaceX += 170;
+      spaceX += 160;
       $(this).css({
         left: positionLeft + spaceX,
         top: positionTop + spaceY,
@@ -379,7 +380,7 @@ function sortElements() {
         top: positionTop + spaceY,
         position: "absolute",
       });
-      spaceX += 170;
+      spaceX += 165;
 
       console.log(index);
     } else if (index == 5) {
@@ -393,7 +394,7 @@ function sortElements() {
       });
     } else {
       spaceY = 530;
-      spaceX += 170;
+      spaceX += 165;
       $(this).css({
         left: positionLeft + spaceX,
         top: positionTop + spaceY,
