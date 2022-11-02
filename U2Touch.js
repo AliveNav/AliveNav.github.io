@@ -1,7 +1,7 @@
-var elPosleft = [];
-var elPosTop = [];
+// init speechsynth API
+const speaker = window.speechSynthesis
+let msg = new SpeechSynthesisUtterance()
 
-// enable and disable buttons
 
 // Header part Welcome text and show random number
 const firstLine = $("#first-line"),
@@ -244,9 +244,17 @@ function randomNumberGenerator() {
     scroll: false,
   });
 
+
+
+   //read the number
+   
   // disable the start button once clicked
   $("#checkbtn").prop("disabled", false);
   $("#valuebtn").prop("disabled", true);
+
+
+ 
+// }
 }
 
 // function for "Überprüfen"  check button   on click  check  if the value of the boxes are same as the generated random number on header
@@ -438,15 +446,16 @@ function sortElements() {
     }
   });
 
-  // el1.get([0]).css({
-  //   left: positionLeft + spaceX,
-  //   top: positionTop + spaceY,
-  //   position: "absolute",
-  // })
+}
 
-  // el1.css({
-  //   left: positionLeft + spaceX,
-  //   top: positionTop + spaceY,
-  //   position: "absolute",
-  // });
+
+// read the random generated Number
+function speakit(){
+  var textToSpeak = random.toString()
+  msg.text = textToSpeak
+  msg.lang = "de-DE"
+  msg.rate = 0.7
+  msg.voice = window.speechSynthesis.getVoices()[1];
+  
+  speaker.speak(msg)
 }
