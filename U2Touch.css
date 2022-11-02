@@ -11,12 +11,31 @@
   --right-height: 750px;
   --drag-box-width: 200px;
   --drag-box-height: 200px;
+  --number-box-height:100px;
+  --button-box-height:100px;
 
   --theme-color1: #bfe7da;
   --theme-color2: #f7f1cd;
   --background-color: #e8ecf2;
   --box-shadow: -5px -5px 10px rgba(255, 255, 255, 0.8),
     5px 5px 10px rgba(0, 0, 0, 0.25);
+
+    --font-line1: 25px;
+    --font-line2: 20px;
+    --font-universal: 12px;
+    --font-weight: 500;
+    --font-weight-universal: 250;
+
+
+    --img1-width:30px;
+    --img1-height:20px;
+    --img2-width:30px;
+    --img2-height:135px;
+    --img3-width:150px;
+    --img3-height:140px;
+    --img4-width:180px;
+    --img4-height:160px;
+
 }
 * {
   margin: 0px;
@@ -42,17 +61,15 @@ button {
 .container {
   height: var(--container-height);
   width: var(--container-width);
-
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
   flex-direction: column;
   /* background-color: #ecbbb5; */
-
   overflow: hidden;
-
   background-color: var(--background-color);
   user-select: none;
+  position: relative;
 }
 
 /* header part starts here */
@@ -78,12 +95,12 @@ button {
 
 .randomNumber {
   color: #a2d1c2;
-  font-size: 25px;
-  font-weight: 500;
+  font-size: var(--font-line1);
+  font-weight: var(--font-weight);
 }
 .showNumber {
   width: 400px;
-  height: 100px;
+  height: var(--number-box-height);
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -95,31 +112,31 @@ button {
 }
 
 .secondLine {
-  font-size: 20px;
-  font-weight: 500;
+  font-size: var(--font-line2);
+  font-weight: var(--font-weight);
   color: #73787d;
 }
 .firstLine {
   color: #a2d1c2;
-  font-size: 25px;
-  font-weight: 500;
+  font-size: var(--font-line1);
+  font-weight: var(--font-weight);
 }
 .lineAfter {
-  font-size: 20px;
-  font-weight: 500;
+  font-size: var(--font-line2);
+  font-weight: var(--font-weight);
   color: #73787d;
 }
 .lineFalsch {
   color: #ecbbb5;
-  font-size: 25px;
-  font-weight: 500;
+  font-size: var(--font-line1);
+  font-weight: var(--font-weight);
 }
 
 /* Header lower part buttons and settings */
 
 .btns {
   width: var(--header-width);
-  height: 100px;
+  height: var(--button-box-height);
 
   display: flex;
   justify-content: space-between;
@@ -249,48 +266,42 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
-  font-weight: 250;
+  font-size: var(--font-universal);
+  font-weight: var(--font-weight-universal);
   font-family: "Poppins", sans-serif;
 }
 
 .btn {
   background-color: var(--background-color);
   color: #73787d;
-
   border: 2px solid var(--background-color);
   border-radius: 9999px;
-  /* 1st. topleft border
-             2nd.  bottom right */
   box-shadow: -3px -3px 5px rgba(255, 255, 255, 0.8),
     3px 3px 5px rgba(0, 0, 0, 0.25);
-
-  /* margin: 10px; */
-
-  /* background-color: #ecbbb5; */
 }
 #valuebtn {
   background-color: var(--theme-color1);
 }
 
 /* main area starts here */
+
 .main {
   width: var(--main-width);
   height: var(--main-height);
-
   display: flex;
   align-items: center;
   justify-content: space-between;
-  /* background-color: brown; */
-  /* border-radius: 1em;
-      box-shadow: -5px -5px 10px rgba(255,255,255, 0.8),
-      5px 5px 10px rgba(0,0,0, 0.25); */
+ 
 }
+
+
+
+
+/* leftside dropbox area  starts here */
 
 .leftSide {
   width: var(--left-width);
   height: var(--left-height);
-
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -344,20 +355,20 @@ button {
 }
 
 .img1 {
-  width: 30px;
-  height: 20px;
+  width: var(--img1-width);
+  height: var(--img1-height);
 }
 .img2 {
-  width: 30px;
-  height: 135px;
+  width: var(--img2-width);
+  height: var(--img2-height);
 }
 .img3 {
-  width: 150px;
-  height: 140px;
+  width: var(--img3-width);
+  height: var(--img3-height);
 }
 .img4 {
-  width: 180px;
-  height: 160px;
+  width: var(--img4-width);
+  height: var(--img4-height);
 }
 
 /* .collision{
@@ -382,71 +393,10 @@ button {
 }
 
 
-/* ipad pro virtical */
-
-@media (max-width: 1026px){
-  :root{
-  --container-width: 100%;
-  --container-height: 100vh;
-  --header-width: 900px;
-  --header-height: 200px;
-  --main-width: 900px;
-  --main-height: 900px;
-  --left-width: 900px;
-  --left-height: 700px;
-  --right-width: 900px;
-  --right-height: 170px;
-  --drag-box-width: 200px;
-  --drag-box-height: 200px;
-  }
-  .main {
-    width: var(--main-width);
-    height: var(--main-height);
-  
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-direction: column-reverse;
-    /* background-color: brown; */
-    /* border-radius: 1em;
-        box-shadow: -5px -5px 10px rgba(255,255,255, 0.8),
-        5px 5px 10px rgba(0,0,0, 0.25); */
-  }
-  .rightSide {
-    width: var(--right-width);
-    height: var(--right-height);
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    align-items: center;
-    box-shadow: var(--box-shadow);
-    border-radius: 2em;
-    background-color: var(--theme-color2);
-  
-  }
-  .dragBox:first-child {
-    width: 100px;
-    height: 100px;
-  }
-  .img1 {
-    width: 25px;
-    height: 18px;
-  }
-  .img2 {
-    width: 25px;
-    height: 130px;
-  }
-  .img3 {
-    width: 140px;
-    height: 135px;
-  }
-  .img4 {
-    width: 170px;
-    height: 150px;
-  }
-}
 
 
+
+/* screens with  width size  between 1025 - 1367 px  eg. ipad pro horizontal viewport */
 @media (max-width: 1367px) and (min-width:1025px){
   :root{
   --container-width: 100%;
@@ -461,63 +411,152 @@ button {
   --right-height: 650px;
   --drag-box-width: 180px;
   --drag-box-height: 200px;
-  }
-  .btns {
-    width: var(--header-width);
-    height: 50px;
-  
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    
-  
-  }
-  .btnBox {
-    width: 800px;
-    height: 50px;
-    display: flex;
-    justify-content: space-evenly;
-    /* background-color: #ecbbb5; */
-    align-items: center;
-  }
-  .randomNumber {
-    color: #a2d1c2;
-    font-size: 20px;
-    font-weight: 400;
-  }
-  .showNumber {
-    width: 400px;
-    height: 80px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    /* visibility: hidden; */
-    /* background-color: blue; */
-  
-    /* background-color: #ca3d2b; */
-  }
-  
-  .secondLine {
-    font-size: 15px;
-    font-weight: 400;
-    color: #73787d;
-  }
-  .firstLine {
-    color: #a2d1c2;
-    font-size: 20px;
-    font-weight: 400;
-  }
-  .lineAfter {
-    font-size: 15px;
-    font-weight: 400;
-    color: #73787d;
-  }
-  .lineFalsch {
-    color: #ecbbb5;
-    font-size: 20px;
-    font-weight: 400;
-  }
 
-  
+  --font-line1: 20px;
+  --font-line2: 15px;
+  --font-universal: 12px;
+  --font-weight: 400;
+  --font-weight-universal: 250;
+  }
+ 
+}
+
+
+
+
+
+
+/* screens  with  width ipad pro virtical */
+
+@media (max-width: 1025px) and (min-width: 900px) and (min-height: 1300px){
+  :root{
+  --container-width: 100%;
+  --container-height: 100vh;
+  --header-width: 900px;
+  --header-height: 200px;
+  --main-width: 900px;
+  --main-height: 900px;
+  --left-width: 900px;
+  --left-height: 700px;
+  --right-width: 900px;
+  --right-height: 170px;
+  --drag-box-width: 200px;
+  --drag-box-height: 200px;
+
+  --font-line1: 20px;
+  --font-line2: 15px;
+  --font-universal: 12px;
+  --font-weight: 400;
+  --font-weight-universal: 250;
+
+  --img1-width:25px;
+  --img1-height:18px;
+  --img2-width:25px;
+  --img2-height:130px;
+  --img3-width:140px;
+  --img3-height:135px;
+  --img4-width:170px;
+  --img4-height:150px;
+  }
+  .main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column-reverse;
+  }
+  .rightSide {
+    flex-direction: row;
+  }
+  .dragBox:first-child {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+
+/* screens between 768 and 900 px width eg. ipad */
+@media (max-width: 900px) and (min-width:768px){
+  :root{
+  --container-width: 100%;
+  --container-height: 100vh;
+  --header-width: 750px;
+  --header-height: 200px;
+  --main-width: 750px;
+  --main-height: 600px;
+  --left-width: 750px;
+  --left-height: 470px;
+  --right-width: 750px;
+  --right-height: 120px;
+  --drag-box-width: 120px;
+  --drag-box-height: 120px;
+
+  --font-line1: 20px;
+  --font-line2: 15px;
+  --font-universal: 12px;
+  --font-weight: 400;
+  --font-weight-universal: 250;
+
+  --img1-width:20px;
+  --img1-height:15px;
+  --img2-width:20px;
+  --img2-height:100px;
+  --img3-width:100px;
+  --img3-height:100px;
+  --img4-width:130px;
+  --img4-height:120px;
+  }
+  .main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column-reverse;
+  }
+  .rightSide {
+    justify-content: space-evenly;
+    flex-direction: row;
+
+  }
+  .dragBox:first-child {
+    width: 50px;
+    height: 100px;
+  }
+}
+
+
+/* ipad horizontal */
+
+@media (max-width: 1024px) and (max-height:768px){
+  :root{
+  --container-width: 100%;
+  --container-height: 100vh;
+  --header-width: 900px;
+  --header-height: 130px;
+  --main-width: 900px;
+  --main-height: 500px;
+  --left-width: 700px;
+  --left-height: 450px;
+  --right-width: 150px;
+  --right-height: 450px;
+  --drag-box-width: 150px;
+  --drag-box-height: 150px;
+  --number-box-height:80px;
+  --button-box-height:50px;
+
+  --font-line1: 20px;
+  --font-line2: 15px;
+  --font-universal: 12px;
+  --font-weight: 400;
+  --font-weight-universal: 250;
+
+
+  --img1-width:20px;
+  --img1-height:15px;
+  --img2-width:20px;
+  --img2-height:100px;
+  --img3-width:100px;
+  --img3-height:100px;
+  --img4-width:130px;
+  --img4-height:120px;
+  }
+ 
 }
