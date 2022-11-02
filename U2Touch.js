@@ -360,7 +360,7 @@ function sortElements() {
   });
 
   spaceX = 5;
-  spacetemp = spacetemp + 5
+  spacetemp = spacetemp + 3
   
   spaceY = spacetemp;
 
@@ -379,13 +379,12 @@ function sortElements() {
         top: positionTop + spaceY,
         position: "absolute",
       });
-      spaceX += el100Width + 5;
+      spaceX += el100Width + 5
 
     } else if (index == temp) {
-      spaceX = 5;
-      spaceY = spacetemp + 5;
-      spacetemp = spacetemp + 5
-
+      spaceX = 5
+      spaceY = spacetemp + 3
+      spacetemp += el100Height 
       $(this).css({
         left: positionLeft + spaceX,
         top: positionTop + spaceY,
@@ -403,21 +402,14 @@ function sortElements() {
 
   // sorting "tausender" boxes 5 Boxes in 4th row 4 Boxes in 5th row
 
-  spaceY = spacetemp;
+  
+  spaceX = 5
   el1000.each(function (index, el) {
     var el1000Width = $(this).width()
     var el1000Height = $(this).height()
-    
-    if(index == 0){
-      spacetemp += el1000Height + 5
-      if(counterHunderter > 6){
-        spaceX += el1000Width -20
-      }else{
-        spaceX = 5
-      }
-      
-    }
-    if (index < 3) {
+    spaceY = dropBoxHeight - el1000Height
+    var tempy = (dropBoxWidth/(el1000Width-25))>>0 
+    if (index < tempy) {
       $(this).css({
         left: positionLeft + spaceX,
         top: positionTop + spaceY,
@@ -426,9 +418,9 @@ function sortElements() {
       spaceX += el1000Width - 25;
 
       console.log(index);
-    } else if (index == 3) {
-      spaceX = 5;
-      spaceY = spacetemp;
+    } else if (index == tempy) {
+      spaceX = dropBoxWidth - el1000Width;
+      spaceY = dropBoxHeight - (el1000Height*2 - 5)
 
       $(this).css({
         left: positionLeft + spaceX,
@@ -436,8 +428,8 @@ function sortElements() {
         position: "absolute",
       });
     } else {
-      spaceY = spacetemp;
-      spaceX += el1000Width - 25;
+      spaceY = dropBoxHeight - (el1000Height*2 - 5)
+      spaceX -= el1000Width - 25;
       $(this).css({
         left: positionLeft + spaceX,
         top: positionTop + spaceY,
