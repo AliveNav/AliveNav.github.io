@@ -62,7 +62,7 @@ button {
   height: var(--container-height);
   width: var(--container-width);
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
   flex-direction: column;
   /* background-color: #ecbbb5; */
@@ -428,7 +428,7 @@ button {
 
 /* screens  with  width ipad pro virtical */
 
-@media (max-width: 1025px) and (min-width: 900px) and (min-height: 1300px){
+@media (max-width: 1025px) and (min-width: 900px){
   :root{
   --container-width: 100%;
   --container-height: 100vh;
