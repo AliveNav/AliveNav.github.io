@@ -13,6 +13,8 @@
   --drag-box-height: 200px;
   --number-box-height:100px;
   --button-box-height:100px;
+  --button-width: 120px;
+  --button-height: 30px;
 
   --theme-color1: #bfe7da;
   --theme-color2: #f7f1cd;
@@ -258,8 +260,8 @@ input[type="range"]::-moz-range-thumb {
 button {
   border: none;
   cursor: pointer;
-  height: 30px;
-  width: 120px;
+  height: var(--button-height);
+  width: var(--button-width);
   transition: all;
   transition-duration: 250ms;
   display: flex;
@@ -280,6 +282,11 @@ button {
 }
 #valuebtn {
   background-color: var(--theme-color1);
+}
+.speaker{
+  width: 30px;
+  height: 30px;
+  filter: opacity(50%);
 }
 
 /* main area starts here */
@@ -530,7 +537,7 @@ and (-webkit-min-device-pixel-ratio: 2) {
     --container-width: 100%;
     --container-height: 100vh;
     --header-width: 700px;
-    --header-height: 200px;
+    --header-height: 150px;
     --main-width: 700px;
     --main-height: 750px;
     --left-width: 700px;
@@ -541,6 +548,8 @@ and (-webkit-min-device-pixel-ratio: 2) {
     --drag-box-height: 150px;
     --number-box-height:100px;
     --button-box-height:50px;
+    --button-width: 100px;
+    --button-height: 30px;
   
     --font-line1: 20px;
     --font-line2: 15px;
