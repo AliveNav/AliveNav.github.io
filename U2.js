@@ -455,7 +455,7 @@ function speakit() {
   msg.text = textToSpeak;
   msg.lang = "de-DE";
   msg.rate = 0.7;
-  msg.voice = window.speechSynthesis.getVoices()[1];
+  msg.voice = window.speechSynthesis.getVoices()[0];
 
   speaker.speak(msg);
 }
