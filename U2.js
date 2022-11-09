@@ -1,6 +1,5 @@
 // init speechsynth API
-const speaker = window.speechSynthesis;
-let msg = new SpeechSynthesisUtterance();
+
 
 // Header part Welcome text and show random number
 const firstLine = $("#first-line"),
@@ -451,11 +450,13 @@ function sortElements() {
 
 // read the random generated Number
 function speakit() {
+  const speaker = window.speechSynthesis;
+  let msg = new SpeechSynthesisUtterance();
   var textToSpeak = random.toString();
   msg.text = textToSpeak;
   msg.lang = "de-DE";
   msg.rate = 0.7;
-  msg.voice = window.speechSynthesis.getVoices()[0];
+  msg.voice = window.speechSynthesis.getVoices()[1];
 
   speaker.speak(msg);
 }
