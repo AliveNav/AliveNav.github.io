@@ -212,6 +212,18 @@ function randomNumberGenerator() {
   random = Math.floor(Math.random() * (cmax - cmin) + cmin);
   let randomnumberString = random.toString();
 
+  //read the number
+  const speaker = window.speechSynthesis;
+  let msg = new SpeechSynthesisUtterance();
+  var textToSpeak = random.toString();
+  msg.text = textToSpeak;
+  msg.lang = "de-De";
+  msg.rate = 0.7;
+  msg.voice = window.speechSynthesis.getVoices()[6]
+  var voices = window.speechSynthesis.getVoices()
+  console.log(voices)
+ 
+  speaker.speak(msg);
   // show the randomly generated number on header part
 
   firstLine.html("Stelle die Zahl");
