@@ -1,7 +1,6 @@
 // init speechsynth API
-const speaker = window.speechSynthesis
-let msg = new SpeechSynthesisUtterance()
-
+const speaker = window.speechSynthesis;
+let msg = new SpeechSynthesisUtterance();
 
 // Header part Welcome text and show random number
 const firstLine = $("#first-line"),
@@ -129,31 +128,45 @@ $("#dropbox").droppable({
         createElement(zehnerID);
         counterEiner = 0;
         counterZehner++;
-        
+
         $("[id=cloneElement]").remove();
       }
       if (counterZehner == 10) {
         createElement(hunderterID);
         counterZehner = 0;
         counterHunderter++;
-       
+
         $("[id=cloneElement2]").remove();
       }
       if (counterHunderter == 10) {
         createElement(tausenderID);
         counterHunderter = 0;
         counterTausender++;
-       
+
         $("[id=cloneElement3]").remove();
       }
       if (counterTausender == 10) {
         alert("mehr als 10 Tausender block ist nicht erlaubt!");
         $("[id=cloneElement4]").remove();
         counterTausender = 0;
-        counter = 0
+        counter = 0;
       }
-      counter = counterEiner*1 + counterZehner*10 + counterHunderter*100 + counterTausender*1000
-      console.log(counter + " " + counterEiner + " " + counterZehner +" "+ counterHunderter +" " + counterTausender);
+      counter =
+        counterEiner * 1 +
+        counterZehner * 10 +
+        counterHunderter * 100 +
+        counterTausender * 1000;
+      console.log(
+        counter +
+          " " +
+          counterEiner +
+          " " +
+          counterZehner +
+          " " +
+          counterHunderter +
+          " " +
+          counterTausender
+      );
     }
   },
 });
@@ -166,7 +179,7 @@ function createElement(elID) {
   newElement.addClass("canvas-element");
   newElement.addClass("collision2");
 
-  var dropboxwidth = $canvas.width()
+  var dropboxwidth = $canvas.width();
   if (elID == "#imgZehner") {
     // elements which was created from 10 "Einer" , 10 "Zehner"  or 10 "tausender" will have the id = cloneElment2/3/4
     // ( which is a "Zehner/ Hunderter" object) we need it for removing them once there are 10 of them
@@ -182,7 +195,7 @@ function createElement(elID) {
   });
   $canvas.append(newElement);
   newElement.css({
-    left: $canvas.position().left + (dropboxwidth -200),
+    left: $canvas.position().left + (dropboxwidth - 200),
     top: $canvas.position().top,
     position: "absolute",
   });
@@ -244,17 +257,13 @@ function randomNumberGenerator() {
     scroll: false,
   });
 
+  //read the number
 
-
-   //read the number
-   
   // disable the start button once clicked
   $("#checkbtn").prop("disabled", false);
   $("#valuebtn").prop("disabled", true);
 
-
- 
-// }
+  // }
 }
 
 // function for "Überprüfen"  check button   on click  check  if the value of the boxes are same as the generated random number on header
@@ -284,7 +293,6 @@ function check() {
     $("#randomNumber").html(" &ne; ");
     secondLine.html(random);
 
-   
     $("#randomNumber").addClass("lineAfter");
 
     firstLine.removeClass("lineAfter");
@@ -318,46 +326,42 @@ function sortElements() {
   var el1000 = $("[id=cloneElement4]");
   var dropBox = $("#dropbox");
 
-  
-
   var positionLeft = dropBox.position().left;
   var positionTop = dropBox.position().top;
-  var dropBoxWidth = dropBox.width()
-  var dropBoxHeight = dropBox.height()
+  var dropBoxWidth = dropBox.width();
+  var dropBoxHeight = dropBox.height();
   var spaceX = 5;
   var spaceY = 5;
-  var spacetemp = 0 
-  var spacetempx = 0
-  console.log(dropBoxWidth)
-  console.log(dropBoxHeight)
+  var spacetemp = 0;
+  var spacetempx = 0;
+  console.log(dropBoxWidth);
+  console.log(dropBoxHeight);
 
   el1.each(function (index, el) {
-    var el1Width = $(this).width()
-    var el1Height = $(this).height()
-    spacetemp = el1Height
+    var el1Width = $(this).width();
+    var el1Height = $(this).height();
+    spacetemp = el1Height;
     $(this).css({
       left: positionLeft + spaceX,
       top: positionTop + spaceY,
       position: "absolute",
     });
-    
 
     spaceX += el1Width + 5;
-    
   });
 
   spaceX = 5;
-  spacetemp = spacetemp*2 + 5
+  spacetemp = spacetemp * 2 + 5;
   spaceY = spacetemp;
 
   // sorting "zehner" Boxes all of them in 2nd row
   el10.each(function (index, el) {
-    var el10Width = $(this).width()
-    var el10Height = $(this).height()
-    if(index == 0){
-      spacetemp += el10Height
+    var el10Width = $(this).width();
+    var el10Height = $(this).height();
+    if (index == 0) {
+      spacetemp += el10Height;
     }
-    
+
     $(this).css({
       left: positionLeft + spaceX,
       top: positionTop + spaceY,
@@ -368,31 +372,30 @@ function sortElements() {
   });
 
   spaceX = 5;
-  spacetemp = spacetemp + 3
-  
+  spacetemp = spacetemp + 3;
+
   spaceY = spacetemp;
 
   // sorting "Hunderter" Boxes 6 boxes in 3rd row the last 3 in 2nd row
   el100.each(function (index, el) {
-    var el100Width = $(this).width()
-    var el100Height = $(this).height()
-    if(index == 0){
-      spacetemp += el100Height
+    var el100Width = $(this).width();
+    var el100Height = $(this).height();
+    if (index == 0) {
+      spacetemp += el100Height;
     }
-    var temp = (dropBoxWidth/(el100Width+5))>>0 // how many "Zehner" Box fits in one line for sorting purposes
-    console.log(temp)
+    var temp = (dropBoxWidth / (el100Width + 5)) >> 0; // how many "Zehner" Box fits in one line for sorting purposes
+    console.log(temp);
     if (index < temp) {
       $(this).css({
         left: positionLeft + spaceX,
         top: positionTop + spaceY,
         position: "absolute",
       });
-      spaceX += el100Width + 5
-
+      spaceX += el100Width + 5;
     } else if (index == temp) {
-      spaceX = 5
-      spaceY = spacetemp + 3
-      spacetemp += el100Height 
+      spaceX = 5;
+      spaceY = spacetemp + 3;
+      spacetemp += el100Height;
       $(this).css({
         left: positionLeft + spaceX,
         top: positionTop + spaceY,
@@ -410,13 +413,12 @@ function sortElements() {
 
   // sorting "tausender" boxes 5 Boxes in 4th row 4 Boxes in 5th row
 
-  
-  spaceX = 5
+  spaceX = 5;
   el1000.each(function (index, el) {
-    var el1000Width = $(this).width()
-    var el1000Height = $(this).height()
-    spaceY = dropBoxHeight - el1000Height
-    var tempy = (dropBoxWidth/(el1000Width-25))>>0 
+    var el1000Width = $(this).width();
+    var el1000Height = $(this).height();
+    spaceY = dropBoxHeight - el1000Height;
+    var tempy = (dropBoxWidth / (el1000Width - 25)) >> 0;
     if (index < tempy) {
       $(this).css({
         left: positionLeft + spaceX,
@@ -428,7 +430,7 @@ function sortElements() {
       console.log(index);
     } else if (index == tempy) {
       spaceX = dropBoxWidth - el1000Width;
-      spaceY = dropBoxHeight - (el1000Height*2 - 5)
+      spaceY = dropBoxHeight - (el1000Height * 2 - 5);
 
       $(this).css({
         left: positionLeft + spaceX,
@@ -436,7 +438,7 @@ function sortElements() {
         position: "absolute",
       });
     } else {
-      spaceY = dropBoxHeight - (el1000Height*2 - 5)
+      spaceY = dropBoxHeight - (el1000Height * 2 - 5);
       spaceX -= el1000Width - 25;
       $(this).css({
         left: positionLeft + spaceX,
@@ -445,17 +447,15 @@ function sortElements() {
       });
     }
   });
-
 }
 
-
 // read the random generated Number
-function speakit(){
-  var textToSpeak = random.toString()
-  msg.text = textToSpeak
-  msg.lang = "de-DE"
-  msg.rate = 0.7
+function speakit() {
+  var textToSpeak = random.toString();
+  msg.text = textToSpeak;
+  msg.lang = "de-DE";
+  msg.rate = 0.7;
   msg.voice = window.speechSynthesis.getVoices()[1];
-  
-  speaker.speak(msg)
+
+  speaker.speak(msg);
 }
