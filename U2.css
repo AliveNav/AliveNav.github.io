@@ -1,0 +1,770 @@
+:root {
+    --container-height: 100vh;
+    --container-width: 100%;
+
+    --header-height: 100px;
+    --header-width: 1300px;
+
+    --main-height: 780px;
+    --main-width: 1300px;
+
+    --left-height: 750px;
+    --left-width: 1050px;
+
+    --right-height: 750px;
+    --right-width: 200px;
+
+  --drag-box-height: 200px;
+  --drag-box-width: 200px;
+
+  
+
+  --button-box-height: 100px;
+  --button-box-width: 430px;
+
+  --number-box-height: 100px;
+  --number-box-width: 430px;
+
+  --scroller-height: 100px;
+  --scroller-width:300px;
+
+  --button-height: 100px;
+  --button-width: 70px;
+
+
+
+  --theme-color1: #bfe7da;
+  --theme-color2: #f7f2dd;
+  --background-color: #e8ecf2;
+  --box-shadow: -5px -5px 10px rgba(255, 255, 255, 0.8),
+    5px 5px 10px rgba(0, 0, 0, 0.25);
+
+  --font-line1: 25px;
+  --font-line2: 20px;
+  --font-universal: 12px;
+  --font-weight: 500;
+  --font-weight-universal: 250;
+
+  --img1-width: 30px;
+  --img1-height: 20px;
+  --img2-width: 30px;
+  --img2-height: 135px;
+  --img3-width: 150px;
+  --img3-height: 140px;
+  --img4-width: 180px;
+  --img4-height: 160px;
+}
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+
+  font-size: 12px;
+  font-weight: 250;
+  font-family: "Poppins", sans-serif;
+
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Alter Version Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Moderne Browser (Chrome/Firefox/Opera) */
+
+  cursor: pointer;
+}
+button {
+  user-select: none;
+}
+/* colors  #bfe7da greenish  theme color     #e8ecf2 whitesh Background color  #f0e9e6 alternative theme color  */
+.container {
+  height: var(--container-height);
+  width: var(--container-width);
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-direction: column;
+  /* background-color: #ecbbb5; */
+  overflow: hidden;
+  background-color: var(--background-color);
+  user-select: none;
+}
+
+/* header part starts here */
+.header {
+  height: var(--header-height);
+  width: var(--header-width);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+
+  /* background-color: #e8ecf2; */
+  /* margin-bottom: 10px; */
+
+  /* background-color: #ca3d2b; */
+
+  border-radius: 1em;
+      box-shadow: -5px -5px 10px rgba(255, 255, 255, 0.8),
+        5px 5px 10px rgba(0, 0, 0, 0.25);
+  
+}
+
+
+
+.showNumber {
+    width: var(--number-box-width);
+    height: var(--number-box-height);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    /* visibility: hidden; */
+    /* background-color: rgb(0, 255, 13); */
+  
+    /* background-color: #ca3d2b; */
+  }
+.randomNumber {
+  color: #a2d1c2;
+  font-size: var(--font-line1);
+  font-weight: var(--font-weight);
+}
+
+
+.secondLine {
+  font-size: var(--font-line2);
+  font-weight: var(--font-weight);
+  color: #73787d;
+}
+.firstLine {
+  color: var(--theme-color1);
+  font-size: var(--font-line1);
+  font-weight: var(--font-weight);
+}
+.lineAfter {
+  font-size: var(--font-line2);
+  font-weight: var(--font-weight);
+  color: #73787d;
+}
+.lineFalsch {
+  color: #ecbbb5;
+  font-size: var(--font-line1);
+  font-weight: var(--font-weight);
+}
+
+/* Header lower part buttons and settings */
+
+
+.value-Rang {
+  width: var(--scroller-width);
+  border-radius: 5px;
+  padding: 10px 12px 20px;
+  color: #73787d;
+
+  /* background-color: #ecbbb5; */
+}
+.range-text p {
+  margin-top: 2.5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #73787d;
+}
+.value-input {
+  display: flex;
+  width: 100%;
+  margin: 15px 0 17px;
+}
+.value-input .field {
+  height: 22px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+.field input {
+  width: 100%;
+  height: 100%;
+  outline: none;
+  margin-left: 6px;
+  border-radius: 5px;
+  /* border: 1px solid #999; */
+  border: none;
+  text-align: center;
+  background-color: #d3f3e9;
+  -moz-appearance: textfield;
+  color: #73787d;
+
+  box-shadow: inset -2px -2px 5px rgba(255, 255, 255, 1),
+    inset 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+.field input:focus {
+  background-color: var(--theme-color1);
+}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+.value-input .separator {
+  width: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.slider {
+  height: 1rem;
+  border-radius: 2rem;
+  background-color: #ddd;
+  position: relative;
+
+  box-shadow: inset 0.2rem 0.2rem 0.5rem #e8ecf2,
+    inset -0.2rem -0.2rem 0.5rem white;
+}
+.slider .progress {
+  height: 1rem;
+  left: 10%;
+  right: 20%;
+  position: absolute;
+  border-radius: 2.5px;
+  background-color: var(--theme-color1);
+}
+.range-input {
+  position: relative;
+}
+.range-input input {
+  position: absolute;
+  top: -6px;
+  height: 0.25px;
+  width: 100%;
+  -webkit-appearance: none;
+  background: none;
+  pointer-events: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  height: 2rem;
+  width: 2rem;
+  border-radius: 50%;
+  pointer-events: auto;
+  -webkit-appearance: none;
+  background-color: var(--theme-color1);
+  box-shadow: -1px -1px 4px rgba(255, 255, 255, 0.8),
+    1px 1px 4px rgba(0, 0, 0, 0.25);
+  border: 3px solid var(--background-color);
+}
+
+input[type="range"]::-moz-range-thumb {
+  height: 2rem;
+  width: 2rem;
+  border-radius: 50%;
+  pointer-events: auto;
+  -moz-appearance: none;
+  background-color: var(--theme-color1);
+}
+
+
+.btnBox {
+  width: var(--button-box-width);
+  height: var(--button-box-height);
+  display: flex;
+  justify-content: space-between;
+  /* background-color: #ecbbb5; */
+  align-items: center;
+}
+button {
+  border: none;
+  cursor: pointer;
+  height: var(--button-height);
+  width: var(--button-width);
+  transition: all;
+  transition-duration: 250ms;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-universal);
+  font-weight: var(--font-weight-universal);
+  font-family: "Poppins", sans-serif;
+}
+
+.btn {
+  background-color: var(--background-color);
+  color: #73787d;
+  border: 2px solid var(--background-color);
+  border-radius: 1em;
+  box-shadow: -1px -1px 3px rgba(255, 255, 255, 0.8),
+    1px 1px 3px rgba(0, 0, 0, 0.25);
+}
+#valuebtn {
+  background-color: var(--theme-color1);
+}
+#checkbtn{
+    background-color: rgb(207, 223, 247);
+}
+#undobtn{
+    background-color: rgb(233, 238, 214);
+}
+.speaker {
+  width: 30px;
+  height: 30px;
+  filter: opacity(50%);
+}
+.undo {
+  width: 25px;
+  height: 25px;
+  filter: opacity(40%);
+}
+.question {
+  width: 20px;
+  height: 20px;
+  filter: opacity(40%);
+}
+.info{
+    width: 25px;
+    height: 25px;
+    filter: opacity(40%);
+}
+
+
+/* main area starts here */
+
+.main {
+  width: var(--main-width);
+  height: var(--main-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* leftside dropbox area  starts here */
+
+.leftSide {
+  width: var(--left-width);
+  height: var(--left-height);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  /* background-color: azure; */
+}
+
+.dropBox {
+  width: var(--left-width);
+  height: var(--left-height);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--theme-color1);
+  box-shadow: var(--box-shadow);
+  border-radius: 2em;
+}
+
+/* rightside images representing draggable boxes */
+
+.rightSide {
+  width: var(--right-width);
+  height: var(--right-height);
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
+  box-shadow: var(--box-shadow);
+  border-radius: 2em;
+  background-color: var(--theme-color2);
+}
+
+.dragBox {
+  width: var(--drag-box-width);
+  height: var(--drag-box-height);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* background-color: yellow;   */
+}
+.dragBox:first-child {
+  width: 200px;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.img1 {
+  width: var(--img1-width);
+  height: var(--img1-height);
+}
+.img2 {
+  width: var(--img2-width);
+  height: var(--img2-height);
+}
+.img3 {
+  width: var(--img3-width);
+  height: var(--img3-height);
+}
+.img4 {
+  width: var(--img4-width);
+  height: var(--img4-height);
+}
+
+/* .collision{
+      width: 30px;
+      height: 20px;
+      border: 2px solid red;
+    }
+    .collision2{
+      width: 30px;
+      height: 20px;
+      border: 2px solid red;
+    } */
+
+/* when hover on a button change color only for non touch screens */
+@media (hover: hover) {
+  .btn:hover {
+    background-color: var(--theme-color1);
+    box-shadow: -1px -1px 5px rgba(255, 255, 255, 0.6),
+      1px 1px 5px rgba(0, 0, 0, 0.3), inset -2px -2px 5px rgba(255, 255, 255, 1),
+      inset 2px 2px 4px rgba(0, 0, 0, 0.3);
+  }
+}
+
+
+/* ipad landscape */
+
+@media only screen and (min-device-width: 1024px) and (max-device-width: 1024px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2) {
+  :root {
+    --container-width: 100%;
+    --container-height: 100vh;
+    --header-width: 950px;
+    --header-height: 100px;
+
+    --main-width: 950px;
+    --main-height: 550px;
+
+    --left-width: 750px;
+    --left-height: 530px;
+
+    --right-width: 180px;
+    --right-height: 530px;
+
+    --drag-box-width: 180px;
+    --drag-box-height: 180px;
+
+
+
+    --number-box-height: 100px;
+    --number-box-width: 320px;
+  
+    --button-box-height: 100px;
+    --button-box-width: 320px;
+  
+    --button-height: 100px;
+    --button-width: 50px;
+  
+    --scroller-height: 100px;
+    --scroller-width:300px;
+
+
+    --font-line1: 20px;
+    --font-line2: 15px;
+    --font-universal: 12px;
+    --font-weight: 400;
+    --font-weight-universal: 250;
+
+    --img1-width: 25px;
+    --img1-height: 18px;
+    --img2-width: 25px;
+    --img2-height: 110px;
+    --img3-width: 120px;
+    --img3-height: 110px;
+    --img4-width: 150px;
+    --img4-height: 130px;
+  }
+  .dragBox:first-child {
+    width: 50px;
+    height: 100px;
+  }
+}
+
+@media only screen and (min-device-width: 768px) and (max-device-width: 768px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
+  :root {
+    --container-width: 100%;
+    --container-height: 100vh;
+
+    --header-width: 700px;
+    --header-height: 100px;
+
+    --main-width: 700px;
+    --main-height: 750px;
+
+    --left-width: 700px;
+    --left-height: 550px;
+
+    --right-width: 700px;
+    --right-height: 150px;
+
+    --drag-box-width: 150px;
+    --drag-box-height: 150px;
+   
+
+    --number-box-height: 100px;
+    --number-box-width: 200px;
+  
+    --button-box-height: 100px;
+    --button-box-width: 300px;
+  
+    --button-height: 100px;
+    --button-width: 50px;
+  
+    --scroller-height: 100px;
+    --scroller-width:200px;
+
+   
+    --font-line1: 20px;
+    --font-line2: 15px;
+    --font-universal: 12px;
+    --font-weight: 400;
+    --font-weight-universal: 250;
+
+    --img1-width: 25px;
+    --img1-height: 18px;
+    --img2-width: 25px;
+    --img2-height: 120px;
+    --img3-width: 130px;
+    --img3-height: 125px;
+    --img4-width: 150px;
+    --img4-height: 140px;
+  }
+  .main {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: column-reverse;
+  }
+  .rightSide {
+    flex-direction: row;
+  }
+  .dragBox:first-child {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+/* ipad pro 12.9 */
+@media only screen and (min-device-width: 1366px) and (max-device-width: 1366px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2) {
+  :root {
+    --container-width: 100%;
+    --container-height: 100vh;
+
+    --header-width: 1200px;
+    --header-height: 100px;
+
+    --main-width: 1200px;
+    --main-height: 750px;
+
+    --left-width: 950px;
+    --left-height: 720px;
+
+    --right-width: 200px;
+    --right-height: 720px;
+
+    --drag-box-width: 200px;
+    --drag-box-height: 180px;
+
+    --number-box-height: 100px;
+    --number-box-width: 400px;
+  
+    --button-box-height: 100px;
+    --button-box-width: 400px;
+  
+    --button-height: 100px;
+    --button-width: 60px;
+  
+    --scroller-height: 100px;
+    --scroller-width: 300px;
+
+    --font-line1: 20px;
+    --font-line2: 15px;
+    --font-universal: 12px;
+    --font-weight: 400;
+    --font-weight-universal: 250;
+
+
+    --img1-width: 25px;
+    --img1-height: 18px;
+    --img2-width: 25px;
+    --img2-height: 110px;
+    --img3-width: 120px;
+    --img3-height: 110px;
+    --img4-width: 150px;
+    --img4-height: 130px;
+  }
+  .dragBox:first-child {
+    width: 50px;
+    height: 100px;
+  }
+}
+
+@media only screen and (min-device-width: 1024px) and (max-device-width: 1024px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
+  :root {
+    --container-width: 100%;
+    --container-height: 100vh;
+
+    --header-width: 900px;
+    --header-height: 100px;
+
+    --main-width: 900px;
+    --main-height: 1100px;
+
+    --left-width: 900px;
+    --left-height: 850px;
+
+    --right-width: 900px;
+    --right-height: 180px;
+
+    --drag-box-width: 200px;
+    --drag-box-height: 200px;
+
+    --number-box-height: 100px;
+    --number-box-width: 300px;
+  
+    --button-box-height: 100px;
+    --button-box-width: 300px;
+  
+    --button-height: 100px;
+    --button-width: 50px;
+  
+    --scroller-height: 100px;
+    --scroller-width: 250px;
+
+    --font-line1: 20px;
+    --font-line2: 15px;
+    --font-universal: 12px;
+    --font-weight: 400;
+    --font-weight-universal: 250;
+
+   
+
+    --img1-width: 30px;
+    --img1-height: 22px;
+    --img2-width: 30px;
+    --img2-height: 140px;
+    --img3-width: 150px;
+    --img3-height: 145px;
+    --img4-width: 180px;
+    --img4-height: 170px;
+  }
+  .main {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: column-reverse;
+  }
+  .rightSide {
+    flex-direction: row;
+  }
+  .dragBox:first-child {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+/* ipad pro 10.5 */
+
+@media only screen and (min-device-width: 834px) and (max-device-width: 834px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
+  :root {
+    --container-width: 100%;
+    --container-height: 100vh;
+    --header-width: 750px;
+    --header-height: 100px;
+
+    --main-width: 750px;
+    --main-height: 800px;
+
+    --left-width: 750px;
+    --left-height: 630px;
+
+    --right-width: 750px;
+    --right-height: 150px;
+
+    --drag-box-width: 150px;
+    --drag-box-height: 150px;
+
+    
+    --number-box-height: 100px;
+    --number-box-width: 250px;
+  
+    --button-box-height: 100px;
+    --button-box-width: 300px;
+  
+    --button-height: 100px;
+    --button-width: 50px;
+  
+    --scroller-height: 100px;
+    --scroller-width: 200px;
+
+    --font-line1: 20px;
+    --font-line2: 15px;
+    --font-universal: 12px;
+    --font-weight: 400;
+    --font-weight-universal: 250;
+
+    --img1-width: 25px;
+    --img1-height: 18px;
+    --img2-width: 25px;
+    --img2-height: 120px;
+    --img3-width: 130px;
+    --img3-height: 125px;
+    --img4-width: 150px;
+    --img4-height: 140px;
+  }
+  .main {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: column-reverse;
+  }
+  .rightSide {
+    flex-direction: row;
+  }
+  .dragBox:first-child {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+@media only screen and (min-device-width: 1112px) and (max-device-width: 1112px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2) {
+  :root {
+    --container-width: 100%;
+    --container-height: 100vh;
+    --header-width: 1000px;
+    --header-height: 150px;
+    --main-width: 1000px;
+    --main-height: 610px;
+    --left-width: 800px;
+    --left-height: 550px;
+    --right-width: 180px;
+    --right-height: 550px;
+    --drag-box-width: 180px;
+    --drag-box-height: 180px;
+    --number-box-height: 100px;
+    --button-box-height: 50px;
+
+    --font-line1: 20px;
+    --font-line2: 15px;
+    --font-universal: 12px;
+    --font-weight: 400;
+    --font-weight-universal: 250;
+
+    --img1-width: 25px;
+    --img1-height: 18px;
+    --img2-width: 25px;
+    --img2-height: 110px;
+    --img3-width: 120px;
+    --img3-height: 110px;
+    --img4-width: 150px;
+    --img4-height: 130px;
+  }
+  .dragBox:first-child {
+    width: 50px;
+    height: 100px;
+  }
+}
