@@ -14,76 +14,93 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="U2Touch.css" />
+    <link rel="stylesheet" href="U2.css" />
     <script src="https://code.jquery.com/jquery-3.6.0.js" defer></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js" defer></script>
     <script src="http://code.jquery.com/jquery.min.js"></script>
     <script src="http://code.jquery.com/ui/1.8.17/jquery-ui.min.js"></script>
-    <script src="./jquery-ui-touch-punch-master/jquery.ui.touch-punch.min.js" defer></script>
-    <script src="./jquery-ui-touch-punch-master/jquery.ui.touch-punch.js" defer></script>
-    
-    <script src="U2Touch.js" defer></script>
+    <script
+      src="./jquery-ui-touch-punch-master/jquery.ui.touch-punch.min.js"
+      defer
+    ></script>
+    <script
+      src="./jquery-ui-touch-punch-master/jquery.ui.touch-punch.js"
+      defer
+    ></script>
+
+    <script src="U2.js" defer></script>
     <title>Exercise 2 Drag and Drop Touch</title>
   </head>
   <body>
     <div class="container">
       <div class="header">
-        <div class="showNumber" id="shownumber">
-          <p class="firstLine" id="first-line"></p>
-          <p class="randomNumber" id="randomNumber"></p>
-          <p class="secondLine" id="second-line"></p>
-        </div>
-        <div class="btns">
+        
+        
           <div class="btnBox">
             <button class="btn" id="valuebtn" onclick="randomNumberGenerator()">
               Start
             </button>
-            <button class="btn" id="checkbtn" onclick="check()">
-              Überprüfen
+            <button class="btn" id="checkbtn" onclick="check()" title="überprüfen und sortieren">
+              <!-- Überprüfen -->
+              <img class="question" src="./imgs/sort.png" alt="sortieren" />
+              <img class="question" src="./imgs/question-mark.png" alt="Überprüfen" />
             </button>
-            <button class="btn" onclick="reset()">Korrigieren</button>
-            <button class="btn"  onclick="speakit()">
-              Lesen
-              <img class="speaker" src="/imgs/speak-3-48.png" alt="speaker">
+            <button class="btn" id="undobtn" onclick="reset()" title="korrigieren">
+              <!-- Korrigieren -->
+              <img class="undo" src="./imgs/undo-button.png" alt="Korrigieren" />
+            </button>
+            <button class="btn" onclick="speakit()" title="Zahl lesen">
+              <!-- Lesen -->
+              <img class="speaker" src="/imgs/speak-3-48.png" alt="speaker" />
+            </button>
+            <button class="btn" onclick="showInfo()" title="Informationen zeigen">
+                <img class="info" src="/imgs/information.png" alt="Information" />
             </button>
           </div>
-          <div class="value-Rang">
-            <div class="range-text">
-              <p></p>
-            </div>
-            <div class="value-input">
-              <div class="field">
-                <span>Min</span>
-                <input type="number" class="input-min" value="1000" />
-              </div>
-              <div class="separator">-</div>
-              <div class="field">
-                <span>Max</span>
-                <input type="number" class="input-max" value="8000" />
-              </div>
-            </div>
-            <div class="slider">
-              <div class="progress"></div>
-            </div>
-            <div class="range-input">
-              <input
-                type="range"
-                class="range-min"
-                min="0"
-                max="10000"
-                value="1000"
-                step="100"
-              />
-              <input
-                type="range"
-                class="range-max"
-                min="0"
-                max="10000"
-                value="8000"
-                step="100"
-              />
-            </div>
+        
+        <div class="showNumber" id="shownumber">
+            <p class="firstLine" id="first-line"></p>
+            <p class="randomNumber" id="randomNumber"></p>
+            <p class="secondLine" id="second-line"></p>
           </div>
+        <div class="scroller">
+            <div class="value-Rang">
+                <div class="range-text">
+                  <p></p>
+                </div>
+                <div class="value-input">
+                  <div class="field">
+                    <span>Min</span>
+                    <input type="number" class="input-min" value="1000" />
+                  </div>
+                  <div class="separator">-</div>
+                  <div class="field">
+                    <span>Max</span>
+                    <input type="number" class="input-max" value="8000" />
+                  </div>
+                </div>
+                <div class="slider">
+                  <div class="progress"></div>
+                </div>
+                <div class="range-input">
+                  <input
+                    type="range"
+                    class="range-min"
+                    min="0"
+                    max="10000"
+                    value="1000"
+                    step="100"
+                  />
+                  <input
+                    type="range"
+                    class="range-max"
+                    min="0"
+                    max="10000"
+                    value="8000"
+                    step="100"
+                  />
+                </div>
+              </div>
         </div>
       </div>
       <div class="main">
@@ -92,45 +109,37 @@
         </div>
         <div class="rightSide">
           <div class="dragBox">
-            
-              <img
-                class="img1"
-                id="imgEiner"
-                src="./cubes/Box1Wood.png"
-                alt="cube1"
-              />
-          
+            <img
+              class="img1"
+              id="imgEiner"
+              src="./cubes/Box1Wood.png"
+              alt="cube1"
+            />
           </div>
           <div class="dragBox">
-            
-              <img
-                class="img2"
-                id="imgZehner"
-                src="./cubes/Box10Wood.png"
-                alt="cube10"
-              />
-            
+            <img
+              class="img2"
+              id="imgZehner"
+              src="./cubes/Box10Wood.png"
+              alt="cube10"
+            />
           </div>
           <div class="dragBox">
-            
-              <img
-                class="img3"
-                id="imgHunderter"
-                src="./cubes/Box100Wood.png"
-                alt="cube100"
-              />
-           
+            <img
+              class="img3"
+              id="imgHunderter"
+              src="./cubes/Box100Wood.png"
+              alt="cube100"
+            />
           </div>
           <div class="dragBox">
-           
-              <img
-                class="img4"
-                id="imgTausender"
-                src="./cubes/Box1000Wood.png"
-                alt="cube1000"
-                srcset=""
-              />
-           
+            <img
+              class="img4"
+              id="imgTausender"
+              src="./cubes/Box1000Wood.png"
+              alt="cube1000"
+              srcset=""
+            />
           </div>
         </div>
       </div>
