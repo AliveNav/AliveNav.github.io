@@ -1,23 +1,21 @@
 :root {
-    --container-height: 100vh;
-    --container-width: 100%;
+  --container-height: 100vh;
+  --container-width: 100%;
 
-    --header-height: 100px;
-    --header-width: 1300px;
+  --header-height: 100px;
+  --header-width: 1500px;
 
-    --main-height: 780px;
-    --main-width: 1300px;
+  --main-height: 1000px;
+  --main-width: 1500px;
 
-    --left-height: 750px;
-    --left-width: 1050px;
+  --left-height: 950px;
+  --left-width: 1250px;
 
-    --right-height: 750px;
-    --right-width: 200px;
+  --right-height: 950px;
+  --right-width: 200px;
 
   --drag-box-height: 200px;
   --drag-box-width: 200px;
-
-  
 
   --button-box-height: 100px;
   --button-box-width: 430px;
@@ -26,12 +24,10 @@
   --number-box-width: 430px;
 
   --scroller-height: 100px;
-  --scroller-width:300px;
+  --scroller-width: 300px;
 
   --button-height: 100px;
   --button-width: 70px;
-
-
 
   --theme-color1: #bfe7da;
   --theme-color2: #f7f2dd;
@@ -104,31 +100,27 @@ button {
   /* background-color: #ca3d2b; */
 
   border-radius: 1em;
-      box-shadow: -5px -5px 10px rgba(255, 255, 255, 0.8),
-        5px 5px 10px rgba(0, 0, 0, 0.25);
-  
+  box-shadow: -5px -5px 10px rgba(255, 255, 255, 0.8),
+    5px 5px 10px rgba(0, 0, 0, 0.25);
 }
 
-
-
 .showNumber {
-    width: var(--number-box-width);
-    height: var(--number-box-height);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    /* visibility: hidden; */
-    /* background-color: rgb(0, 255, 13); */
-  
-    /* background-color: #ca3d2b; */
-  }
+  width: var(--number-box-width);
+  height: var(--number-box-height);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  /* visibility: hidden; */
+  /* background-color: rgb(0, 255, 13); */
+
+  /* background-color: #ca3d2b; */
+}
 .randomNumber {
   color: #a2d1c2;
   font-size: var(--font-line1);
   font-weight: var(--font-weight);
 }
-
 
 .secondLine {
   font-size: var(--font-line2);
@@ -136,7 +128,7 @@ button {
   color: #73787d;
 }
 .firstLine {
-  color: var(--theme-color1);
+  color: #a2d1c2;
   font-size: var(--font-line1);
   font-weight: var(--font-weight);
 }
@@ -152,7 +144,6 @@ button {
 }
 
 /* Header lower part buttons and settings */
-
 
 .value-Rang {
   width: var(--scroller-width);
@@ -259,7 +250,6 @@ input[type="range"]::-moz-range-thumb {
   background-color: var(--theme-color1);
 }
 
-
 .btnBox {
   width: var(--button-box-width);
   height: var(--button-box-height);
@@ -294,11 +284,11 @@ button {
 #valuebtn {
   background-color: var(--theme-color1);
 }
-#checkbtn{
-    background-color: rgb(207, 223, 247);
+#checkbtn {
+  background-color: rgb(207, 223, 247);
 }
-#undobtn{
-    background-color: rgb(233, 238, 214);
+#undobtn {
+  background-color: rgb(233, 238, 214);
 }
 .speaker {
   width: 30px;
@@ -315,12 +305,11 @@ button {
   height: 20px;
   filter: opacity(40%);
 }
-.info{
-    width: 25px;
-    height: 25px;
-    filter: opacity(40%);
+.info {
+  width: 25px;
+  height: 25px;
+  filter: opacity(40%);
 }
-
 
 /* main area starts here */
 
@@ -426,7 +415,6 @@ button {
   }
 }
 
-
 /* ipad landscape */
 
 @media only screen and (min-device-width: 1024px) and (max-device-width: 1024px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2) {
@@ -448,20 +436,17 @@ button {
     --drag-box-width: 180px;
     --drag-box-height: 180px;
 
-
-
     --number-box-height: 100px;
     --number-box-width: 320px;
-  
+
     --button-box-height: 100px;
-    --button-box-width: 320px;
-  
+    --button-box-width:300px;
+
     --button-height: 100px;
     --button-width: 50px;
-  
-    --scroller-height: 100px;
-    --scroller-width:300px;
 
+    --scroller-height: 100px;
+    --scroller-width: 300px;
 
     --font-line1: 20px;
     --font-line2: 15px;
@@ -503,21 +488,19 @@ button {
 
     --drag-box-width: 150px;
     --drag-box-height: 150px;
-   
 
     --number-box-height: 100px;
     --number-box-width: 200px;
-  
+
     --button-box-height: 100px;
-    --button-box-width: 300px;
-  
+    --button-box-width: 250px;
+
     --button-height: 100px;
     --button-width: 50px;
-  
-    --scroller-height: 100px;
-    --scroller-width:200px;
 
-   
+    --scroller-height: 100px;
+    --scroller-width: 200px;
+
     --font-line1: 20px;
     --font-line2: 15px;
     --font-universal: 12px;
@@ -571,13 +554,13 @@ button {
 
     --number-box-height: 100px;
     --number-box-width: 400px;
-  
+
     --button-box-height: 100px;
     --button-box-width: 400px;
-  
+
     --button-height: 100px;
     --button-width: 60px;
-  
+
     --scroller-height: 100px;
     --scroller-width: 300px;
 
@@ -586,7 +569,6 @@ button {
     --font-universal: 12px;
     --font-weight: 400;
     --font-weight-universal: 250;
-
 
     --img1-width: 25px;
     --img1-height: 18px;
@@ -625,13 +607,13 @@ button {
 
     --number-box-height: 100px;
     --number-box-width: 300px;
-  
+
     --button-box-height: 100px;
     --button-box-width: 300px;
-  
+
     --button-height: 100px;
     --button-width: 50px;
-  
+
     --scroller-height: 100px;
     --scroller-width: 250px;
 
@@ -640,8 +622,6 @@ button {
     --font-universal: 12px;
     --font-weight: 400;
     --font-weight-universal: 250;
-
-   
 
     --img1-width: 30px;
     --img1-height: 22px;
@@ -688,16 +668,15 @@ button {
     --drag-box-width: 150px;
     --drag-box-height: 150px;
 
-    
     --number-box-height: 100px;
     --number-box-width: 250px;
-  
+
     --button-box-height: 100px;
     --button-box-width: 300px;
-  
+
     --button-height: 100px;
     --button-width: 50px;
-  
+
     --scroller-height: 100px;
     --scroller-width: 200px;
 
@@ -731,7 +710,7 @@ button {
   }
 }
 
-/*@media only screen and (min-device-width: 1112px) and (max-device-width: 1112px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2) {
+@media only screen and (min-device-width: 1112px) and (max-device-width: 1112px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2) {
   :root {
     --container-width: 100%;
     --container-height: 100vh;
@@ -768,4 +747,3 @@ button {
     height: 100px;
   }
 }
-*/
