@@ -1,5 +1,16 @@
-// init speechsynth API
+// get and set Url values 
+let minValue = 0
+let maxValue = 0
+const queryString = window.location.search
+const urlSearchParams = new URLSearchParams(queryString)
+for(const[key, value] of urlSearchParams){
+  // console.log(`${key}=>${value}`)
+  minValue = urlSearchParams.get('min')
+  maxValue = urlSearchParams.get('max')
+}
 
+console.log(minValue)
+console.log(maxValue)
 
 // Header part Welcome text and show random number
 const firstLine = $("#first-line"),
@@ -10,51 +21,51 @@ secondLine.html("Ziehen und Ablegen");
 
 //header part  number slider
 
-const rangeInput = document.querySelectorAll(".range-input input"),
-  valueInput = document.querySelectorAll(".value-input input"),
-  progress = document.querySelector(".slider .progress");
+// const rangeInput = document.querySelectorAll(".range-input input"),
+//   valueInput = document.querySelectorAll(".value-input input"),
+//   progress = document.querySelector(".slider .progress");
 
-let valueGap = 100;
+// let valueGap = 100;
 
-valueInput.forEach((input) => {
-  // getting two inputs value and parsing them to interger number
-  input.addEventListener("input", (e) => {
-    let minVal = parseInt(valueInput[0].value),
-      maxVal = parseInt(valueInput[1].value);
+// valueInput.forEach((input) => {
+//   // getting two inputs value and parsing them to interger number
+//   input.addEventListener("input", (e) => {
+//     let minVal = parseInt(valueInput[0].value),
+//       maxVal = parseInt(valueInput[1].value);
 
-    if (maxVal - minVal >= valueGap && maxVal <= 10000) {
-      if (e.target.className === "input-min") {
-        // if active input is min input
-        rangeInput[0].value = minVal;
-        progress.style.left = (minVal / rangeInput[0].max) * 100 + "%";
-      } else {
-        rangeInput[1].value = maxVal;
-        progress.style.right = 100 - (maxVal / rangeInput[1].max) * 100 + "%";
-      }
-    }
-  });
-});
+//     if (maxVal - minVal >= valueGap && maxVal <= 10000) {
+//       if (e.target.className === "input-min") {
+//         // if active input is min input
+//         rangeInput[0].value = minVal;
+//         progress.style.left = (minVal / rangeInput[0].max) * 100 + "%";
+//       } else {
+//         rangeInput[1].value = maxVal;
+//         progress.style.right = 100 - (maxVal / rangeInput[1].max) * 100 + "%";
+//       }
+//     }
+//   });
+// });
 
-rangeInput.forEach((input) => {
-  input.addEventListener("input", (e) => {
-    let minVal = parseInt(rangeInput[0].value),
-      maxVal = parseInt(rangeInput[1].value);
+// rangeInput.forEach((input) => {
+//   input.addEventListener("input", (e) => {
+//     let minVal = parseInt(rangeInput[0].value),
+//       maxVal = parseInt(rangeInput[1].value);
 
-    if (maxVal - minVal < valueGap) {
-      if (e.target.className === "range-min") {
-        // if active slider is min slider
-        rangeInput[0].value = maxVal - valueGap;
-      } else {
-        rangeInput[1].value = minVal + valueGap;
-      }
-    } else {
-      valueInput[0].value = minVal;
-      valueInput[1].value = maxVal;
-      progress.style.left = (minVal / rangeInput[0].max) * 100 + "%";
-      progress.style.right = 100 - (maxVal / rangeInput[1].max) * 100 + "%";
-    }
-  });
-});
+//     if (maxVal - minVal < valueGap) {
+//       if (e.target.className === "range-min") {
+//         // if active slider is min slider
+//         rangeInput[0].value = maxVal - valueGap;
+//       } else {
+//         rangeInput[1].value = minVal + valueGap;
+//       }
+//     } else {
+//       valueInput[0].value = minVal;
+//       valueInput[1].value = maxVal;
+//       progress.style.left = (minVal / rangeInput[0].max) * 100 + "%";
+//       progress.style.right = 100 - (maxVal / rangeInput[1].max) * 100 + "%";
+//     }
+//   });
+// });
 
 // main field
 
@@ -205,17 +216,18 @@ $("#checkbtn").prop("disabled", true);
 
 function randomNumberGenerator() {
   //get the min and max values set by user
-  let min = $(".input-min").val();
-  let max = $(".input-max").val();
-  let cmin = Math.ceil(min);
-  let cmax = Math.floor(max);
-  random = Math.floor(Math.random() * (cmax - cmin) + cmin);
-  let randomnumberString = random.toString();
+  let min = minValue
+  let max = maxValue
+  let cmin = Math.ceil(min)
+  let cmax = Math.floor(max)
+  random = Math.floor(Math.random() * (cmax - cmin) + cmin)
+  let randomnumberString = random.toString()
 
-  //read the number
+  // read the number
+
   const speaker = window.speechSynthesis;
-  let msg = new SpeechSynthesisUtterance();
-  var textToSpeak = random.toString();
+  let msg = new SpeechSynthesisUtterance()
+  var textToSpeak = random.toString()
   msg.text = textToSpeak;
   msg.lang = "de-De";
   msg.rate = 0.7;
@@ -224,26 +236,27 @@ function randomNumberGenerator() {
   console.log(voices)
  
   speaker.speak(msg);
+
   // show the randomly generated number on header part
 
-  firstLine.html("Stelle die Zahl");
-  $("#randomNumber").html(randomnumberString);
-  secondLine.html("mit Hilfe der Kästchen dar!");
-  console.log(random);
+  firstLine.html("Stelle die Zahl")
+  $("#randomNumber").html(randomnumberString)
+  secondLine.html("mit Hilfe der Kästchen dar!")
+  console.log(random)
 
-  firstLine.removeClass("firstLineFalsch");
-  firstLine.addClass("lineAfter");
+  firstLine.removeClass("firstLineFalsch")
+  firstLine.addClass("lineAfter")
 
   // reset the values of all counters clear the field
-  $("[id=cloneElement]").remove();
-  $("[id=cloneElement2]").remove();
-  $("[id=cloneElement3]").remove();
-  $("[id=cloneElement4]").remove();
-  counter = 0;
-  counterEiner = 0;
-  counterZehner = 0;
-  counterHunderter = 0;
-  counterTausender = 0;
+  $("[id=cloneElement]").remove()
+  $("[id=cloneElement2]").remove()
+  $("[id=cloneElement3]").remove()
+  $("[id=cloneElement4]").remove()
+  counter = 0
+  counterEiner = 0
+  counterZehner = 0
+  counterHunderter = 0
+  counterTausender = 0
 
   // select the  images ( boxes representing the place Value) and make them draggable
 
@@ -466,9 +479,11 @@ function speakit() {
   let msg = new SpeechSynthesisUtterance();
   var textToSpeak = random.toString();
   msg.text = textToSpeak;
-  msg.lang = "de-DE";
+  msg.lang = "de-De";
   msg.rate = 0.7;
-  msg.voice = window.speechSynthesis.getVoices()[6];
-
+  msg.voice = window.speechSynthesis.getVoices()[6]
+  var voices = window.speechSynthesis.getVoices()
+  console.log(voices)
+ 
   speaker.speak(msg);
 }
