@@ -2,35 +2,35 @@
   --container-height: 100vh;
   --container-width: 100%;
 
-  --header-height: 100px;
-  --header-width: 1500px;
+  --header-height: 10vh;
+  --header-width: 95vw;
 
-  --main-height: 1000px;
-  --main-width: 1500px;
+  --main-height: 85vh;
+  --main-width: 95vw;
 
-  --left-height: 950px;
-  --left-width: 1250px;
+  --left-height: 80vh;
+  --left-width: 75vw;
 
-  --right-height: 950px;
-  --right-width: 200px;
+  --right-height: 80vh;
+  --right-width: 18vw;
 
-  --drag-box-height: 200px;
-  --drag-box-width: 200px;
+  /* --drag-box-height: 20vh;
+  --drag-box-width: 12vw; */
 
-  --button-box-height: 100px;
-  --button-box-width: 430px;
+  --button-box-height: 10vh;
+  --button-box-width: 20vw;
 
-  --number-box-height: 100px;
-  --number-box-width: 430px;
+  --number-box-height: 10vh;
+  --number-box-width: 60vw;
 
-  --scroller-height: 100px;
-  --scroller-width: 300px;
+  /* --scroller-height: 10vh;
+  --scroller-width: 300px; */
 
-  --button-height: 100px;
-  --button-width: 70px;
+  --button-height: 10vh;
+  --button-width: 5vw;
 
   --theme-color1: #bfe7da;
-  --theme-color2: #f7f2dd;
+  --theme-color2: #f0ede5;
   --background-color: #e8ecf2;
   --box-shadow: -5px -5px 10px rgba(255, 255, 255, 0.8),
     5px 5px 10px rgba(0, 0, 0, 0.25);
@@ -41,14 +41,14 @@
   --font-weight: 500;
   --font-weight-universal: 250;
 
-  --img1-width: 30px;
-  --img1-height: 20px;
-  --img2-width: 30px;
-  --img2-height: 135px;
-  --img3-width: 150px;
-  --img3-height: 140px;
-  --img4-width: 180px;
-  --img4-height: 160px;
+  --img1-width: 28px;
+  --img1-height: 28px;
+  --img2-width: 220px;
+  --img2-height: 30px;
+  --img3-width: 220px;
+  --img3-height: 220px;
+  --img4-width: 250px;
+  --img4-height: 250px;
 }
 * {
   margin: 0px;
@@ -415,9 +415,77 @@ button {
   }
 }
 
+/* on a screen smaller than 1366px of width the boxes will appear 20% smaller than desktop version  */
+@media only screen and (max-width: 1366px) {
+  :root{
+
+  --font-line1: 20px;
+  --font-line2: 18px;
+  --font-universal: 12px;
+  --font-weight: 400;
+  --font-weight-universal: 250;
+
+  --img1-width: 23px;
+  --img1-height: 23px;
+  --img2-width: 176px;
+  --img2-height: 24px;
+  --img3-width: 176px;
+  --img3-height: 176px;
+  --img4-width: 200px;
+  --img4-height: 200px;
+  }
+  
+}
+
+
+/* on a screen smaller than 1024px of width the boxes will appear 40% smaller than desktop version  */
+@media only screen and (max-width: 1024px) {
+  :root{
+
+  --font-line1: 18px;
+  --font-line2: 15px;
+  --font-universal: 12px;
+  --font-weight: 400;
+  --font-weight-universal: 250;
+
+  --img1-width: 18px;
+  --img1-height: 18px;
+  --img2-width: 132px;
+  --img2-height: 18px;
+  --img3-width: 132px;
+  --img3-height: 132px;
+  --img4-width: 150px;
+  --img4-height: 150px;
+  }
+  
+}
+
+
+
+/* on a screen smaller than 768px of width the boxes will appear 50% smaller than desktop version  */
+@media only screen and (max-width: 768px) {
+  :root{
+
+  --font-line1: 18px;
+  --font-line2: 15px;
+  --font-universal: 12px;
+  --font-weight: 400;
+  --font-weight-universal: 250;
+
+  --img1-width: 15px;
+  --img1-height: 15px;
+  --img2-width: 110px;
+  --img2-height: 18px;
+  --img3-width: 110px;
+  --img3-height: 110px;
+  --img4-width: 125px;
+  --img4-height: 125px;
+  }
+  
+}
 /* ipad landscape */
 
-@media only screen and (min-device-width: 1024px) and (max-device-width: 1024px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2) {
+/* @media only screen and (min-device-width: 1024px) and (max-device-width: 1024px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2) {
   :root {
     --container-width: 100%;
     --container-height: 100vh;
@@ -440,7 +508,7 @@ button {
     --number-box-width: 320px;
 
     --button-box-height: 100px;
-    --button-box-width:300px;
+    --button-box-width: 300px;
 
     --button-height: 100px;
     --button-width: 50px;
@@ -532,7 +600,7 @@ button {
 }
 
 /* ipad pro 12.9 */
-@media only screen and (min-device-width: 1366px) and (max-device-width: 1366px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2) {
+/* @media only screen and (min-device-width: 1366px) and (max-device-width: 1366px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2) {
   :root {
     --container-width: 100%;
     --container-height: 100vh;
@@ -556,7 +624,7 @@ button {
     --number-box-width: 400px;
 
     --button-box-height: 100px;
-    --button-box-width: 400px;
+    --button-box-width: 350px;
 
     --button-height: 100px;
     --button-width: 60px;
@@ -648,7 +716,7 @@ button {
 }
 
 /* ipad pro 10.5 */
-
+/* 
 @media only screen and (min-device-width: 834px) and (max-device-width: 834px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
   :root {
     --container-width: 100%;
@@ -746,4 +814,4 @@ button {
     width: 50px;
     height: 100px;
   }
-}
+} */ 
