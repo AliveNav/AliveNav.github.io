@@ -7,12 +7,12 @@
   --header-width: 95vw;
 
   --main-height: 85vh;
-  --main-width: 95vw;
+  --main-width: 75vw;
 
-  --left-height: 80vh;
+  --left-height: 70vh;
   --left-width: 75vw;
 
-  --right-height: 80vh;
+  --right-height: 70vh;
   --right-width: 18vw;
 
   --button-box-height: 10vh;
@@ -54,15 +54,18 @@
   font-weight: 250;
   font-family: "Poppins", sans-serif;
 
+  
+
+  cursor: pointer;
+}
+body{
+  height: var(--container-height);
+  width: var(--container-width);
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none; /* Safari */
   -moz-user-select: none; /* Alter Version Firefox */
   -ms-user-select: none; /* Internet Explorer/Edge */
   user-select: none; /* Moderne Browser (Chrome/Firefox/Opera) */
-
-  cursor: pointer;
-}
-body{
   overflow:hidden;
 }
 button {
