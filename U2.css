@@ -6,13 +6,13 @@
   --header-height: 10vh;
   --header-width: 95vw;
 
-  --main-height: 75vh;
+  --main-height: 80vh;
   --main-width: 95vw;
 
-  --left-height: 70vh;
+  --left-height: 75vh;
   --left-width: 75vw;
 
-  --right-height: 70vh;
+  --right-height: 75vh;
   --right-width: 18vw;
 
   --button-box-height: 10vh;
@@ -76,7 +76,7 @@ button {
   height: var(--container-height);
   width: var(--container-width);
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
   flex-direction: column;
   /* background-color: #ecbbb5; */
