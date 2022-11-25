@@ -62,6 +62,10 @@
 
   cursor: pointer;
 }
+body,
+html {
+  position: fixed;
+}
 button {
   user-select: none;
 }
