@@ -1,4 +1,5 @@
 
+
 // get and set Url values
 let minValue = 0;
 let maxValue = 0;
@@ -12,16 +13,18 @@ for (const [key, value] of urlSearchParams) {
 
 // Header part Welcome text and show random number
 const firstLine = $("#first-line"),
-  secondLine = $("#second-line");
+  secondLine = $("#second-line"), random_number = $('#randomNumber')
 
-firstLine.html("Übung 1");
-secondLine.html("Ziehen und Ablegen");
-
-// only start button is enable all other buttons are disabled
+  firstLine.html("Herzlich Willkommen!")
+  random_number.html("")
+  secondLine.html(`Drücke <span class="color-line-big"> Start</span> , um zu beginnen`)
+  // only start button is enable all other buttons are disabled
 $("#checkbtn").prop("disabled", true);
+$("#undobtn").prop("disabled", true);
 
 // main field
 
+let show_start_text = false
 let random;
 let counter = 0;
 
@@ -103,6 +106,7 @@ $("#down").droppable({
       $canvasElement.addClass("canvas-element");
       $canvasElement.draggable({
         containment: "#dropbox",
+        stack: "img",
       });
       $canvas.append($canvasElement);
       $canvasElement.css({
@@ -110,15 +114,23 @@ $("#down").droppable({
         top: ui.position.top,
         position: "absolute",
       });
+
+      //if the user already clicked on check button once and want to correct answer show the random number only just like beginning
+      if(show_start_text){
+        firstLine.html(`<span class="black-line-mid"> Stelle die Zahl </span>`);
+        random_number.html(`<span class="color-line-big">${random} </span>`);
+        secondLine.html(`<span class="black-line-mid"> mit Hilfe der Materialien dar! </span>`);
+        show_start_text = false
+      }
     }
     if (ui.draggable.attr("id") === merge_ids[0]) {
       ui.draggable.attr("id", down_ids[0]);
       counterEiner--;
-      console.log(counterEiner);
+      //console.log(counterEiner);
     } else if (ui.draggable.attr("id") === merge_ids[1]) {
       ui.draggable.attr("id", down_ids[1]);
       counterZehner--;
-      console.log(counterZehner);
+      //console.log(counterZehner);
     } else if (ui.draggable.attr("id") === merge_ids[2]) {
       ui.draggable.attr("id", down_ids[2]);
       counterHunderter--;
@@ -143,7 +155,7 @@ $("#dropbox-merge").droppable({
         var $canvasElement = ui.draggable.clone();
         $canvasElement.attr("id", "cloneElement-10-dropbox-merge");
         counterZehner++;
-        console.log(counterZehner);
+        //console.log(counterZehner);
       } else if (ui.draggable.hasClass("img3")) {
         var $canvasElement = ui.draggable.clone();
         $canvasElement.attr("id", "cloneElement-100-dropbox-merge");
@@ -163,15 +175,23 @@ $("#dropbox-merge").droppable({
         top: ui.position.top,
         position: "absolute",
       });
+
+      //if the user already clicked on check button once and needs to correct the answer or try to represent with lesser boxes, show the random number only (on header) just like at the beginning
+      if(show_start_text){
+        firstLine.html(`<span class="black-line-mid"> Stelle die Zahl </span>`);
+        random_number.html(`<span class="color-line-big">${random} </span>`);
+        secondLine.html(`<span class="black-line-mid"> mit Hilfe der Materialien dar! </span>`);
+        show_start_text = false
+      }
     }
     if (ui.draggable.attr("id") === down_ids[0]) {
       ui.draggable.attr("id", merge_ids[0]);
       counterEiner++;
-      console.log(counterEiner);
+      //console.log(counterEiner);
     } else if (ui.draggable.attr("id") === down_ids[1]) {
       ui.draggable.attr("id", merge_ids[1]);
       counterZehner++;
-      console.log(counterZehner);
+      //console.log(counterZehner);
     } else if (ui.draggable.attr("id") === down_ids[2]) {
       ui.draggable.attr("id", merge_ids[2]);
       counterHunderter++;
@@ -189,7 +209,7 @@ $("#dropbox-merge").droppable({
       });
       counterEiner = 0;
       counterZehner++;
-      console.log(counterZehner);
+      //console.log(counterZehner);
     }
     if (counterZehner == 10) {
       createElement(img_100_id);
@@ -263,7 +283,7 @@ $("#dropBox-delete").droppable({
         ui.draggable.remove();
       });
       counterZehner--;
-      console.log(counterZehner);
+      //console.log(counterZehner);
     } else if (ui.draggable.attr("id") === merge_ids[2]) {
       ui.draggable.attr("id", delete_ids[2]);
       delete_slowly(ui.draggable, ui.draggable.width());
@@ -345,6 +365,7 @@ function createElement(elID) {
   }
   newElement.draggable({
     containment: "#dropbox",
+    stack: "img",
   });
   $canvas.append(newElement);
   newElement.css({
@@ -358,7 +379,7 @@ function createElement(elID) {
 }
 // start Button display the random number  between two values, which is set in URL
 
-function randomNumberGenerator() {
+function start() {
   //get the min and max values set by user
   let min = minValue;
   let max = maxValue;
@@ -367,28 +388,11 @@ function randomNumberGenerator() {
   random = Math.floor(Math.random() * (cmax - cmin) + cmin);
   let randomnumberString = random.toString();
 
-  // read the number
-
-  const speaker = window.speechSynthesis;
-  let msg = new SpeechSynthesisUtterance();
-  var textToSpeak = random.toString();
-  msg.text = textToSpeak;
-  msg.lang = "de-De";
-  msg.rate = 0.7;
-  msg.voice = window.speechSynthesis.getVoices()[6];
-  var voices = window.speechSynthesis.getVoices();
-
-  speaker.speak(msg);
-
   // show the randomly generated number on header part
-
-  firstLine.html("Stelle die Zahl");
+  firstLine.html(`<span class="black-line-mid"> Stelle die Zahl </span>`);
   $("#randomNumber").html(randomnumberString);
   secondLine.html("mit Hilfe der Materialien dar!");
-
-  firstLine.removeClass("firstLineFalsch");
-  firstLine.addClass("lineAfter");
-
+ 
   // reset the values of all counters clear the field
   $("[id=cloneElement-1-down]").remove();
   $("[id=cloneElement-10-down]").remove();
@@ -429,13 +433,16 @@ function randomNumberGenerator() {
 
   //read the number
 
-  // disable the start button once clicked
+  // disable the start button once clicked and enable the other buttons
   $("#checkbtn").prop("disabled", false);
+  $("#undobtn").prop("disabled", false);
   $("#valuebtn").prop("disabled", true);
+  
+  
 
   // }
 }
-// function for "Überprüfen"  check button   on click  check  if the value of the boxes are same as the generated random number on header
+// function for "Überprüfen"  check button   on click, if the value of the boxes are same as the generated random number on header turn the start button for the next round
 function check() {
   sortElements();
   let counter_1 = $("[id=cloneElement-1-down]").length;
@@ -452,162 +459,122 @@ function check() {
   let counter_100_total = counter_100 + counter_100_merge;
   let counter_1000_total = counter_1000 + counter_1000_merge;
 
+  let counter_array = [counter_1_total,counter_10_total, counter_100_total, counter_1000_total]
+  let temp_counter = [counter_1000_total,counter_1000_total, counter_10_total, counter_1_total]
+  let temp_random = random.toString();
+  let optimal_result = true
+  let temp_random_lenght = temp_random.length
+
+  if(temp_random_lenght == 1){
+    if(temp_random.charAt(0) != counter_array[0]){
+      optimal_result = false
+    }
+  }
+  if(temp_random_lenght == 2){
+    if(temp_random.charAt(0) != counter_array[1]){
+      optimal_result = false
+    }
+    if(temp_random.charAt(1) != counter_array[0]){
+      optimal_result = false
+    }
+  }
+  if(temp_random_lenght == 3){
+    if(temp_random.charAt(0) != counter_array[2]){
+      optimal_result = false
+    }
+    if(temp_random.charAt(1) != counter_array[1]){
+      optimal_result = false
+    }
+    if(temp_random.charAt(2) != counter_array[0]){
+      optimal_result = false
+    }
+  }
+  if(temp_random_lenght == 4){
+    if(temp_random.charAt(0) != counter_array[3]){
+      optimal_result = false
+    }
+    if(temp_random.charAt(1) != counter_array[2]){
+      optimal_result = false
+    }
+    if(temp_random.charAt(2) != counter_array[1]){
+      optimal_result = false
+    }
+    if(temp_random.charAt(3) != counter_array[0]){
+      optimal_result = false
+    }
+  }
+  
+
   let result =
     counter_1_total +
     counter_10_total * 10 +
     counter_100_total * 100 +
     counter_1000_total * 1000;
-  console.log(result);
+  //console.log(result);
 
-  if (random == result) {
-    if (
-      counter_1000_total == 0 &&
-      counter_100_total == 0 &&
-      counter_10_total == 0
-    ) {
-      $("#randomNumber").html();
-      firstLine.html("Perfekt! deine Antwort ist richtig!");
-      secondLine.html(
-        "Die Zahl " +
-          random +
-          " besteht aus " +
-          counter_10_total +
-          " Zehner, " +
-          counter_1_total +
-          " Einer."
-      );
-    } else if (counter_1000_total == 0 && counter_100_total == 0) {
-      $("#randomNumber").html();
-      firstLine.html("Hervorragend! deine Antwort ist richtig!");
-      secondLine.html(
-        "Die Zahl " +
-          random +
-          " besteht aus " +
-          counter_10_total +
-          " Zehner, " +
-          counter_1_total +
-          " Einer."
-      );
-    } else if (counter_1000_total == 0) {
-      $("#randomNumber").html(" ");
-      firstLine.html("Sehr gut! deine Antwort ist richtig!");
-      secondLine.html(
-        "Die Zahl " +
-          random +
-          " besteht aus " +
-          counter_100_total +
-          " Hunderter, " +
-          counter_10_total +
-          " Zehner, " +
-          counter_1_total +
-          " Einer."
-      );
-    } else {
-      $("#randomNumber").html();
-      firstLine.html("Ausgezeichnet! deine Antwort ist richtig!");
-      secondLine.html(
-        "Die Zahl " +
-          random +
-          " besteht aus " +
-          counter_1000_total +
-          " Tausender" +
-          counter_100_total +
-          " Hunderter, " +
-          counter_10_total +
-          " Zehner, " +
-          counter_1_total +
-          " Einer."
-      );
-    }
+  
+
+  if(random == result && optimal_result){
+    $("#checkbtn").prop("disabled", true);
     $("#valuebtn").prop("disabled", false);
-  } else {
-    if (
-      counter_1000_total == 0 &&
-      counter_100_total == 0 &&
-      counter_10_total == 0
-    ) {
-      $("#randomNumber").html(" ");
-      firstLine.html(
-        "Du hast die Zahl " + result + " gelegt: " + counter_1_total + " Einer."
-      );
-      secondLine.html(
-        "Du solltest die Zahl " + random + " darstellen, versuche es nochmal"
-      );
-    } else if (counter_1000_total == 0 && counter_100_total == 0) {
-      $("#randomNumber").html(" ");
-      firstLine.html(
-        "Du hast die Zahl " +
-          result +
-          " gelegt: " +
-          counter_10_total +
-          " Zehner, " +
-          counter_1_total +
-          " Einer."
-      );
-      secondLine.html(
-        "Du solltest die Zahl " + random + " darstellen, versuche es nochmal"
-      );
-    } else if (counter_1000_total == 0) {
-      $("#randomNumber").html(" ");
-      firstLine.html(
-        "Du hast die Zahl " +
-          result +
-          " gelegt: " +
-          counter_100_total +
-          " Hunderter, " +
-          counter_10_total +
-          " Zehner, " +
-          counter_1_total +
-          " Einer."
-      );
-      secondLine.html(
-        "Du solltest die Zahl " + random + " darstellen, versuche es nochmal"
-      );
-    } else {
-      $("#randomNumber").html(" ");
-      firstLine.html(
-        "Du hast die Zahl " +
-          result +
-          " gelegt: " +
-          counter_1000_total +
-          " Tausender " +
-          counter_100_total +
-          " Hunderter, " +
-          counter_10_total +
-          " Zehner, " +
-          counter_1_total +
-          " Einer."
-      );
-      secondLine.html(
-        "Du solltest die Zahl " + random + " darstellen, versuche es nochmal"
-      );
-    }
+  firstLine.html(`<span class="black-line-mid"> Sehr gut! du hast die richtige Zahl dargestellt. die Zahl <span class="color-line-big"> ${random}</span> besteht aus</span>`);
+  random_number.html(`<span class="color-line-big" id="span4">${counter_1000_total}</span> <span class="black-line-mid" id="span4">Tausender </span>
+  <span class="color-line-big" id="span3">${counter_100_total}</span> <span class="black-line-mid" id="span3">Hunderter </span>
+  <span class="color-line-big" id="span2">${counter_10_total}</span> <span class="black-line-mid" id="span2">Zehner </span> 
+  <span class="color-line-big" id="span1">${counter_1_total}</span> <span class="black-line-mid" id="span1">Einer</span>`);
+  secondLine.html("");
+  }else if(random == result && !optimal_result){
+    show_start_text = true
+    firstLine.html(`<span class="black-line-mid"> Du hast die richtige Zahl <span class="color-line-big-yellow"> ${random}</span> dargestellt. Dafür hast du </span>`);
+  random_number.html(`<span class="color-line-big-yellow" id="span4">${counter_1000_total}</span> <span class="black-line-mid" id="span4">Tausender </span>
+  <span class="color-line-big-yellow" id="span3">${counter_100_total}</span> <span class="black-line-mid" id="span3">Hunderter </span>
+  <span class="color-line-big-yellow" id="span2">${counter_10_total}</span> <span class="black-line-mid" id="span2">Zehner </span> 
+  <span class="color-line-big-yellow" id="span1">${counter_1_total}</span> <span class="black-line-mid" id="span1">Einer</span>`);
+  secondLine.html(`genommen. Lege die Zahl <span class="color-line-big"> ${random}</span>  mit weniger Teilen`);
+  }else{
+    show_start_text = true
+    firstLine.html(`<span class="black-line-mid"> Du hast die Zahl <span class="color-line-big-red"> ${result}</span> dargestellt. Dafür hast du </span>`);
+    random_number.html(`<span class="color-line-big-red" id="span4">${counter_1000_total}</span> <span class="black-line-mid" id="span4">Tausender </span>
+    <span class="color-line-big-red" id="span3">${counter_100_total}</span> <span class="black-line-mid" id="span3">Hunderter </span>
+    <span class="color-line-big-red" id="span2">${counter_10_total}</span> <span class="black-line-mid" id="span2">Zehner </span> 
+    <span class="color-line-big-red" id="span1">${counter_1_total}</span> <span class="black-line-mid" id="span1">Einer</span>`);
+    secondLine.html(`genommen. Versuche es nochmal, die Zahl <span class="color-line-big"> ${random}</span> darzustellen`);
   }
+
+  // only show the place values which is more than 0 (eg. if there is no "1000er" box avoid write it on screen)
+  counter_array.forEach( (element, index) => {
+    console.log(element)
+    if(element === 0){
+      let temp = index+1
+      $(`[id=span${temp}]`).hide()
+    }
+  })
+
 }
 // ًreset button or Correction button  will remove all the boxes from the field
-function reset() {
-  $("[id=cloneElement-1-down]").remove();
-  $("[id=cloneElement-10-down]").remove();
-  $("[id=cloneElement-100-down]").remove();
-  $("[id=cloneElement-1000-down]").remove();
-  $("[id=cloneElement-1-dropbox-merge]").remove();
-  $("[id=cloneElement-10-dropbox-merge]").remove();
-  $("[id=cloneElement-100-dropbox-merge]").remove();
-  $("[id=cloneElement-1000-dropbox-merge]").remove();
-  counter = 0;
-  counterEiner = 0;
-  counterZehner = 0;
-  counterHunderter = 0;
-  counterTausender = 0;
+// function reset() {
+//   $("[id=cloneElement-1-down]").remove();
+//   $("[id=cloneElement-10-down]").remove();
+//   $("[id=cloneElement-100-down]").remove();
+//   $("[id=cloneElement-1000-down]").remove();
+//   $("[id=cloneElement-1-dropbox-merge]").remove();
+//   $("[id=cloneElement-10-dropbox-merge]").remove();
+//   $("[id=cloneElement-100-dropbox-merge]").remove();
+//   $("[id=cloneElement-1000-dropbox-merge]").remove();
+//   counter = 0;
+//   counterEiner = 0;
+//   counterZehner = 0;
+//   counterHunderter = 0;
+//   counterTausender = 0;
 
-  let randomnumberString = random.toString();
-  firstLine.html("Stelle die Zahl");
-  $("#randomNumber").html(randomnumberString);
-  secondLine.html("mit Hilfe der Materialien dar!");
+//   let randomnumberString = random.toString();
+//   firstLine.html("Stelle die Zahl ");
+//   $("#randomNumber").html(randomnumberString);
+//   secondLine.html(" mit Hilfe der Materialien dar!");
 
-  firstLine.removeClass("firstLineFalsch");
-  firstLine.addClass("lineAfter");
-}
+//   firstLine.removeClass("firstLineFalsch");
+//   firstLine.addClass("lineAfter");
+// }
 //sort functions
 // used for sorting "100" and "1000" elements
 function sort_row(
@@ -991,7 +958,7 @@ function sortElements() {
   var height2 = el1000_height*2;
   var height3 = down_height;
   var height4 = el1000_height * 4;
-  console.log(height4);
+  //console.log(height4);
 
   var spaceX = 5;
   var spaceY = 5;
@@ -1027,7 +994,7 @@ function sortElements() {
   // as long as it fits to one row, sort them beside each others.
   // when there are more "100" boxes, which doesnt fit in a row, stack them on top of each other
   if (el100length >= 1 && row1) {
-    console.log("here", row1);
+   // console.log("here", row1);
     row2 = true;
     sort_row(
       el100,
@@ -1043,7 +1010,7 @@ function sortElements() {
       positionTop
     );
   } else if (el100length >= 1) {
-    console.log("here", row2);
+   // console.log("here", row2);
     row1 = true;
     sort_row(
       el100,
@@ -1189,15 +1156,20 @@ function sortElements() {
   }
 }
 // read the random generated Number
-function speakit() {
+function read_text() {
   const speaker = window.speechSynthesis;
   let msg = new SpeechSynthesisUtterance();
-  var textToSpeak = random.toString();
-  msg.text = textToSpeak;
+  var text_to_read1 = $("#first-line").text()
+  var text_to_read2 = $("#randomNumber").text()
+  var text_to_read3 = $("#second-line").text()
+  var text_to_read_final = text_to_read1.concat(text_to_read2, text_to_read3)
+  //console.log(text_to_read_final)
+  // var textToSpeak = random.toString();
+  msg.text = $("#first-line").text() + " " + $("#randomNumber").text() + " " + $("#second-line").text()
   msg.lang = "de-De";
-  msg.rate = 0.7;
+  msg.voice = speechSynthesis.getVoices().find(voice => /de(-|_)De/.test(voice.lang));
   msg.voice = window.speechSynthesis.getVoices()[6];
-  var voices = window.speechSynthesis.getVoices();
+  // var voices = window.speechSynthesis.getVoices();
 
   speaker.speak(msg);
 }
