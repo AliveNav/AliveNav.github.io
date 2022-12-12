@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="de">
   <head>
@@ -20,8 +19,6 @@
     <link rel="stylesheet" href="U2.css" />
     <script src="https://code.jquery.com/jquery-3.6.0.js" defer></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js" defer></script>
-    <!-- <script src="http://code.jquery.com/jquery.min.js"></script>
-    <script src="http://code.jquery.com/ui/1.8.17/jquery-ui.min.js"></script> -->
     <script
       src="./jquery-ui-touch-punch-master/jquery.ui.touch-punch.min.js"
       defer
@@ -38,7 +35,7 @@
     <div class="container">
       <div class="header">
           <div class="btnBox">
-            <button class="btn" id="valuebtn" onclick="randomNumberGenerator()">
+            <button class="btn" id="valuebtn" onclick="start()">
               Start
             </button>
             <button class="btn" id="checkbtn" onclick="check()" title="überprüfen und sortieren">
@@ -46,22 +43,19 @@
               <!-- <img class="question" src="./imgs/sort.png" alt="sortieren" /> -->
               <img class="question" src="./imgs/question-mark.png" alt="Überprüfen" />
             </button>
-            <button class="btn" id="undobtn" onclick="reset()" title="korrigieren">
+            <!-- <button class="btn" id="undobtn" onclick="reset()" title="korrigieren"> -->
               <!-- Korrigieren -->
-              <img class="undo" src="./imgs/undo-button.png" alt="Korrigieren" />
-            </button>
-            <!-- <button class="btn" onclick="showInfo()" title="Informationen zeigen">
-                <img class="info" src="/imgs/information.png" alt="Information" />
+              <!-- <img class="undo" src="./imgs/undo-button.png" alt="Korrigieren" />
             </button> -->
           </div>
         
         <div class="showNumber" id="shownumber">
-            <p class="firstLine" id="first-line"></p>
-            <p class="randomNumber" id="randomNumber"></p>
-            <p class="secondLine" id="second-line"></p>
+            <p class="black-line-big" id="first-line"></p>
+            <p class="color-line-big" id="randomNumber"></p>
+            <p class="black-line-mid" id="second-line"></p>
           </div>
           <div class="speakerbutton">
-            <button class="btn" onclick="speakit()" title="Zahl lesen">
+            <button class="btn" onclick="read_text()" title="Zahl lesen">
               <!-- Lesen -->
               <img class="speaker" src="/imgs/speak-3-48.png" alt="speaker" />
             </button>
