@@ -1,20 +1,21 @@
 :root {
-  --container-height: 90vh;
-  --container-width: 100vw;
+  --container-height: 98%;
+  --container-width: 100%;
 
   --header-height: 10%;
-  --header-width: 95vw;
+  --header-width: 95%;
 
   --main-height: 90%;
-  --main-width: 95vw;
+  --main-width: 95%;
 
   --left-height: 98%;
-  --left-width: 75vw;
+  --left-width: 80%;
 
   --left-down-height:70%;
   --left-down-width:100%;
 
   --left-up-height:30%;
+  --left-up-width: 100%;
  
   --left-merge-height:100%;
   --left-merge-width:80%;
@@ -23,16 +24,16 @@
   --left-delete-width:20%;
 
   --right-height: 98%;
-  --right-width: 18vw;
+  --right-width: 18%;
 
   --button-box-height: 100%;
-  --button-box-width: 12vw;
+  --button-box-width: 10%;
 
   --number-box-height: 100%;
-  --number-box-width: 60vw;
+  --number-box-width: 80%;
 
   --button-height: 100%;
-  --button-width: 5vw;
+  --button-width: 48%;
 
   --theme-color1: #bfe7da;
   --theme-color2: #f0ede5;
@@ -69,9 +70,16 @@
 
   cursor: pointer;
 }
+html{
+  height: -moz-available;
+  height: -webkit-fill-available;
+  height: fill-available;
+}
 body{
-  height: 100vh;
-  width: 100vw;
+  height: 100%;
+  height: -moz-available;
+  height: -webkit-fill-available;
+  height: fill-available;
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none; /* Safari */
@@ -129,32 +137,7 @@ body{
 
   /* background-color: #ca3d2b; */
 }
-/* .randomNumber {
-  color: #a2d1c2;
-  font-size: var(--font-line1);
-  font-weight: var(--font-weight);
-}
 
-.secondLine {
-  font-size: var(--font-line2);
-  font-weight: var(--font-weight);
-  color: #73787d;
-}
-.firstLine {
-  color: #a2d1c2;
-  font-size: var(--font-line1);
-  font-weight: var(--font-weight);
-}
-.lineAfter {
-  font-size: var(--font-line2);
-  font-weight: var(--font-weight);
-  color: #73787d;
-}
-.lineFalsch {
-  color: #ecbbb5;
-  font-size: var(--font-line1);
-  font-weight: var(--font-weight);
-} */
 .black-line-big{
   font-size: var(--font-line1);
   font-weight: var(--font-weight);
@@ -244,6 +227,7 @@ button {
 }
 .speakerbutton{
   height: 100%;
+  width: 5%;
 }
 /* main area starts here */
 
@@ -272,8 +256,6 @@ button {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  /* align-items: center; */
-  /* background-color: var(--theme-color1); */
   box-shadow: var(--box-shadow);
   border-radius: 2em;
  
@@ -282,7 +264,7 @@ button {
 .up{
   display: flex;
   height: var(--left-up-height);
-  width: var(--left-width);
+  width: var(--left-up-width);
 }
 .dropBox-merge{
   background-color: #eeeadd;
