@@ -70,7 +70,7 @@
   cursor: pointer;
 }
 body{
-  height: 100vh;
+  min-height: -webkit-fill-available;
   width: 100%;
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-touch-callout: none; /* iOS Safari */
@@ -85,7 +85,7 @@ button {
 }
 /* colors  #bfe7da greenish  theme color     #e8ecf2 whitesh Background color  #f0e9e6 alternative theme color  */
 .container {
-  height: var(--container-height);
+  min-height: -webkit-fill-available;
   width: var(--container-width);
   display: flex;
   justify-content: flex-end;
