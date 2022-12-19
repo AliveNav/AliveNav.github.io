@@ -1,11 +1,11 @@
 :root {
-  --container-height: 98%;
-  --container-width: 100%;
+  --container-height: 100vh;
+  --container-width: 100vw;
 
   --header-height: 10%;
   --header-width: 95%;
 
-  --main-height: 90%;
+  --main-height: 75%;
   --main-width: 95%;
 
   --left-height: 98%;
@@ -30,9 +30,9 @@
   --button-box-width: 10%;
 
   --number-box-height: 100%;
-  --number-box-width: 80%;
+  --number-box-width: 60%;
 
-  --button-height: 100%;
+  --button-height: 80%;
   --button-width: 48%;
 
   --theme-color1: #bfe7da;
@@ -64,6 +64,8 @@
   font-size: 12px;
   font-weight: 250;
   font-family: "Poppins", sans-serif;
+
+  /* secondery font name    segoe script*/
 
  
   /* overflow: hidden; */
@@ -97,7 +99,7 @@ body{
   height: var(--container-height);
   width: var(--container-width);
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
   flex-direction: column;
   /* background-color: #ecbbb5; */
@@ -114,15 +116,16 @@ body{
   justify-content: space-between;
   align-items: center;
   flex-direction: row;
+  position: relative;
 
   /* background-color: #e8ecf2; */
   /* margin-bottom: 10px; */
 
   /* background-color: #ca3d2b; */
 
-  border-radius: 1em;
+  /* border-radius: 1em;
   box-shadow: -5px -5px 10px rgba(255, 255, 255, 0.8),
-    5px 5px 10px rgba(0, 0, 0, 0.25);
+    5px 5px 10px rgba(0, 0, 0, 0.25); */
 }
 
 .showNumber {
@@ -134,8 +137,8 @@ body{
   flex-direction: column;
   /* visibility: hidden; */
   /* background-color: rgb(0, 255, 13); */
-
-  /* background-color: #ca3d2b; */
+  /* border-radius: 1em;
+  box-shadow: var(--box-shadow); */
 }
 
 .black-line-big{
@@ -165,8 +168,9 @@ body{
 }
 
 .btnBox {
-  width: var(--button-box-width);
+  
   height: var(--button-box-height);
+  aspect-ratio: 1.7;
   display: flex;
   justify-content: space-between;
   /* background-color: #ecbbb5; */
@@ -176,7 +180,7 @@ button {
   border: none;
   cursor: pointer;
   height: var(--button-height);
-  width: var(--button-width);
+  aspect-ratio: 1;
   transition: all;
   transition-duration: 250ms;
   display: flex;
@@ -191,10 +195,9 @@ button {
 .btn {
   background-color: var(--background-color);
   color: #73787d;
-  border: 2px solid var(--background-color);
   border-radius: 1em;
-  box-shadow: -1px -1px 3px rgba(255, 255, 255, 0.8),
-    1px 1px 3px rgba(0, 0, 0, 0.25);
+  box-shadow: -5px -5px 10px rgba(255, 255, 255, 0.8),
+    5px 5px 10px rgba(0, 0, 0, 0.25);
 }
 #valuebtn {
   background-color: var(--theme-color1);
@@ -227,7 +230,10 @@ button {
 }
 .speakerbutton{
   height: 100%;
-  width: 5%;
+  aspect-ratio: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 /* main area starts here */
 
@@ -371,6 +377,139 @@ button {
   height: var(--img4-height);
 }
 
+
+
+
+/* firework animation */
+@keyframes firework {
+  0% { transform: translate(var(--x), var(--initialY)); width: var(--initialSize); opacity: 1; }
+  50% { width: 0.5vmin; opacity: 1; }
+  100% { width: var(--finalSize); opacity: 0; }
+}
+
+/* @keyframes fireworkPseudo {
+  0% { transform: translate(-50%, -50%); width: var(--initialSize); opacity: 1; }
+  50% { width: 0.5vmin; opacity: 1; }
+  100% { width: var(--finalSize); opacity: 0; }
+}
+ */
+.firework,
+.firework::before,
+.firework::after
+{
+  --initialSize: 0.5vmin;
+  --finalSize: 45vmin;
+  --particleSize: 0.2vmin;
+  --color1: yellow;
+  --color2: khaki;
+  --color3: white;
+  --color4: lime;
+  --color5: gold;
+  --color6: mediumseagreen;
+  --y: -50%;
+  --x: -50%;
+  --initialY: 5vh;
+  content: "";
+  /* animation: firework 2s infinite; */
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, var(--y));
+  width: var(--initialSize);
+  aspect-ratio: 1;
+  background: 
+    /*
+    radial-gradient(circle, var(--color1) var(--particleSize), #0000 0) 0% 0%,
+    radial-gradient(circle, var(--color1) var(--particleSize), #0000 0) 100% 0%,
+    radial-gradient(circle, var(--color1) var(--particleSize), #0000 0) 100% 100%,
+    radial-gradient(circle, var(--color1) var(--particleSize), #0000 0) 0% 100%,
+    */
+    
+    radial-gradient(circle, var(--color1) var(--particleSize), #0000 0) 50% 0%,
+    radial-gradient(circle, var(--color2) var(--particleSize), #0000 0) 100% 50%,
+    radial-gradient(circle, var(--color3) var(--particleSize), #0000 0) 50% 100%,
+    radial-gradient(circle, var(--color4) var(--particleSize), #0000 0) 0% 50%,
+    
+    /* bottom right */
+    radial-gradient(circle, var(--color5) var(--particleSize), #0000 0) 80% 90%,
+    radial-gradient(circle, var(--color6) var(--particleSize), #0000 0) 95% 90%,
+    radial-gradient(circle, var(--color1) var(--particleSize), #0000 0) 90% 70%,
+    radial-gradient(circle, var(--color2) var(--particleSize), #0000 0) 100% 60%,
+    radial-gradient(circle, var(--color3) var(--particleSize), #0000 0) 55% 80%,
+    radial-gradient(circle, var(--color4) var(--particleSize), #0000 0) 70% 77%,
+    
+    /* bottom left */
+    radial-gradient(circle, var(--color5) var(--particleSize), #0000 0) 22% 90%,
+    radial-gradient(circle, var(--color6) var(--particleSize), #0000 0) 45% 90%,
+    radial-gradient(circle, var(--color1) var(--particleSize), #0000 0) 33% 70%,
+    radial-gradient(circle, var(--color2) var(--particleSize), #0000 0) 10% 60%,
+    radial-gradient(circle, var(--color3) var(--particleSize), #0000 0) 31% 80%,
+    radial-gradient(circle, var(--color4) var(--particleSize), #0000 0) 28% 77%,
+    radial-gradient(circle, var(--color5) var(--particleSize), #0000 0) 13% 72%,
+    
+    /* top left */
+    radial-gradient(circle, var(--color6) var(--particleSize), #0000 0) 80% 10%,
+    radial-gradient(circle, var(--color1) var(--particleSize), #0000 0) 95% 14%,
+    radial-gradient(circle, var(--color2) var(--particleSize), #0000 0) 90% 23%,
+    radial-gradient(circle, var(--color3) var(--particleSize), #0000 0) 100% 43%,
+    radial-gradient(circle, var(--color4) var(--particleSize), #0000 0) 85% 27%,
+    radial-gradient(circle, var(--color5) var(--particleSize), #0000 0) 77% 37%,
+    radial-gradient(circle, var(--color6) var(--particleSize), #0000 0) 60% 7%,
+    
+    /* top right */
+    radial-gradient(circle, var(--color1) var(--particleSize), #0000 0) 22% 14%,
+    radial-gradient(circle, var(--color1) var(--particleSize), #0000 0) 45% 20%,
+    radial-gradient(circle, var(--color1) var(--particleSize), #0000 0) 33% 34%,
+    radial-gradient(circle, var(--color1) var(--particleSize), #0000 0) 10% 29%,
+    radial-gradient(circle, var(--color1) var(--particleSize), #0000 0) 31% 37%,
+    radial-gradient(circle, var(--color1) var(--particleSize), #0000 0) 28% 7%,
+    radial-gradient(circle, var(--color1) var(--particleSize), #0000 0) 13% 42%
+    ;
+  background-size: var(--initialSize) var(--initialSize);
+  background-repeat: no-repeat;
+  visibility: hidden;
+}
+
+
+
+.firework:nth-child(2) {
+  --x: 50%;
+}
+
+.firework:nth-child(2),
+.firework:nth-child(2)::before,
+.firework:nth-child(2)::after {
+  --color1: rgb(221, 57, 85);
+  --color2: rgb(223, 19, 46);
+  --color3: rgb(190, 101, 16);
+  --color4: orchid;
+  --color5: rgb(190, 60, 8);
+  --color6: rgb(197, 129, 50);  
+  --finalSize: 40vmin;
+  left: 30%;
+  top: 10%;
+  animation-delay: -0.25s;
+}
+
+.firework:nth-child(3) {
+  --x: -50%;
+  --y: -50%;
+}
+
+.firework:nth-child(3),
+.firework:nth-child(3)::before,
+.firework:nth-child(3)::after {
+  --color1: rgb(225, 0, 255);
+  --color2: rgb(68, 5, 68);
+  --color3: rgb(202, 113, 214);
+  --color4: rgb(188, 52, 241);
+  --color5: rgb(140, 73, 160);
+  --color6: rgb(173, 8, 151);
+  --finalSize: 35vmin;
+  left: 70%;
+  top: 10%;
+  animation-delay: -0.4s;
+}
 /* when hover on a button change color only for non touch screens */
 @media (hover: hover) {
   .btn:hover {
@@ -391,29 +530,6 @@ button {
   --font-weight: 400;
   --font-weight-universal: 250;
 
-  --img1-width: 20px;
-  --img1-height: 20px;
-  --img2-width: 154px;
-  --img2-height: 21px;
-  --img3-width: 155px;
-  --img3-height: 155px;
-  --img4-width: 170px;
-  --img4-height: 170px;
-  }
-  
-}
-
-
-/* on a screen smaller than 1024px of width the boxes will appear 40% smaller than desktop version  */
-@media only screen and (max-width: 1024px), screen and (max-height: 900px) {
-  :root{
-
-  --font-line1: 18px;
-  --font-line2: 15px;
-  --font-universal: 12px;
-  --font-weight: 400;
-  --font-weight-universal: 250;
-
   --img1-width: 18px;
   --img1-height: 18px;
   --img2-width: 132px;
@@ -427,13 +543,36 @@ button {
 }
 
 
+/* on a screen smaller than 1024px of width the boxes will appear 40% smaller than desktop version  */
+@media only screen and (max-width: 1024px), screen and (max-height: 900px) {
+  :root{
+
+  --font-line1: 15px;
+  --font-line2: 13px;
+  --font-universal: 12px;
+  --font-weight: 400;
+  --font-weight-universal: 250;
+
+  --img1-width: 15px;
+  --img1-height: 15px;
+  --img2-width: 110px;
+  --img2-height: 15px;
+  --img3-width: 110px;
+  --img3-height: 110px;
+  --img4-width: 120px;
+  --img4-height: 120px;
+  }
+  
+}
+
+
 /* on a screen smaller than 768px of width the boxes will appear 50% smaller than desktop version  */
 @media only screen and (max-width: 768px) {
   :root{
 
-  --font-line1: 18px;
-  --font-line2: 15px;
-  --font-universal: 12px;
+  --font-line1: 15px;
+  --font-line2: 12px;
+  --font-universal: 10px;
   --font-weight: 400;
   --font-weight-universal: 250;
 
