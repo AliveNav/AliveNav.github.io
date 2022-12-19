@@ -513,7 +513,7 @@ function start() {
           `<span class="black-line-mid"> du solltest die Zahl <span class="color-line-big"> ${random_number}</span> tragen, versuch es nochmal </span>`
         );
         $("[id=animated-div-box3]").remove();
-        read_text();
+        
       }
     });
   });
