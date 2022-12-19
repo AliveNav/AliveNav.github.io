@@ -106,7 +106,7 @@ $("#down").droppable({
       $canvasElement.addClass("canvas-element");
       $canvasElement.draggable({
         containment: "#dropbox",
-        stack: "img",
+        stack: ".img1, .img2, .img3, .img4",
       });
       $canvas.append($canvasElement);
       $canvasElement.css({
@@ -168,6 +168,7 @@ $("#dropbox-merge").droppable({
       $canvasElement.addClass("canvas-element");
       $canvasElement.draggable({
         containment: "#dropbox",
+        stack: ".img1, .img2, .img3, .img4"
       });
       $canvas.append($canvasElement);
       $canvasElement.css({
@@ -365,7 +366,7 @@ function createElement(elID) {
   }
   newElement.draggable({
     containment: "#dropbox",
-    stack: "img",
+    stack: ".img1, .img2, .img3, .img4",
   });
   $canvas.append(newElement);
   newElement.css({
@@ -431,7 +432,8 @@ function start() {
     scroll: false,
   });
 
-  //read the number
+  //stop animation
+  stop_animation()
 
   // disable the start button once clicked and enable the other buttons
   $("#checkbtn").prop("disabled", false);
@@ -517,12 +519,13 @@ function check() {
   if(random == result && optimal_result){
     $("#checkbtn").prop("disabled", true);
     $("#valuebtn").prop("disabled", false);
+    play_animation()
   firstLine.html(`<span class="black-line-mid"> Sehr gut! du hast die richtige Zahl dargestellt. die Zahl <span class="color-line-big"> ${random}</span> besteht aus</span>`);
   random_number.html(`<span class="color-line-big" id="span4">${counter_1000_total}</span> <span class="black-line-mid" id="span4">Tausender </span>
   <span class="color-line-big" id="span3">${counter_100_total}</span> <span class="black-line-mid" id="span3">Hunderter </span>
   <span class="color-line-big" id="span2">${counter_10_total}</span> <span class="black-line-mid" id="span2">Zehner </span> 
   <span class="color-line-big" id="span1">${counter_1_total}</span> <span class="black-line-mid" id="span1">Einer</span>`);
-  secondLine.html("");
+  secondLine.html(`<span class="black-line-mid"> Klicke auf <span class="color-line-big"> Start</span>, um eine neue Zahl zu bekommen</span>`);
   }else if(random == result && !optimal_result){
     show_start_text = true
     firstLine.html(`<span class="black-line-mid"> Du hast die richtige Zahl <span class="color-line-big-yellow"> ${random}</span> dargestellt. Dafür hast du </span>`);
@@ -1184,4 +1187,16 @@ function delete_slowly(element, element_width) {
     },
     "slowly"
   );
+}
+
+// start and stop firework animation
+
+function play_animation(){
+  $('.firework').css({
+    "visibility": "visible",
+    "animation": "firework 2s infinite"
+  })
+}
+function stop_animation(){
+  $('.firework').css("visibility", "hidden")
 }
