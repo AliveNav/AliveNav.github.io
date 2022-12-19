@@ -2,8 +2,8 @@
 <html lang="de">
   <head>
     <meta charset="UTF-8" />
-    <meta name="keywords" content="HTML, CSS, JavaScript">
-    <meta name="author" content="Ahmad Naveed Nassruddin">
+    <meta name="keywords" content="HTML, CSS, JavaScript" />
+    <meta name="author" content="Ahmad Naveed Nassruddin" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -34,46 +34,59 @@
   <body>
     <div class="container">
       <div class="header">
-          <div class="btnBox">
-            <button class="btn" id="valuebtn" onclick="start()">
-              Start
-            </button>
-            <button class="btn" id="checkbtn" onclick="check()" title="überprüfen und sortieren">
-              <!-- Überprüfen -->
-              <!-- <img class="question" src="./imgs/sort.png" alt="sortieren" /> -->
-              <img class="question" src="./imgs/question-mark.png" alt="Überprüfen" />
-            </button>
-            <!-- <button class="btn" id="undobtn" onclick="reset()" title="korrigieren"> -->
-              <!-- Korrigieren -->
-              <!-- <img class="undo" src="./imgs/undo-button.png" alt="Korrigieren" />
+        <div class="firework"></div>
+        <div class="firework"></div>
+        <div class="firework"></div>
+        <div class="btnBox">
+          <button class="btn" id="valuebtn" onclick="start()">Start</button>
+          <button
+            class="btn"
+            id="checkbtn"
+            onclick="check()"
+            title="überprüfen und sortieren"
+          >
+            <!-- Überprüfen -->
+            <!-- <img class="question" src="./imgs/sort.png" alt="sortieren" /> -->
+            <img
+              class="question"
+              src="./imgs/question-mark.png"
+              alt="Überprüfen"
+            />
+          </button>
+          <!-- <button class="btn" id="undobtn" onclick="reset()" title="korrigieren"> -->
+          <!-- Korrigieren -->
+          <!-- <img class="undo" src="./imgs/undo-button.png" alt="Korrigieren" />
             </button> -->
-          </div>
-        
+        </div>
         <div class="showNumber" id="shownumber">
-            <p class="black-line-big" id="first-line"></p>
-            <p class="color-line-big" id="randomNumber"></p>
-            <p class="black-line-mid" id="second-line"></p>
-          </div>
-          <div class="speakerbutton">
-            <button class="btn" onclick="read_text()" title="Zahl lesen">
-              <!-- Lesen -->
-              <img class="speaker" src="/imgs/speak-3-48.png" alt="speaker" />
-            </button>
-          </div>
+          <p class="black-line-big" id="first-line"></p>
+          <p class="color-line-big" id="randomNumber"></p>
+          <p class="black-line-mid" id="second-line"></p>
+        </div>
+        <div class="speakerbutton">
+          <button class="btn" onclick="read_text()" title="Zahl lesen">
+            <!-- Lesen -->
+            <img class="speaker" src="/imgs/speak-3-48.png" alt="speaker" />
+          </button>
+        </div>
       </div>
       <div class="main">
         <div class="leftSide">
           <div class="dropBox" id="dropbox">
             <div class="up" id="up">
               <div class="dropBox-merge" id="dropbox-merge">
-                <img src="./imgs/merge-img5.png" alt="" class="merge-img" unselectable="on">
+                <img
+                  src="./imgs/MergeImg.png"
+                  alt=""
+                  class="merge-img"
+                  unselectable="on"
+                />
               </div>
               <div class="dropBox-delete" id="dropBox-delete">
-                <img src="./imgs/recycle-bin.png" alt="" class="recycle-bin">
+                <img src="./imgs/recycle-bin.png" alt="" class="recycle-bin" />
               </div>
             </div>
             <div class="down" id="down"></div>
-            
           </div>
         </div>
         <div class="rightSide">
