@@ -275,9 +275,6 @@ function start() {
           2,
           "linear-gradient(0deg, #75e99c00 0%, #ffffff00 100%)"
         );
-        random.html(randomnumberString);
-        header_text_line1.html("Trage die Zahl");
-        header_text_line2.html("am Zahllenstrahl ein");
       }
       //if 4 boxes are visible (means aleady clicked once), hide the lower boxes (box3 and box4) and reset the filter color
       if (level_counter == 4) {
@@ -301,9 +298,6 @@ function start() {
           3,
           "linear-gradient(0deg, #c399e600 0%, #ffffff00 100%)"
         );
-        random.html(randomnumberString);
-        header_text_line1.html("Trage die Zahl");
-        header_text_line2.html("am Zahllenstrahl ein");
       }
 
       // otherweise show box2 and change the color of "clicked filter" on box1 #c0ccf141ad
@@ -366,11 +360,7 @@ function start() {
           3,
           "linear-gradient(0deg, #c399e600 0%, #ffffff00 100%)"
         );
-        random.html(randomnumberString);
-        header_text_line1.html("Trage die Zahl ");
-        header_text_line2.html(" am Zahlenstrahl ein");
         $("[id=animated-div-box3]").remove();
-        console.log("why");
       }
 
       filter_box2_index = index;
