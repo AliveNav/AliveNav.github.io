@@ -45,7 +45,7 @@ let filter_box3_index = 0;
 
 //emoji for correct/wrong  answer
 var emoji = new Image();
-emoji.src = "./imgs/thumbsup.png";
+emoji.src = "./imgs/ThumbUp.png";
 emoji.setAttribute("id", "emoji-img");
 emoji.classList.add("emoji-img");
 $("#emoji").append(emoji);
