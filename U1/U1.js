@@ -29,26 +29,31 @@ for (const [key, value] of urlSearchParams) {
   maxValue = urlSearchParams.get("max");
 }
 
-// initial values of the frist svg
-let default_values = [
-  0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000,
-];
+// initialize web speech API 
+const speaker = window.speechSynthesis;
+let msg = new SpeechSynthesisUtterance();
+msg.lang = "de-De";
+msg.voice = speechSynthesis
+  .getVoices()
+  .find((voice) => /de(-|_)De/.test(voice.lang));
+//msg.voice = window.speechSynthesis.getVoices()[6];
+
+// initial values of the first svg (unchanged values)
+let default_values = [0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000];
 let box1_values = [];
 let box2_values = [];
 let box3_values = [];
 
-//help variables "check" used to indicate when to reset the values "level counter" used to hide the lower boxes when user correct answer
+//help variables "check" used to indicate when to reset the values "level counter" used to hide the lower boxes when user try to correct answer after a wrong answer
 let check = false;
 let level_counter = 0;
 let filter_box2_index = 0;
 let filter_box3_index = 0;
 
-//emoji for correct/wrong  answer
-//var emoji = new Image();
-//emoji.src = "./imgs/ThumbUp.png";
-//emoji.setAttribute("id", "emoji-img");
-//emoji.classList.add("emoji-img");
-//$("#emoji").append(emoji);
+// welcome text
+header_text_line1.html(`<span class="black-line-big">Herzlich Willkommen!</span>`)
+random.html("")
+header_text_line2.html(`Drücke <span class="color-line-big"> Start</span> , um zu beginnen`)
 
 // takes an svg and an array of 11 numbers , creates a ruler with 11 values
 function create_line(svg, box_number, text_id) {
@@ -138,7 +143,7 @@ function filters_position(box, box_number) {
     let filter = $(`#filter-${index}-${box_number}`);
     filter.addClass("filter");
     filter.css({
-      top: $(this).position().top - box_height/4.5,
+      top: $(this).position().top - box_height/4.8,
       left: $(this).position().left,
     });
   });
@@ -191,20 +196,22 @@ function change_filter_color(el_number, box_number, bg_color_clicked) {
     }
   });
 }
-
-// boxes are hidden, when clicked on 1st box show the 2nd box, onclick on 2nd box show 3rd box ...
-box2.css({
-  visibility: "hidden",
-  opacity: 0,
-});
-box3.css({
-  visibility: "hidden",
-  opacity: 0,
-});
-box4.css({
-  visibility: "hidden",
-  opacity: 0,
-});
+// hide the bottom rows (boxes)
+function row_hider(){
+  box2.css({
+    visibility: "hidden",
+    opacity: 0,
+  });
+  box3.css({
+    visibility: "hidden",
+    opacity: 0,
+  });
+  box4.css({
+    visibility: "hidden",
+    opacity: 0,
+  });
+}
+// used to freez the screen when the user finds the correct answer
 function freez_screen() {
   let freez_filter = document.createElement("div");
   freez_filter.setAttribute("id", "freez");
@@ -216,14 +223,6 @@ function freez_screen() {
   });
 }
 
-// read the texts
-const speaker = window.speechSynthesis;
-let msg = new SpeechSynthesisUtterance();
-msg.lang = "de-De";
-msg.voice = speechSynthesis
-  .getVoices()
-  .find((voice) => /de(-|_)De/.test(voice.lang));
-//msg.voice = window.speechSynthesis.getVoices()[6];
 function read_text() {
   msg.text =
     $("#first-line").text() +
@@ -232,32 +231,56 @@ function read_text() {
     " " +
     $("#second-line").text();
   speaker.speak(msg);
+  
 }
 
+// reload page
+function refreshPage() {
+  window.location.reload();
+}
+
+// remove all elements from svgs, used to reset for next round
+function remove_elements(){
+  $('#svg-1').empty()
+  $(`#box-1 > div`).remove()
+  $('#svg-2').empty()
+  $(`#box-2 > div`).remove()
+  $('#svg-3').empty()
+  $(`#box-3 > div`).remove()
+  $('#svg-4').empty()
+  $(`#box-4 > div`).remove()
+} 
+// boxes are hidden, when clicked on 1st box show the 2nd box, onclick on 2nd box show 3rd box ...
+row_hider()
+create_svg_elements(svg_1, box1, 1, 1);
+init(1, default_values);
+freez_screen();
 //start button function
 function start() {
+
   let cmin = Math.ceil(minValue);
   let cmax = Math.floor(maxValue);
   random_number = Math.floor(Math.random() * (cmax - cmin) + cmin);
   let randomnumberString = random_number.toString();
   random.html(randomnumberString);
-  header_text_line1.html("Trage die Zahl");
-  header_text_line2.html("am Zahlenstrahl ein");
-
+  header_text_line1.html(`<span class="black-line-big">Trage die Zahl</span>`)
+  header_text_line2.html(`<span class="black-line-big">am Zahllenstrahl ein</span>`)
   //create svg elements (texts and lines), initilized the values with zeros
   //for svg1 set the values , since they are always the same values (0 to 10000)
+  remove_elements()
+ 
   create_svg_elements(svg_1, box1, 1, 1);
   init(1, default_values);
   create_svg_elements(svg_2, box2, 2, 2);
   create_svg_elements(svg_3, box3, 3, 3);
-  //for last box the filter is different (smaller and right on top of the line)
   create_svg_elements2(svg_4, box4, 4, 4);
+ 
 
   // for the last box we dont need the mid lines or small lines so remove them
   // I dont change the create line function because in furture we may need them for float numbers
   $("#svg-4 > .small-lines").remove();
   $("#svg-4 > .mid-lines").remove();
-
+  row_hider()
   // stage one from box1 to box2, there are 10 options to click on each stage
   let box1_filters = $(`#box-1 > div`);
   box1_filters.each(function (index, el) {
@@ -265,6 +288,9 @@ function start() {
       //when clicked on the first box filters
       // if 3 boxes are visible (means aleady clicked once), hide the lower box (box3) and reset the filter color
       if (level_counter == 3) {
+        random.html(randomnumberString);
+        header_text_line1.html(`<span class="black-line-big">Trage die Zahl</span>`)
+        header_text_line2.html(`<span class="black-line-big">am Zahllenstrahl ein</span>`)
         box3.css({
           visibility: "hidden",
           opacity: 0,
@@ -298,6 +324,9 @@ function start() {
           3,
           "linear-gradient(0deg, #c399e600 0%, #ffffff00 100%)"
         );
+        random.html(randomnumberString);
+        header_text_line1.html(`<span class="black-line-big">Trage die Zahl</span>`)
+        header_text_line2.html(`<span class="black-line-big">am Zahllenstrahl ein</span>`)
       }
 
       // otherweise show box2 and change the color of "clicked filter" on box1 #c0ccf141ad
@@ -311,7 +340,7 @@ function start() {
           visibility: "visible",
           background: "#f89f56",
         })
-        .delay(500)
+        .delay(1000)
         .animate({ opacity: 1 }, 1000);
       change_filter_color(
         index,
@@ -340,8 +369,10 @@ function start() {
             height: box2.height(),
             width: box2.width(),
             background: box2.css("background-color"),
-          },
-          500, "swing"
+          },{
+            duration: 1000,
+            
+          }
         );
     });
   });
@@ -360,7 +391,11 @@ function start() {
           3,
           "linear-gradient(0deg, #c399e600 0%, #ffffff00 100%)"
         );
+        random.html(randomnumberString);
+        header_text_line1.html(`<span class="black-line-big">Trage die Zahl</span>`)
+        header_text_line2.html(`<span class="black-line-big">am Zahllenstrahl ein</span>`)
         $("[id=animated-div-box3]").remove();
+        console.log("why");
       }
 
       filter_box2_index = index;
@@ -374,7 +409,7 @@ function start() {
           visibility: "visible",
           background: "#75e99c",
         })
-        .delay(500)
+        .delay(1000)
         .animate({ opacity: 1 }, 1000);
 
       change_filter_color(
@@ -405,7 +440,7 @@ function start() {
             width: box3.width(),
             background: box3.css("background-color"),
           },
-          500
+          1000
         );
 
       level_counter = 3; // 3 boxes are visible
@@ -413,7 +448,6 @@ function start() {
   });
 
   // stage 3 from box3 to box4
-
   let box3_filters = $(`#box-3 > div`);
   box3_filters.each(function (index, el) {
     $(this).on("click", function () {
@@ -429,7 +463,7 @@ function start() {
           visibility: "visible",
           background: "#c399e6",
         })
-        .delay(500)
+        .delay(1000)
         .animate({ opacity: 1 }, 1000);
 
       change_filter_color(
@@ -460,8 +494,12 @@ function start() {
             width: box4.width(),
             background: box4.css("background-color"),
           },
-          500
+          1000
         );
+
+        random.html(randomnumberString);
+        header_text_line1.html(`<span class="black-line-big">Trage die Zahl</span>`)
+        header_text_line2.html(`<span class="black-line-big">am Zahllenstrahl ein</span>`)
     });
   });
 
@@ -472,14 +510,11 @@ function start() {
     $(this).on("click", function () {
       //if the user clicked on the right answer
       if (randomnumberString === box4_texts[index].textContent) {
-        // show correct emoji
-        //emoji.classList.remove("emoji-img");
-        //emoji.classList.add("emoji-img-show");
         // make screen unclickable
         freez_screen();
-        //change the color of the number which is clicked
+        //change the color and font of the number which is clicked
         var el = $(box4_texts[index]);
-        el.css("fill", "#a2d1c2");
+        el.css("fill", "#47947b");
         el.css("font-weight", "bold");
 
         // change the box4 color and show msg to user
@@ -487,8 +522,8 @@ function start() {
           background: "#c399e677",
         });
         random.html("");
-        header_text_line1.html("");
-        header_text_line2.html(`Sehr Gut!`);
+        header_text_line1.html(`<span class="black-line-big"> Sehr gut! du hast die richtige Zahl getragen</span>`);
+        header_text_line2.html(`<span class="black-line-mid"> Drücke <span class="color-line-big"> Start</span>, um eine neue Zahl zu bekommen</span>`);
         $("#start-btn").prop("disabled", false);
         check = true;
 
@@ -497,13 +532,12 @@ function start() {
         // user will be able to try again and again untill he/she finds the correct answer
         random.html("");
         header_text_line1.html(
-          `<span class="black-line-mid"> du hast die Zahl <span class="color-line-big-red"> ${box4_texts[index].textContent}</span> getragen </span>`
+          `<span class="black-line-big"> du hast die Zahl <span class="color-line-big-red"> ${box4_texts[index].textContent}</span> getragen </span>`
         );
         header_text_line2.html(
-          `<span class="black-line-mid"> du solltest die Zahl <span class="color-line-big"> ${random_number}</span> tragen, versuch es nochmal </span>`
+          `<span class="black-line-big"> du solltest die Zahl <span class="color-line-big"> ${random_number}</span> tragen, versuch es nochmal </span>`
         );
         $("[id=animated-div-box3]").remove();
-        
       }
     });
   });
@@ -512,12 +546,10 @@ function start() {
   $("#start-btn").prop("disabled", true);
   $("#freez").remove();
   if (check) {
-    refreshPage();
     check = false;
   }
+
 }
 
-function refreshPage() {
-  window.location.reload();
-}
-start();
+
+
