@@ -44,11 +44,11 @@ let filter_box2_index = 0;
 let filter_box3_index = 0;
 
 //emoji for correct/wrong  answer
-var emoji = new Image();
-emoji.src = "./imgs/ThumbUp.png";
-emoji.setAttribute("id", "emoji-img");
-emoji.classList.add("emoji-img");
-$("#emoji").append(emoji);
+//var emoji = new Image();
+//emoji.src = "./imgs/ThumbUp.png";
+//emoji.setAttribute("id", "emoji-img");
+//emoji.classList.add("emoji-img");
+//$("#emoji").append(emoji);
 
 // takes an svg and an array of 11 numbers , creates a ruler with 11 values
 function create_line(svg, box_number, text_id) {
@@ -473,8 +473,8 @@ function start() {
       //if the user clicked on the right answer
       if (randomnumberString === box4_texts[index].textContent) {
         // show correct emoji
-        emoji.classList.remove("emoji-img");
-        emoji.classList.add("emoji-img-show");
+        //emoji.classList.remove("emoji-img");
+        //emoji.classList.add("emoji-img-show");
         // make screen unclickable
         freez_screen();
         //change the color of the number which is clicked
