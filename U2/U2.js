@@ -10,6 +10,11 @@ for (const [key, value] of urlSearchParams) {
   minValue = urlSearchParams.get("min");
   maxValue = urlSearchParams.get("max");
 }
+//check for negative numbers in URL  / min should always be smaller than max
+if(parseInt(minValue) < 0 || parseInt(minValue) > parseInt(maxValue)){
+  alert("URL Min-wert darf nicht Null oder ein negative Zahl sein\nMin-wert darf nicht größe als Max-wert sein")
+  refreshPage()
+}
 
 // Header part Welcome text and show random number
 const firstLine = $("#first-line"),
@@ -420,17 +425,16 @@ function start() {
     scroll: false,
   });
 
-  //stop animation
-  stop_animation()
 
   // disable the start button once clicked and enable the other buttons
   $("#checkbtn").prop("disabled", false);
   $("#undobtn").prop("disabled", false);
   $("#valuebtn").prop("disabled", true);
+  $('.showNumber').css({
+    "background-image": "none",
+  })
+  $("#freez").remove()
   
-  
-
-  // }
 }
 // function for "Überprüfen"  check button   on click, if the value of the boxes are same as the generated random number on header turn the start button for the next round
 function check() {
@@ -507,7 +511,10 @@ function check() {
   if(random == result && optimal_result){
     $("#checkbtn").prop("disabled", true);
     $("#valuebtn").prop("disabled", false);
-    play_animation()
+    $('.showNumber').css({
+      "background-image": "url(./imgs/winner.gif)",
+    })
+    freez_screen()
   firstLine.html(`<span class="black-line-mid"> Sehr gut! du hast die richtige Zahl dargestellt. die Zahl <span class="color-line-big"> ${random}</span> besteht aus</span>`);
   random_number.html(`<span class="color-line-big" id="span4">${counter_1000_total}</span> <span class="black-line-mid" id="span4">Tausender </span>
   <span class="color-line-big" id="span3">${counter_100_total}</span> <span class="black-line-mid" id="span3">Hunderter </span>
@@ -534,7 +541,7 @@ function check() {
 
   // only show the place values which is more than 0 (eg. if there is no "1000er" box avoid write it on screen)
   counter_array.forEach( (element, index) => {
-    console.log(element)
+    
     if(element === 0){
       let temp = index+1
       $(`[id=span${temp}]`).hide()
@@ -1177,18 +1184,6 @@ function delete_slowly(element, element_width) {
   );
 }
 
-// start and stop firework animation
-
-function play_animation(){
-  $('.firework').css({
-    "visibility": "visible",
-    "animation": "firework 2s infinite"
-  })
-}
-function stop_animation(){
-  $('.firework').css("visibility", "hidden")
-}
-
 // reset values and remove elements
 function reset(){
   $("[id=cloneElement-1-down]").remove();
@@ -1204,4 +1199,19 @@ function reset(){
   counterZehner = 0;
   counterHunderter = 0;
   counterTausender = 0;
+}
+// reload the page
+function refreshPage() {
+  window.location.reload();
+}
+// used to freez the screen when the user finds the correct answer
+function freez_screen() {
+  let freez_filter = document.createElement("div");
+  freez_filter.setAttribute("id", "freez");
+  freez_filter.classList.add("freez");
+  $(".main").append(freez_filter);
+  $("#freez").css({
+    left: $('.main').position().left,
+    top: $('.main').position().top,
+  });
 }
