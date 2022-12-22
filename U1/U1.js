@@ -29,6 +29,12 @@ for (const [key, value] of urlSearchParams) {
   maxValue = urlSearchParams.get("max");
 }
 
+
+
+if(parseInt(minValue) < 0 || parseInt(minValue) > parseInt(maxValue)){
+  alert("URL Min-wert darf nicht Null oder ein negative Zahl sein\nMax-wert darf nicht größe als 10000 sein\nMin-wert darf nicht größe als Max-wert sein")
+  refreshPage()
+}
 // initialize web speech API 
 const speaker = window.speechSynthesis;
 let msg = new SpeechSynthesisUtterance();
@@ -526,7 +532,9 @@ function start() {
         header_text_line2.html(`<span class="black-line-mid"> Drücke <span class="color-line-big"> Start</span>, um eine neue Zahl zu bekommen</span>`);
         $("#start-btn").prop("disabled", false);
         check = true;
-
+        $('.showNumber').css({
+          "background-image": "url(./imgs/winner.gif)",
+        })
         $("[id=animated-div-box3]").remove();
       } else {
         // user will be able to try again and again untill he/she finds the correct answer
@@ -548,7 +556,9 @@ function start() {
   if (check) {
     check = false;
   }
-
+  $('.showNumber').css({
+    "background-image": "none",
+  })
 }
 
 
