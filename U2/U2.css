@@ -171,10 +171,10 @@ body{
 .btnBox {
   
   height: var(--button-box-height);
-  aspect-ratio: 1.7;
+  aspect-ratio: 2.5;
   display: flex;
   justify-content: space-between;
-  /* background-color: #ecbbb5; */
+   /* background-color: #ecbbb5; */
   align-items: center;
 }
 button {
@@ -250,6 +250,7 @@ button {
   height: var(--main-height);
   position: absolute;
   background-color: #ffffff00;
+  z-index: 10000;
 }
 /* leftside dropbox area  starts here */
 
@@ -423,9 +424,10 @@ button {
 
   --font-line1: 15px;
   --font-line2: 13px;
-  --font-universal: 12px;
+  --font-universal: 10px;
   --font-weight: 400;
   --font-weight-universal: 250;
+  --button-height: 70%;
 
   --img1-width: 15px;
   --img1-height: 15px;
@@ -436,7 +438,15 @@ button {
   --img4-width: 120px;
   --img4-height: 120px;
   }
+  .btnBox {
   
+    height: var(--button-box-height);
+    aspect-ratio: 2.3;
+    display: flex;
+    justify-content: space-between;
+     /* background-color: #ecbbb5; */
+    align-items: center;
+  }
 }
 
 
@@ -446,9 +456,10 @@ button {
 
   --font-line1: 15px;
   --font-line2: 12px;
-  --font-universal: 10px;
+  --font-universal: 8px;
   --font-weight: 400;
   --font-weight-universal: 250;
+  --button-height: 60%;
 
   --img1-width: 15px;
   --img1-height: 15px;
@@ -459,6 +470,15 @@ button {
   --img4-width: 120px;
   --img4-height: 120px;
   }
+  .btnBox {
+  
+    height: var(--button-box-height);
+    aspect-ratio: 2;
+    display: flex;
+    justify-content: space-between;
+     /* background-color: #ecbbb5; */
+    align-items: center;
+  }
   
 }
 
@@ -468,7 +488,7 @@ button {
 
   --font-line1: 10px;
   --font-line2: 8px;
-  --font-universal: 10px;
+  --font-universal: 8px;
   --font-weight: 300;
   --font-weight-universal: 200;
 
@@ -488,7 +508,7 @@ button {
 
   --font-line1: 10px;
   --font-line2: 8px;
-  --font-universal: 10px;
+  --font-universal: 8px;
   --font-weight: 300;
   --font-weight-universal: 200;
 
