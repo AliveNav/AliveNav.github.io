@@ -15,8 +15,6 @@ const header_text_line2 = $("#second-line");
 // variable for namespace
 const svgns = "http://www.w3.org/2000/svg";
 
-
-
 let minValue = 0;
 let maxValue = 0;
 let random_number = 0;
@@ -28,14 +26,18 @@ for (const [key, value] of urlSearchParams) {
   minValue = urlSearchParams.get("min");
   maxValue = urlSearchParams.get("max");
 }
-
-
-
-if(parseInt(minValue) < 0 || parseInt(minValue) > parseInt(maxValue)){
-  alert("URL Min-wert darf nicht Null oder ein negative Zahl sein\nMax-wert darf nicht größe als 10000 sein\nMin-wert darf nicht größe als Max-wert sein")
-  refreshPage()
+// check for negative number in url / max should be always bigger or equal to min / max should be 10000
+if (
+  parseInt(minValue) < 0 ||
+  parseInt(minValue) > parseInt(maxValue) ||
+  parseInt(maxValue) > 10000
+) {
+  alert(
+    "URL Min-wert darf nicht Null oder ein negative Zahl sein\nMax-wert darf nicht größe als 10000 sein\nMin-wert darf nicht größe als Max-wert sein"
+  );
+  refreshPage();
 }
-// initialize web speech API 
+// initialize web speech API
 const speaker = window.speechSynthesis;
 let msg = new SpeechSynthesisUtterance();
 msg.lang = "de-De";
@@ -45,7 +47,9 @@ msg.voice = speechSynthesis
 //msg.voice = window.speechSynthesis.getVoices()[6];
 
 // initial values of the first svg (unchanged values)
-let default_values = [0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000];
+let default_values = [
+  0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000,
+];
 let box1_values = [];
 let box2_values = [];
 let box3_values = [];
@@ -56,10 +60,17 @@ let level_counter = 0;
 let filter_box2_index = 0;
 let filter_box3_index = 0;
 
+// if the random number has the same value as row3 big line values , than make them clickable. that means user can find the answer on the 3rd row no need to show the 4th row
+let row3_clickable = false;
+
 // welcome text
-header_text_line1.html(`<span class="black-line-big">Herzlich Willkommen!</span>`)
-random.html("")
-header_text_line2.html(`Drücke <span class="color-line-big"> Start</span> , um zu beginnen`)
+header_text_line1.html(
+  `<span class="black-line-big">Herzlich Willkommen!</span>`
+);
+random.html("");
+header_text_line2.html(
+  `Drücke <span class="color-line-big"> Start</span> , um zu beginnen.`
+);
 
 // takes an svg and an array of 11 numbers , creates a ruler with 11 values
 function create_line(svg, box_number, text_id) {
@@ -103,6 +114,14 @@ function create_line(svg, box_number, text_id) {
     }
     temp += x1 / 4.2;
   }
+  let vertical_line = document.createElementNS(svgns, "line");
+  vertical_line.setAttribute("x1", x2);
+  vertical_line.setAttribute("y1", y2);
+  vertical_line.setAttribute("x2", svg.width() - gape_x * 4.8);
+  vertical_line.setAttribute("y2", y2);
+  vertical_line.classList.add("big-lines");
+  vertical_line.setAttribute("id", `line-heigh-${box_number}`);
+  svg.append(vertical_line);
 }
 // initializing the values on top of the lines, used inside create_lines function to set the values
 function create_numbers(svg, x, y, id_number) {
@@ -149,7 +168,7 @@ function filters_position(box, box_number) {
     let filter = $(`#filter-${index}-${box_number}`);
     filter.addClass("filter");
     filter.css({
-      top: $(this).position().top - box_height/4.8,
+      top: $(this).position().top - box_height / 4.8,
       left: $(this).position().left,
     });
   });
@@ -203,7 +222,7 @@ function change_filter_color(el_number, box_number, bg_color_clicked) {
   });
 }
 // hide the bottom rows (boxes)
-function row_hider(){
+function row_hider() {
   box2.css({
     visibility: "hidden",
     opacity: 0,
@@ -237,7 +256,6 @@ function read_text() {
     " " +
     $("#second-line").text();
   speaker.speak(msg);
-  
 }
 
 // reload page
@@ -246,70 +264,121 @@ function refreshPage() {
 }
 
 // remove all elements from svgs, used to reset for next round
-function remove_elements(){
-  $('#svg-1').empty()
-  $(`#box-1 > div`).remove()
-  $('#svg-2').empty()
-  $(`#box-2 > div`).remove()
-  $('#svg-3').empty()
-  $(`#box-3 > div`).remove()
-  $('#svg-4').empty()
-  $(`#box-4 > div`).remove()
-} 
+function remove_elements() {
+  $("#svg-1").empty();
+  $(`#box-1 > div`).remove();
+  $("#svg-2").empty();
+  $(`#box-2 > div`).remove();
+  $("#svg-3").empty();
+  $(`#box-3 > div`).remove();
+  $("#svg-4").empty();
+  $(`#box-4 > div`).remove();
+}
+//a small number generator function values between 0 to 9. this value will be added to the main random number ,IFF the main random number % 100 = 0
+// this is to make sure we dont generate a number which is same as first or second rows values  eg. 2000 or 6000 or 3400 or 1200 etc..
+function small_random_number_generator() {
+  let min = Math.ceil(1);
+  let max = Math.floor(10);
+  let small_random_number = Math.floor(Math.random() * (max - min) + min);
+  return small_random_number;
+}
 // boxes are hidden, when clicked on 1st box show the 2nd box, onclick on 2nd box show 3rd box ...
-row_hider()
+row_hider();
 create_svg_elements(svg_1, box1, 1, 1);
 init(1, default_values);
 freez_screen();
 //start button function
 function start() {
-
   let cmin = Math.ceil(minValue);
   let cmax = Math.floor(maxValue);
   random_number = Math.floor(Math.random() * (cmax - cmin) + cmin);
+
+  // this will make sure to exclude all numbers from the first and second rows  eg. 1000 or 4500 or 8000 etc.
+  small_number = small_random_number_generator();
+  if (random_number % 100 == 0) {
+    random_number += small_number;
+  }
+  if (random_number % 10 == 0) {
+    row3_clickable = true;
+  }
   let randomnumberString = random_number.toString();
-  random.html(randomnumberString);
-  header_text_line1.html(`<span class="black-line-big">Trage die Zahl</span>`)
-  header_text_line2.html(`<span class="black-line-big">am Zahllenstrahl ein</span>`)
+  random.html("");
+  header_text_line1.html(
+    `<span class="black-line-big">Trage die Zahl</span><span class="color-line-big"> ${random_number}</span><span class="black-line-big"> am Zahlenstrahl ein.</span>`
+  );
+  header_text_line2.html(``);
   //create svg elements (texts and lines), initilized the values with zeros
   //for svg1 set the values , since they are always the same values (0 to 10000)
-  remove_elements()
- 
+  remove_elements();
+
   create_svg_elements(svg_1, box1, 1, 1);
   init(1, default_values);
   create_svg_elements(svg_2, box2, 2, 2);
   create_svg_elements(svg_3, box3, 3, 3);
   create_svg_elements2(svg_4, box4, 4, 4);
- 
 
   // for the last box we dont need the mid lines or small lines so remove them
   // I dont change the create line function because in furture we may need them for float numbers
   $("#svg-4 > .small-lines").remove();
   $("#svg-4 > .mid-lines").remove();
-  row_hider()
+  row_hider();
   // stage one from box1 to box2, there are 10 options to click on each stage
   let box1_filters = $(`#box-1 > div`);
   box1_filters.each(function (index, el) {
     $(this).on("click", function () {
       //when clicked on the first box filters
-      // if 3 boxes are visible (means aleady clicked once), hide the lower box (box3) and reset the filter color
-      if (level_counter == 3) {
-        random.html(randomnumberString);
-        header_text_line1.html(`<span class="black-line-big">Trage die Zahl</span>`)
-        header_text_line2.html(`<span class="black-line-big">am Zahllenstrahl ein</span>`)
-        box3.css({
+      if (level_counter == 2) {
+        box2.css({
           visibility: "hidden",
           opacity: 0,
         });
+        $("[id=animated-div-box1]").remove();
         $("[id=animated-div-box2]").remove();
         change_filter_color(
           filter_box2_index,
           2,
           "linear-gradient(0deg, #75e99c00 0%, #ffffff00 100%)"
         );
+        random.html("");
+        header_text_line1.html(
+          `<span class="black-line-big">Trage die Zahl</span><span class="color-line-big"> ${random_number}</span><span class="black-line-big"> am Zahlenstrahl ein.</span>`
+        );
+        header_text_line2.html(``);
+      }
+      // if 3 boxes are visible (means aleady clicked once), hide the lower box (box3) and reset the filter color
+      if (level_counter == 3) {
+        box2.css({
+          visibility: "hidden",
+          opacity: 0,
+        });
+        box3.css({
+          visibility: "hidden",
+          opacity: 0,
+        });
+        $("[id=animated-div-box1]").remove();
+        $("[id=animated-div-box2]").remove();
+        change_filter_color(
+          filter_box2_index,
+          2,
+          "linear-gradient(0deg, #75e99c00 0%, #ffffff00 100%)"
+        );
+        random.html("");
+        header_text_line1.html(
+          `<span class="black-line-big">Trage die Zahl</span><span class="color-line-big"> ${random_number}</span><span class="black-line-big"> am Zahlenstrahl ein.</span>`
+        );
+        header_text_line2.html(``);
+
+        box3_texts.removeClass("wronganswer");
+        box3_texts.addClass("text");
+        box4_texts.removeClass("wronganswer");
+        box4_texts.addClass("text");
       }
       //if 4 boxes are visible (means aleady clicked once), hide the lower boxes (box3 and box4) and reset the filter color
       if (level_counter == 4) {
+        box2.css({
+          visibility: "hidden",
+          opacity: 0,
+        });
         box3.css({
           visibility: "hidden",
           opacity: 0,
@@ -318,6 +387,7 @@ function start() {
           visibility: "hidden",
           opacity: 0,
         });
+        $("[id=animated-div-box1]").remove();
         $("[id=animated-div-box2]").remove();
         $("[id=animated-div-box3]").remove();
         change_filter_color(
@@ -330,9 +400,11 @@ function start() {
           3,
           "linear-gradient(0deg, #c399e600 0%, #ffffff00 100%)"
         );
-        random.html(randomnumberString);
-        header_text_line1.html(`<span class="black-line-big">Trage die Zahl</span>`)
-        header_text_line2.html(`<span class="black-line-big">am Zahllenstrahl ein</span>`)
+        random.html("");
+        header_text_line1.html(
+          `<span class="black-line-big">Trage die Zahl</span><span class="color-line-big"> ${random_number}</span><span class="black-line-big"> am Zahlenstrahl ein.</span>`
+        );
+        header_text_line2.html(``);
       }
 
       // otherweise show box2 and change the color of "clicked filter" on box1 #c0ccf141ad
@@ -348,11 +420,7 @@ function start() {
         })
         .delay(1000)
         .animate({ opacity: 1 }, 1000);
-      change_filter_color(
-        index,
-        1,
-        "#f89f5677"
-      );
+      change_filter_color(index, 1, "#f89f5677");
 
       //animated div from box1 to box2 this will help students to understand, which part of box1 is being zoomed in
       let animated_filter = document.createElement("div");
@@ -363,7 +431,7 @@ function start() {
         .css({
           background: "#f89f56",
           position: "absolute",
-          top: box1.position().top + box1.height()/1.1,
+          top: box1.position().top + box1.height() / 1.1,
           left: $(this).position().left,
           height: $(this).height(),
           width: $(this).width(),
@@ -375,11 +443,12 @@ function start() {
             height: box2.height(),
             width: box2.width(),
             background: box2.css("background-color"),
-          },{
+          },
+          {
             duration: 1000,
-            
           }
         );
+      level_counter = 2;
     });
   });
 
@@ -387,21 +456,58 @@ function start() {
   let box2_filters = $(`#box-2 > div`);
   box2_filters.each(function (index, el) {
     $(this).on("click", function () {
-      if (level_counter == 4) {
-        box4.css({
+      if (level_counter == 3) {
+        box3.css({
           visibility: "hidden",
           opacity: 0,
         });
+        change_filter_color(
+          filter_box2_index,
+          2,
+          "linear-gradient(0deg, #c399e600 0%, #ffffff00 100%)"
+        );
         change_filter_color(
           filter_box3_index,
           3,
           "linear-gradient(0deg, #c399e600 0%, #ffffff00 100%)"
         );
-        random.html(randomnumberString);
-        header_text_line1.html(`<span class="black-line-big">Trage die Zahl</span>`)
-        header_text_line2.html(`<span class="black-line-big">am Zahllenstrahl ein</span>`)
+        $("[id=animated-div-box2]").remove();
         $("[id=animated-div-box3]").remove();
-        console.log("why");
+        random.html("");
+        header_text_line1.html(
+          `<span class="black-line-big">Trage die Zahl</span><span class="color-line-big"> ${random_number}</span><span class="black-line-big"> am Zahlenstrahl ein.</span>`
+        );
+        header_text_line2.html(``);
+
+        box3_texts.removeClass("wronganswer");
+        box3_texts.addClass("text");
+      }
+      if (level_counter == 4) {
+        box3.css({
+          visibility: "hidden",
+          opacity: 0,
+        });
+        box4.css({
+          visibility: "hidden",
+          opacity: 0,
+        });
+        change_filter_color(
+          filter_box2_index,
+          2,
+          "linear-gradient(0deg, #c399e600 0%, #ffffff00 100%)"
+        );
+        change_filter_color(
+          filter_box3_index,
+          3,
+          "linear-gradient(0deg, #c399e600 0%, #ffffff00 100%)"
+        );
+        $("[id=animated-div-box2]").remove();
+        $("[id=animated-div-box3]").remove();
+        random.html("");
+        header_text_line1.html(
+          `<span class="black-line-big">Trage die Zahl</span><span class="color-line-big"> ${random_number}</span><span class="black-line-big"> am Zahlenstrahl ein.</span>`
+        );
+        header_text_line2.html(``);
       }
 
       filter_box2_index = index;
@@ -418,11 +524,7 @@ function start() {
         .delay(1000)
         .animate({ opacity: 1 }, 1000);
 
-      change_filter_color(
-        index,
-        2,
-        "#75e99c77"
-      );
+      change_filter_color(index, 2, "#75e99c77");
       $("[id=animated-div-box1]").remove();
 
       let animated_filter = document.createElement("div");
@@ -454,58 +556,124 @@ function start() {
   });
 
   // stage 3 from box3 to box4
+  let box3_texts = $(`#svg-3 > text`);
   let box3_filters = $(`#box-3 > div`);
+  box3_texts.each(function (index, el) {
+    $(this).on("click", function () {
+      if (
+        row3_clickable &&
+        randomnumberString === box3_texts[index].textContent
+      ) {
+        // make screen unclickable
+        freez_screen();
+        //change the color and font of the number which is clicked
+        $(this).css("fill", "#4ab391");
+        $(this).css("font-weight", "bold");
+
+        random.html("");
+        header_text_line1.html(
+          `<span class="black-line-big"> Sehr gut! Du hast <span class="color-line-big"> ${random_number}</span> richtig am Zahlenstrahl eingetragen.</span>`
+        );
+        header_text_line2.html(
+          `<span class="black-line-mid"> Drücke <span class="color-line-big"> Start</span>, um eine neue Zahl zu bekommen.</span>`
+        );
+        $("#start-btn").prop("disabled", false);
+        check = true;
+        $(".showNumber").css({
+          "background-image": "url(./imgs/winner.gif)",
+        });
+        $("[id=animated-div-box3]").remove();
+        $("[id=animated-div-box2]").remove();
+      } else if (
+        row3_clickable &&
+        randomnumberString !== box3_texts[index].textContent
+      ) {
+        // user will be able to try again and again untill he/she finds the correct answer
+        $(this).addClass("wronganswer");
+
+        header_text_line1.html(
+          `<span class="black-line-big"> Du hast die Zahl <span class="color-line-big-red"> ${box3_texts[index].textContent}</span> eingetragen. </span>`
+        );
+        random.html(
+          `<span class="black-line-big">DU solltest aber die Zahl <span class="color-line-big"> ${random_number}</span> eintragen.`
+        );
+        header_text_line2.html(
+          `<span class="black-line-big">Versuche es noch einmal.</span>`
+        );
+      }
+    });
+  });
+
   box3_filters.each(function (index, el) {
     $(this).on("click", function () {
-      level_counter = 4; // 4 boxes are visible
-      filter_box3_index = index;
-      box3_values = create_values(box2_values[index], 1);
-      init(4, box3_values);
-      box3.css({
-        background: "#75e99c77",
-      });
-      box4
-        .css({
-          visibility: "visible",
-          background: "#c399e6",
-        })
-        .delay(1000)
-        .animate({ opacity: 1 }, 1000);
+      if (!row3_clickable) {
+        if (level_counter == 4) {
+          box4.css({
+            visibility: "hidden",
+            opacity: 0,
+          });
+          change_filter_color(
+            filter_box3_index,
+            3,
+            "linear-gradient(0deg, #c399e600 0%, #ffffff00 100%)"
+          );
+          $("[id=animated-div-box3]").remove();
+          random.html("");
+          header_text_line1.html(
+            `<span class="black-line-big">Trage die Zahl</span><span class="color-line-big"> ${random_number}</span><span class="black-line-big"> am Zahlenstrahl ein.</span>`
+          );
+          header_text_line2.html(``);
+        }
+        level_counter = 4; // 4 boxes are visible
+        filter_box3_index = index;
+        box3_values = create_values(box2_values[index], 1);
+        init(4, box3_values);
+        box3.css({
+          background: "#75e99c77",
+        });
+        box4
+          .css({
+            visibility: "visible",
+            background: "#c399e6",
+          })
+          .delay(1000)
+          .animate({ opacity: 1 }, 1000);
 
-      change_filter_color(
-        index,
-        3,
-        "#c399e677"
-      );
-      $("[id=animated-div-box2]").remove();
+        change_filter_color(index, 3, "#c399e677");
+        $("[id=animated-div-box2]").remove();
 
-      let animated_filter = document.createElement("div");
-      animated_filter.setAttribute("id", "animated-div-box3");
-      animated_filter.classList.add("animated-div");
-      main.append(animated_filter);
-      $("#animated-div-box3")
-        .css({
-          background: "#c399e6",
-          position: "absolute",
-          top: box3.position().top + box3.height(),
-          left: $(this).position().left,
-          height: $(this).height(),
-          width: $(this).width(),
-        })
-        .animate(
-          {
-            top: box4.position().top,
-            left: box4.position().left,
-            height: box4.height(),
-            width: box4.width(),
-            background: box4.css("background-color"),
-          },
-          1000
+        let animated_filter = document.createElement("div");
+        animated_filter.setAttribute("id", "animated-div-box3");
+        animated_filter.classList.add("animated-div");
+        main.append(animated_filter);
+        $("#animated-div-box3")
+          .css({
+            background: "#c399e6",
+            position: "absolute",
+            top: box3.position().top + box3.height(),
+            left: $(this).position().left,
+            height: $(this).height(),
+            width: $(this).width(),
+          })
+          .animate(
+            {
+              top: box4.position().top,
+              left: box4.position().left,
+              height: box4.height(),
+              width: box4.width(),
+              background: box4.css("background-color"),
+            },
+            1000
+          );
+
+        random.html("");
+        header_text_line1.html(
+          `<span class="black-line-big">Trage die Zahl</span><span class="color-line-big"> ${random_number}</span><span class="black-line-big"> am Zahlenstrahl ein.</span>`
         );
-
-        random.html(randomnumberString);
-        header_text_line1.html(`<span class="black-line-big">Trage die Zahl</span>`)
-        header_text_line2.html(`<span class="black-line-big">am Zahllenstrahl ein</span>`)
+        header_text_line2.html(``);
+        box4_texts.removeClass("wronganswer");
+        box4_texts.addClass("text");
+      }
     });
   });
 
@@ -520,7 +688,7 @@ function start() {
         freez_screen();
         //change the color and font of the number which is clicked
         var el = $(box4_texts[index]);
-        el.css("fill", "#47947b");
+        el.css("fill", "#4ab391");
         el.css("font-weight", "bold");
 
         // change the box4 color and show msg to user
@@ -528,22 +696,31 @@ function start() {
           background: "#c399e677",
         });
         random.html("");
-        header_text_line1.html(`<span class="black-line-big"> Sehr gut! du hast die richtige Zahl getragen</span>`);
-        header_text_line2.html(`<span class="black-line-mid"> Drücke <span class="color-line-big"> Start</span>, um eine neue Zahl zu bekommen</span>`);
+        header_text_line1.html(
+          `<span class="black-line-big"> Sehr gut! Du hast <span class="color-line-big"> ${random_number}</span> richtig am Zahlenstrahl eingetragen.</span>`
+        );
+        header_text_line2.html(
+          `<span class="black-line-mid"> Drücke <span class="color-line-big"> Start</span>, um eine neue Zahl zu bekommen.</span>`
+        );
         $("#start-btn").prop("disabled", false);
         check = true;
-        $('.showNumber').css({
+        $(".showNumber").css({
           "background-image": "url(./imgs/winner.gif)",
-        })
+        });
         $("[id=animated-div-box3]").remove();
       } else {
         // user will be able to try again and again untill he/she finds the correct answer
-        random.html("");
+        var el = $(box4_texts[index]);
+        el.addClass("wronganswer");
+
         header_text_line1.html(
-          `<span class="black-line-big"> du hast die Zahl <span class="color-line-big-red"> ${box4_texts[index].textContent}</span> getragen </span>`
+          `<span class="black-line-big"> Du hast die Zahl <span class="color-line-big-red"> ${box4_texts[index].textContent}</span> eingetragen. </span>`
+        );
+        random.html(
+          `<span class="black-line-big">DU solltest aber die Zahl <span class="color-line-big"> ${random_number}</span> eintragen.`
         );
         header_text_line2.html(
-          `<span class="black-line-big"> du solltest die Zahl <span class="color-line-big"> ${random_number}</span> tragen, versuch es nochmal </span>`
+          `<span class="black-line-big">Versuche es noch einmal.</span>`
         );
         $("[id=animated-div-box3]").remove();
       }
@@ -556,10 +733,7 @@ function start() {
   if (check) {
     check = false;
   }
-  $('.showNumber').css({
+  $(".showNumber").css({
     "background-image": "none",
-  })
+  });
 }
-
-
-
