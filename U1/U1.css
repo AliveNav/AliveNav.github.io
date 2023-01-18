@@ -146,7 +146,7 @@ button {
   /* background-color: rgb(0, 255, 13); */
 }
 .randomNumber {
-  color: #47947b;
+  color: #4ab391;
   font-size: var(--font-line1);
   font-weight: var(--font-weight);
 }
@@ -173,12 +173,12 @@ button {
 .color-line-big{
   font-size: var(--font-line1);
   font-weight: var(--font-weight);
-  color: #a2d1c2;
+  color: #4ab391;
 }
 .color-line-big-red{
   font-size: var(--font-line1);
   font-weight: var(--font-weight);
-  color: #ecbbb5;
+  color: #e46f5f;
 }
 /* Header rightside (reader button ) */
 .header-right {
@@ -258,6 +258,10 @@ button {
   fill: #000000;
   font-size: var(--texts-size);
  
+}
+.wronganswer{
+  fill: #e46f5f;
+  font-weight: bold;
 }
 .filter {
   height: 7%;
