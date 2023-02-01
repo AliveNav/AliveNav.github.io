@@ -1,0 +1,363 @@
+:root {
+  --container-height: 100vh;
+  --container-width: 100%;
+
+  --header-height: 10%;
+  --header-width: 95%;
+
+  --button-box-height: 100%;
+  --button-box-width: 5%;
+
+  --button-height: 80%;
+  --button-width: 100%;
+
+  --text-box-height: 100%;
+  --text-box-width: 70%;
+
+  --header-rightside-height: 100%;
+  --header-rightside-width: 5%;
+
+  --main-height: 70%;
+  --main-width: 95%;
+
+  --numberline-height: 95%;
+  --numberline-width: 100%;
+
+  --box-height: 15%;
+  --box-width: 100%;
+
+  --svg-height: 100%;
+  --svg-width: 100%;
+
+  --theme-color1: #bfe7da;
+  --theme-color2: #f7f2dd;
+  --background-color: #e8ecf2;
+  --box-shadow: -5px -5px 10px rgba(255, 255, 255, 0.8),
+    5px 5px 10px rgba(0, 0, 0, 0.25);
+
+  --font-line1: 25px;
+  --font-line2: 20px;
+  --font-universal: 20px;
+  --font-weight: 500;
+  --font-weight-universal: 250;
+
+  --small-lines-size: 2px;
+  --mid-lines-size: 3px;
+  --big-lines-size: 5px;
+  --texts-size: 25px;
+}
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+
+  font-size: 12px;
+  font-weight: 250;
+  font-family: "Poppins", sans-serif;
+
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Alter Version Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Moderne Browser (Chrome/Firefox/Opera) */
+  cursor: pointer;
+}
+/* colors  #bfe7da greenish  theme color     #e8ecf2 whitesh Background color  #f7f2ddalternative theme color  */
+.container {
+  height: var(--container-height);
+  width: var(--container-width);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: var(--background-color);
+  user-select: none;
+  z-index: -3;
+}
+/* header part starts here */
+.header {
+  height: var(--header-height);
+  width: var(--header-width);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+  /* background-color: #ca3d2b; */
+  /* border-radius: 2em;
+  box-shadow: var(--box-shadow); */
+}
+/* Header leftside (start button and undo button ) */
+.header-left {
+  width: var(--button-box-width);
+  height: var(--button-box-height);
+  display: flex;
+  justify-content: space-between;
+  /* background-color: #ecbbb5; */
+  align-items: center;
+}
+button {
+  border: none;
+  cursor: pointer;
+  height: var(--button-height);
+  aspect-ratio: 1;
+  transition: all;
+  transition-duration: 250ms;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-universal);
+  font-weight: var(--font-weight-universal);
+  font-family: "Poppins", sans-serif;
+}
+.btn {
+  background-color: var(--background-color);
+  color: #73787d;
+  /* border: 2px solid var(--background-color); */
+  border-radius: 1em;
+  box-shadow: -5px -5px 10px rgba(255, 255, 255, 0.8),
+    5px 5px 10px rgba(0, 0, 0, 0.25);
+}
+#start-btn {
+  background-color: var(--theme-color1);
+}
+
+/* Header mid (texts and random number ) */
+
+.text-lines{
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  
+ 
+}
+.header-mid{
+  width: var(--text-box-width);
+  height: var(--text-box-height);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-size: contain;
+
+}
+.randomNumber {
+  color: #4ab391;
+  font-size: var(--font-line1);
+  font-weight: var(--font-weight);
+}
+.secondLine {
+  font-size: var(--font-line2);
+  font-weight: var(--font-weight);
+  color: #73787d;
+}
+.firstLine {
+  color: #73787d;
+  font-size: var(--font-line1);
+  font-weight: var(--font-weight);
+}
+.black-line-big{
+  font-size: var(--font-line1);
+  font-weight: var(--font-weight);
+  color: #73787d;
+}
+.black-line-mid{
+  font-size: var(--font-line2);
+  font-weight: var(--font-weight);
+  color: #73787d;
+}
+.color-line-big{
+  font-size: var(--font-line1);
+  font-weight: var(--font-weight);
+  color: #4ab391;
+}
+.color-line-big-red{
+  font-size: var(--font-line1);
+  font-weight: var(--font-weight);
+  color: #e46f5f;
+}
+/* Header rightside (reader button ) */
+.header-right {
+  height: var(--header-rightside-height);
+  width: var(--header-rightside-width);
+  display: flex;
+  justify-content: flex-end;
+}
+.speaker {
+  width: 30px;
+  height: 30px;
+  filter: opacity(50%);
+}
+
+/* main area starts here */
+.main {
+  width: var(--main-width);
+  height: var(--main-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* background-color: #ecbbb5; */
+  z-index: 0;
+}
+.numberlines {
+  height: var(--numberline-height);
+  width: var(--numberline-width);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+.box1,
+.box2,
+.box3,
+.box4 {
+  height: var(--box-height);
+  width: var(--box-width);
+  border-radius: 2em;
+  box-shadow: -5px -5px 10px rgba(255, 255, 255, 0.8),
+    5px 5px 10px rgba(0, 0, 0, 0.25);
+}
+/* box1 primary #c0ccf1 color  and secondery color #c0ccf177 filter color after click #f89f5677 */
+.box1 {
+  background-color: #c0ccf1;
+}
+/* box2 primary #f89f56 color  and secondery color #f89f5677  filter color after click #75e99c77*/
+/* box3 primary #75e99c color  and secondery color #75e99c77  filter color after click #c399e677 */
+/* box4 primary #c399e6 color  and secondery color #c399e677  */
+
+.svgs {
+  height: var(--svg-height);
+  width: var(--svg-width);
+}
+.small-lines {
+  stroke: #000000;
+  stroke-width: var(--small-lines-size);
+}
+.big-lines {
+  stroke: #000000;
+  stroke-width: var(--big-lines-size);
+}
+.mid-lines {
+  stroke: #000000;
+  stroke-width: var(--mid-lines-size);
+}
+.text {
+  fill: #000000;
+  font-size: var(--texts-size);
+ 
+}
+.wronganswer{
+  fill: #e46f5f;
+  font-weight: bold;
+}
+.filter {
+  height: 7%;
+  width: 8.6%;
+  position: absolute;
+  border-radius: 0.7em;
+
+}
+.filter:hover {
+  background:#ffffff73;
+}
+.filter2 {
+  height: 10%;
+  width: 3%;
+  position: absolute
+}
+.freez {
+  width: var(--main-width);
+  height: var(--main-height);
+  position: absolute;
+  background-color: #ffffff00;
+}
+.animated-div{
+  border-radius: 2em;
+  z-index: -1;
+}
+
+/* when hover on a button change color only for non touch screens */
+@media (hover: hover) {
+  .btn:hover {
+    background-color: var(--theme-color1);
+    box-shadow: -1px -1px 5px rgba(255, 255, 255, 0.6),
+      1px 1px 5px rgba(0, 0, 0, 0.3), inset -2px -2px 5px rgba(255, 255, 255, 1),
+      inset 2px 2px 4px rgba(0, 0, 0, 0.3);
+  }
+}
+/* on a screen smaller than 1366px of width the boxes will appear 20% smaller than desktop version  */
+@media only screen and (max-width: 1368px) {
+  :root {
+    --font-line1: 20px;
+    --font-line2: 15px;
+    --font-universal: 15px;
+    --font-weight: 500;
+    --font-weight-universal: 250;
+
+    --small-lines-size: 1px;
+    --mid-lines-size: 2px;
+    --big-lines-size: 4px;
+    --texts-size: 20px;
+  }
+}
+/* on a screen smaller than 1024px of width the boxes will appear 40% smaller than desktop version  */
+@media only screen and (max-width: 1024px), screen and (max-height: 900px) {
+  :root {
+    --font-line1: 15px;
+    --font-line2: 10px;
+    --font-universal: 12px;
+    --font-weight: 400;
+    --font-weight-universal: 250;
+
+    --small-lines-size: 1px;
+    --mid-lines-size: 2px;
+    --big-lines-size: 3px;
+    --texts-size: 15px;
+  }
+}
+/* on a screen smaller than 768px of width the boxes will appear 50% smaller than desktop version  */
+@media only screen and (max-width: 768px) {
+  :root {
+    --font-line1: 15px;
+    --font-line2: 10px;
+    --font-universal: 12px;
+    --font-weight: 400;
+    --font-weight-universal: 250;
+
+    --small-lines-size: 1px;
+    --mid-lines-size: 2px;
+    --big-lines-size: 3px;
+    --texts-size: 15px;
+  }
+}
+/* on a screen smaller than 700px of width the boxes will appear 50% smaller than desktop version  */
+@media only screen and (max-width: 720px) {
+  :root {
+    --font-line1: 15px;
+    --font-line2: 10px;
+    --font-universal: 12px;
+    --font-weight: 400;
+    --font-weight-universal: 250;
+
+    --small-lines-size: 1px;
+    --mid-lines-size: 2px;
+    --big-lines-size: 3px;
+    --texts-size: 15px;
+  }
+}
+@media only screen and (max-height: 390px) {
+  :root {
+    --font-line1: 8px;
+    --font-line2: 6px;
+    --font-universal: 10px;
+    --font-weight: 200;
+    --font-weight-universal: 200;
+
+    --small-lines-size: 1px;
+    --mid-lines-size: 2px;
+    --big-lines-size: 3px;
+    --texts-size: 10px;
+  }
+}
