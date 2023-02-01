@@ -293,6 +293,8 @@ function start() {
   let cmax = Math.floor(maxValue);
   random_number = Math.floor(Math.random() * (cmax - cmin) + cmin);
 
+  row3_clickable = false;
+
   // this will make sure to exclude all numbers from the first and second rows  eg. 1000 or 4500 or 8000 etc.
   small_number = small_random_number_generator();
   if (random_number % 100 == 0) {
@@ -580,7 +582,7 @@ function start() {
         $("#start-btn").prop("disabled", false);
         check = true;
         $(".header-mid").css({
-          "background-image": "url(.\imgs\winner.gif)",
+          "background-image": "url(./imgs/winner.gif)",
         });
         $("[id=animated-div-box3]").remove();
         $("[id=animated-div-box2]").remove();
