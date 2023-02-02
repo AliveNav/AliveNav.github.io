@@ -1,42 +1,3 @@
-const main = $("#main");
-const number_lines = $("#number-lines");
-const svg_1 = $("#svg-1");
-const svg_2 = $("#svg-2");
-const svg_3 = $("#svg-3");
-const svg_4 = $("#svg-4");
-const box1 = $("#box-1");
-const box2 = $("#box-2");
-const box3 = $("#box-3");
-const box4 = $("#box-4");
-const header_text_line1 = $("#first-line");
-const header_text_line2 = $("#second-line");
-const header_text_line3 = $("#third-line");
-
-// variable for namespace
-const svgns = "http://www.w3.org/2000/svg";
-
-let minValue = 0;
-let maxValue = 0;
-let random_number = 0;
-
-// get the values from URL parameters
-const queryString = window.location.search;
-const urlSearchParams = new URLSearchParams(queryString);
-for (const [key, value] of urlSearchParams) {
-  minValue = urlSearchParams.get("min");
-  maxValue = urlSearchParams.get("max");
-}
-// check for negative number in url / max should be always bigger or equal to min / max should be 10000
-if (
-  parseInt(minValue) < 0 ||
-  parseInt(minValue) > parseInt(maxValue) ||
-  parseInt(maxValue) > 10000
-) {
-  alert(
-    "URL Min-wert darf nicht Null oder ein negative Zahl sein\nMax-wert darf nicht größe als 10000 sein\nMin-wert darf nicht größe als Max-wert sein"
-  );
-  refreshPage();
-}
 // initialize web speech API
 const speaker = window.speechSynthesis;
 let msg = new SpeechSynthesisUtterance();
@@ -46,655 +7,1206 @@ msg.voice = speechSynthesis
   .find((voice) => /de(-|_)De/.test(voice.lang));
 //msg.voice = window.speechSynthesis.getVoices()[6];
 
-// initial values of the first svg (unchanged values)
-let default_values = [
-  0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000,
+// get and set Url values
+let minValue = 0;
+let maxValue = 0;
+const queryString = window.location.search;
+const urlSearchParams = new URLSearchParams(queryString);
+for (const [key, value] of urlSearchParams) {
+  minValue = urlSearchParams.get("min");
+  maxValue = urlSearchParams.get("max");
+}
+//check for negative numbers in URL  / min should always be smaller than max
+if (parseInt(minValue) < 0 || parseInt(minValue) > parseInt(maxValue)) {
+  alert(
+    "URL Min-wert darf nicht Null oder ein negative Zahl sein\nMin-wert darf nicht größe als Max-wert sein"
+  );
+  refreshPage();
+}
+
+// Header part Welcome text and show random number
+const firstLine = $("#first-line"),
+  secondLine = $("#second-line"),
+  random_number = $("#randomNumber");
+
+firstLine.html("Herzlich Willkommen!");
+random_number.html("");
+secondLine.html(
+  `Drücke <span class="color-line-big"> Start</span> , um zu beginnen.`
+);
+// only start button is enable all other buttons are disabled
+$("#checkbtn").prop("disabled", true);
+$("#undobtn").prop("disabled", true);
+
+// main field
+
+let show_start_text = false;
+let random;
+let counter = 0;
+
+let counterEiner = 0;
+let counterZehner = 0;
+let counterHunderter = 0;
+let counterTausender = 0;
+var img_1_id = "#imgEiner";
+var img_10_id = "#imgZehner";
+var img_100_id = "#imgHunderter";
+var img_1000_id = "#imgTausender";
+var dropID = "#dropbox";
+
+var dropBox = $("#dropbox");
+var positionLeft = dropBox.position().left;
+var positionTop = dropBox.position().top;
+var dropBoxWidth = dropBox.width();
+var dropBoxHeight = dropBox.height();
+
+var down = $("#down");
+var down_height = down.height();
+var down_width = down.width();
+var down_pos_left = down.position().left;
+var down_pos_top = down.position().top;
+
+var up = $("#up");
+var up_height = up.height();
+
+var el1_height = $("#imgEiner").height();
+var el1_width = $("#imgEiner").width();
+var el10_height = $("#imgZehner").height();
+var el10_width = $("#imgZehner").width();
+var el1000_height = $("#imgTausender").height();
+var el1000_width = $("#imgTausender").width();
+var el100_height = $("#imgHunderter").height();
+var el100_width = $("#imgHunderter").width();
+
+var down_ids = [
+  "cloneElement-1-down",
+  "cloneElement-10-down",
+  "cloneElement-100-down",
+  "cloneElement-1000-down",
 ];
-let box1_values = [];
-let box2_values = [];
-let box3_values = [];
+var merge_ids = [
+  "cloneElement-1-dropbox-merge",
+  "cloneElement-10-dropbox-merge",
+  "cloneElement-100-dropbox-merge",
+  "cloneElement-1000-dropbox-merge",
+];
+var delete_ids = [
+  "cloneElement-1-dropBox-delete",
+  "cloneElement-10-dropBox-delete",
+  "cloneElement-100-dropBox-delete",
+  "cloneElement-1000-dropBox-delete",
+];
 
-//help variables "check" used to indicate when to reset the values "level counter" used to hide the lower boxes when user try to correct answer after a wrong answer
-let check = false;
-let level_counter = 0;
-let filter_box2_index = 0;
-let filter_box3_index = 0;
+// select the dropable area  and add a drop function on it
+// each time a draggable image drops in the field  increment the counter accordingly
+// If an element is droped in "down" area change its ID to "down id" this is to identify and differentiate between items in merge area and down area
+$("#down").droppable({
+  tolerance: "fit",
+  drop: function (event, ui) {
+    var $canvas = $(this);
 
-// if the random number has the same value as row3 big line values , than make them clickable. that means user can find the answer on the 3rd row no need to show the 4th row
-let row3_clickable = false;
-
-// welcome text
-header_text_line1.html(`<span class="black-line-big">Herzlich Willkommen!</span>`);
-header_text_line2.html("");
-header_text_line3.html(`<span class="black-line-mid">Drücke <span class="color-line-big"> Start</span> , um zu beginnen.</span>`);
-
-// takes an svg and an array of 11 numbers , creates a ruler with 11 values
-function create_line(svg, box_number, text_id) {
-  let gape_x = svg.width() / 104;
-  let x1 = gape_x * 4;
-  let y1 = svg.height() / 1.2; // height of small lines
-  let x2 = gape_x * 4;
-  let y2 = svg.height();
-  let temp = 0;
-  let gape_middle = svg.height() / 1.4; // height of mid lines
-  let gape_heigh = svg.height() / 2; // height of big lines
-  let text_pos = svg.height() / 3; // height of values
-
-  for (let i = 0; i < 101; i++) {
-    if (i % 10 == 0) {
-      let line_heigh = document.createElementNS(svgns, "line");
-      line_heigh.setAttribute("x1", x1 + temp);
-      line_heigh.setAttribute("y1", gape_heigh);
-      line_heigh.setAttribute("x2", x2 + temp);
-      line_heigh.setAttribute("y2", y2);
-      line_heigh.classList.add("big-lines");
-      line_heigh.setAttribute("id", `line-heigh-${box_number}`);
-      svg.append(line_heigh);
-      create_numbers(svg, x1 + temp - 10, text_pos, text_id);
-    } else if (i % 5 == 0) {
-      let line_mid = document.createElementNS(svgns, "line");
-      line_mid.setAttribute("x1", x1 + temp);
-      line_mid.setAttribute("y1", gape_middle);
-      line_mid.setAttribute("x2", x2 + temp);
-      line_mid.setAttribute("y2", y2);
-      line_mid.classList.add("mid-lines");
-      svg.append(line_mid);
-    } else {
-      let line = document.createElementNS(svgns, "line");
-      line.setAttribute("x1", x1 + temp);
-      line.setAttribute("y1", y1);
-      line.setAttribute("x2", x2 + temp);
-      line.setAttribute("y2", y2);
-      line.classList.add("small-lines");
-      svg.append(line);
-    }
-    temp += x1 / 4.2;
-  }
-  let horizontal_line = document.createElementNS(svgns, "line");
-  horizontal_line.setAttribute("x1", x2);
-  horizontal_line.setAttribute("y1", y2);
-  horizontal_line.setAttribute("x2", svg.width() - gape_x * 4.8);
-  horizontal_line.setAttribute("y2", y2);
-  horizontal_line.classList.add("big-lines");
-  horizontal_line.setAttribute("id", `line-heigh-${box_number}`);
-  svg.append(horizontal_line);
-}
-// initializing the values on top of the lines, used inside create_lines function to set the values
-function create_numbers(svg, x, y, id_number) {
-  let text = document.createElementNS(svgns, "text");
-  text.classList.add("text");
-  text.setAttribute("id", `text-${id_number}`);
-  text.setAttribute("x", x);
-  text.setAttribute("y", y);
-  text.textContent = 0;
-  svg.append(text);
-}
-// gets two values and creates an array of 10 numbers from thoes two values.  (1st value + 2nd value )+ 2rd value ....
-// used to create line values for lower value boxes (box2 , box3 and box4)
-function create_values(value, x) {
-  let text_values = [];
-  let temp = 0;
-  for (let i = 0; i < 11; i++) {
-    text_values[i] = value + temp;
-    temp += x;
-  }
-  return text_values;
-}
-//used to create clickable areas between the numbers , on click expands that area
-function create_filters(box, box_number) {
-  for (let i = 0; i < 10; i++) {
-    let filters = document.createElement("div");
-    filters.setAttribute("id", `filter-${i}-${box_number}`);
-    box.append(filters);
-  }
-}
-//this filter is only for the last box (smaller on top of the line)
-function create_filters2(box, box_number) {
-  for (let i = 0; i < 11; i++) {
-    let filters = document.createElement("div");
-    filters.setAttribute("id", `filter-${i}-${box_number}`);
-    box.append(filters);
-  }
-}
-// position the clickable filters between the numbers
-function filters_position(box, box_number) {
-  let box_height = box.height();
-  let heigh_lines = $(`[id=line-heigh-${box_number}]`);
-  heigh_lines.each(function (index, value) {
-    let filter = $(`#filter-${index}-${box_number}`);
-    filter.addClass("filter");
-    filter.css({
-      top: $(this).position().top - box_height / 4.8,
-      left: $(this).position().left,
-    });
-  });
-}
-// position the clickable filters  on the number (for the last box)
-function filters_position_last(box, box_number) {
-  let box_height = box.height();
-  let heigh_lines = $(`[id=line-heigh-${box_number}]`);
-  let width_gap = box.width() / 60;
-  heigh_lines.each(function (index, value) {
-    let filter = $(`#filter-${index}-${box_number}`);
-    filter.addClass("filter2");
-    filter.css({
-      top: $(this).position().top - box_height / 2,
-      left: $(this).position().left - width_gap,
-    });
-  });
-}
-// initialize the values on top of the big lines
-function init(text_id, values) {
-  let text_values = document.querySelectorAll(`[id=text-${text_id}]`);
-  let box_lendth = text_values.length;
-  for (let i = 0; i < box_lendth; i++) {
-    text_values[i].textContent = values[i];
-  }
-}
-// create elements inside svg (lines and texts) and dynamicly change the values depends on the box which is create_svg_elements
-function create_svg_elements(svg, box, number, text_id) {
-  create_line(svg, number, text_id);
-  create_filters(box, number);
-  filters_position(box, number);
-}
-function create_svg_elements2(svg, box, number, text_id) {
-  create_line(svg, number, text_id);
-  create_filters2(box, number);
-  filters_position_last(box, number);
-}
-// used to change the color of filters once user clicked on them, color of filter will be same as color of next box
-function change_filter_color(el_number, box_number, bg_color_clicked) {
-  let filters = $(`#box-${box_number} > div`);
-  filters.each(function () {
-    if ($(this).attr("id") === `filter-${el_number}-${box_number}`) {
-      $(this).css({
-        background: `${bg_color_clicked}`,
+    if (!ui.draggable.hasClass("canvas-element")) {
+      if (ui.draggable.hasClass("img1")) {
+        var $canvasElement = ui.draggable.clone();
+        $canvasElement.attr("id", "cloneElement-1-down");
+      } else if (ui.draggable.hasClass("img2")) {
+        var $canvasElement = ui.draggable.clone();
+        $canvasElement.attr("id", "cloneElement-10-down");
+      } else if (ui.draggable.hasClass("img3")) {
+        var $canvasElement = ui.draggable.clone();
+        $canvasElement.attr("id", "cloneElement-100-down");
+      } else if (ui.draggable.hasClass("img4")) {
+        var $canvasElement = ui.draggable.clone();
+        $canvasElement.attr("id", "cloneElement-1000-down");
+      }
+      $canvasElement.addClass("canvas-element");
+      $canvasElement.draggable({
+        containment: "#dropbox",
+        stack: ".img1, .img2, .img3, .img4",
       });
-    } else {
-      $(this).css({
-        background: "transparent",
+      $canvas.append($canvasElement);
+      $canvasElement.css({
+        left: ui.position.left,
+        top: ui.position.top,
+        position: "absolute",
       });
+
+      //if the user already clicked on check button once and want to correct answer show the random number only just like beginning
+      if (show_start_text) {
+        firstLine.html(
+          `<span class="black-line-mid"> Stelle die Zahl </span><span class="color-line-big">${random} </span><span class="black-line-mid"> mit den Materialien dar! </span>`
+        );
+        random_number.html(``);
+        secondLine.html(``);
+        show_start_text = false;
+      }
+    }
+    if (ui.draggable.attr("id") === merge_ids[0]) {
+      ui.draggable.attr("id", down_ids[0]);
+      counterEiner--;
+      //console.log(counterEiner);
+    } else if (ui.draggable.attr("id") === merge_ids[1]) {
+      ui.draggable.attr("id", down_ids[1]);
+      counterZehner--;
+      //console.log(counterZehner);
+    } else if (ui.draggable.attr("id") === merge_ids[2]) {
+      ui.draggable.attr("id", down_ids[2]);
+      counterHunderter--;
+    } else if (ui.draggable.attr("id") === merge_ids[3]) {
+      ui.draggable.attr("id", down_ids[3]);
+    }
+  },
+});
+
+// If a element is droped in "dropbox merge" area, its ID will changed to "merge id"
+$("#dropbox-merge").droppable({
+  tolerance: "fit",
+  drop: function (event, ui) {
+    var $canvas = $(this);
+
+    if (!ui.draggable.hasClass("canvas-element")) {
+      if (ui.draggable.hasClass("img1")) {
+        var $canvasElement = ui.draggable.clone();
+        $canvasElement.attr("id", "cloneElement-1-dropbox-merge");
+        counterEiner++;
+      } else if (ui.draggable.hasClass("img2")) {
+        var $canvasElement = ui.draggable.clone();
+        $canvasElement.attr("id", "cloneElement-10-dropbox-merge");
+        counterZehner++;
+        //console.log(counterZehner);
+      } else if (ui.draggable.hasClass("img3")) {
+        var $canvasElement = ui.draggable.clone();
+        $canvasElement.attr("id", "cloneElement-100-dropbox-merge");
+        counterHunderter++;
+      } else if (ui.draggable.hasClass("img4")) {
+        var $canvasElement = ui.draggable.clone();
+        $canvasElement.attr("id", "cloneElement-1000-dropbox-merge");
+        counterTausender++;
+      }
+      $canvasElement.addClass("canvas-element");
+      $canvasElement.draggable({
+        containment: "#dropbox",
+        stack: ".img1, .img2, .img3, .img4",
+      });
+      $canvas.append($canvasElement);
+      $canvasElement.css({
+        left: ui.position.left,
+        top: ui.position.top,
+        position: "absolute",
+      });
+
+      //if the user already clicked on check button once and needs to correct the answer or try to represent with lesser boxes, show the random number only (on header) just like at the beginning
+      if (show_start_text) {
+        firstLine.html(
+          `<span class="black-line-mid"> Stelle die Zahl </span><span class="color-line-big">${random} </span><span class="black-line-mid"> mit den Materialien dar! </span>`
+        );
+        random_number.html(``);
+        secondLine.html(``);
+        show_start_text = false;
+      }
+    }
+    if (ui.draggable.attr("id") === down_ids[0]) {
+      ui.draggable.attr("id", merge_ids[0]);
+      counterEiner++;
+      //console.log(counterEiner);
+    } else if (ui.draggable.attr("id") === down_ids[1]) {
+      ui.draggable.attr("id", merge_ids[1]);
+      counterZehner++;
+      //console.log(counterZehner);
+    } else if (ui.draggable.attr("id") === down_ids[2]) {
+      ui.draggable.attr("id", merge_ids[2]);
+      counterHunderter++;
+    } else if (ui.draggable.attr("id") === down_ids[3]) {
+      ui.draggable.attr("id", merge_ids[3]);
+    }
+
+    if (counterEiner == 10) {
+      createElement(img_10_id);
+      var boxes = $("[id=cloneElement-1-dropbox-merge]");
+      var boxes_length = boxes.length;
+      merge(boxes, boxes_length, el1_width - 3, 0);
+      boxes.hide("slow", function () {
+        boxes.remove();
+      });
+      counterEiner = 0;
+      counterZehner++;
+      //console.log(counterZehner);
+    }
+    if (counterZehner == 10) {
+      createElement(img_100_id);
+      var boxes = $("[id=cloneElement-10-dropbox-merge]");
+      var boxes_length = boxes.length;
+      merge(boxes, boxes_length, 0, el10_height - 6);
+      boxes.hide("slow", function () {
+        boxes.remove();
+      });
+      counterZehner = 0;
+      counterHunderter++;
+    }
+    if (counterHunderter == 10) {
+      createElement(img_1000_id);
+      var boxes = $("[id=cloneElement-100-dropbox-merge]");
+      var boxes_length = boxes.length;
+      merge(boxes, boxes_length, 3, 3);
+      boxes.hide("slow", function () {
+        boxes.remove();
+      });
+      counterHunderter = 0;
+    }
+  },
+});
+
+// If a element is droped into "delete" area, remove them and set the counters back to zero
+$("#dropBox-delete").droppable({
+  tolerance: "intersect",
+  drop: function (event, ui) {
+    var $canvas = $(this);
+    if (!ui.draggable.hasClass("canvas-element")) {
+      if (ui.draggable.hasClass("img1")) {
+        var $canvasElement = ui.draggable.clone();
+        $canvasElement.attr("id", "cloneElement-1-delete");
+      } else if (ui.draggable.hasClass("img2")) {
+        var $canvasElement = ui.draggable.clone();
+        $canvasElement.attr("id", "cloneElement-10-delete");
+      } else if (ui.draggable.hasClass("img3")) {
+        var $canvasElement = ui.draggable.clone();
+        $canvasElement.attr("id", "cloneElement-100-delete");
+      } else if (ui.draggable.hasClass("img4")) {
+        var $canvasElement = ui.draggable.clone();
+        $canvasElement.attr("id", "cloneElement-1000-delete");
+      }
+      $canvasElement.addClass("canvas-element");
+      // $canvasElement.draggable({
+      //   containment: "#dropbox",
+      // });
+      $canvas.append($canvasElement);
+      $canvasElement.css({
+        left: ui.position.left,
+        top: ui.position.top,
+        position: "absolute",
+      });
+      delete_slowly($canvasElement, $canvasElement.width());
+      $canvasElement.hide("slow", function () {
+        $canvasElement.remove();
+      });
+    }
+    if (ui.draggable.attr("id") === merge_ids[0]) {
+      ui.draggable.attr("id", delete_ids[0]);
+      delete_slowly(ui.draggable, ui.draggable.width());
+      ui.draggable.hide("slow", function () {
+        ui.draggable.remove();
+      });
+      counterEiner--;
+    } else if (ui.draggable.attr("id") === merge_ids[1]) {
+      ui.draggable.attr("id", delete_ids[1]);
+      delete_slowly(ui.draggable, ui.draggable.width());
+      ui.draggable.hide("slow", function () {
+        ui.draggable.remove();
+      });
+      counterZehner--;
+      //console.log(counterZehner);
+    } else if (ui.draggable.attr("id") === merge_ids[2]) {
+      ui.draggable.attr("id", delete_ids[2]);
+      delete_slowly(ui.draggable, ui.draggable.width());
+      ui.draggable.hide("slow", function () {
+        ui.draggable.remove();
+      });
+      counterHunderter--;
+    } else if (ui.draggable.attr("id") === merge_ids[3]) {
+      ui.draggable.attr("id", delete_ids[3]);
+      delete_slowly(ui.draggable, ui.draggable.width());
+      ui.draggable.hide("slow", function () {
+        ui.draggable.remove();
+      });
+    }
+
+    if (ui.draggable.attr("id") === down_ids[0]) {
+      ui.draggable.attr("id", delete_ids[0]);
+      delete_slowly(ui.draggable, ui.draggable.width());
+      ui.draggable.hide("slow", function () {
+        ui.draggable.remove();
+      });
+    } else if (ui.draggable.attr("id") === down_ids[1]) {
+      ui.draggable.attr("id", delete_ids[1]);
+      delete_slowly(ui.draggable, ui.draggable.width());
+      ui.draggable.hide("slow", function () {
+        ui.draggable.remove();
+      });
+    } else if (ui.draggable.attr("id") === down_ids[2]) {
+      ui.draggable.attr("id", delete_ids[2]);
+      delete_slowly(ui.draggable, ui.draggable.width());
+      ui.draggable.hide("slow", function () {
+        ui.draggable.remove();
+      });
+    } else if (ui.draggable.attr("id") === down_ids[3]) {
+      ui.draggable.attr("id", delete_ids[3]);
+      delete_slowly(ui.draggable, ui.draggable.width());
+      ui.draggable.hide("slow", function () {
+        ui.draggable.remove();
+      });
+    }
+  },
+});
+
+// if there is "10" of the same elements in "merge" area , merge them into one higher element  e.g  ten  of  Box "1" --> one Box"10"
+function merge(element, element_length, element_width, element_height) {
+  var temp_x = 5;
+  var temp_y = 5;
+  if (element_length == 10) {
+    element.each(function (index, el) {
+      $(this).animate(
+        {
+          top: positionTop + temp_y,
+          left: positionLeft + temp_x,
+        },
+        "slow"
+      );
+      temp_x += element_width;
+      temp_y += element_height;
+    });
+  }
+}
+// create a clone element
+// used to replace the merge elements , if there are 1o of the same kind change it to a higher element (only in merge area)
+function createElement(elID) {
+  // temp variables used to specify the place of the new created element in "merge area"
+  var temp_x = 5;
+  var temp_y = 5;
+  var newElement = $(elID).clone();
+  var $canvas = $("#dropbox-merge");
+  newElement.addClass("hide");
+
+  if (elID == "#imgZehner") {
+    newElement.attr("id", "cloneElement-10-dropbox-merge");
+  } else if (elID == "#imgHunderter") {
+    newElement.attr("id", "cloneElement-100-dropbox-merge");
+  } else if (elID == "#imgTausender") {
+    newElement.attr("id", "cloneElement-1000-dropbox-merge");
+  }
+  newElement.draggable({
+    containment: "#dropbox",
+    stack: ".img1, .img2, .img3, .img4",
+  });
+  $canvas.append(newElement);
+  newElement.css({
+    left: $canvas.position().left + temp_x,
+    top: $canvas.position().top + temp_y,
+    position: "absolute",
+  });
+  newElement.removeClass("hide");
+  newElement.addClass("unhide");
+  newElement.addClass("canvas-element");
+}
+// start Button display the random number  between two values, which is set in URL
+function start() {
+  //get the min and max values set by user
+  let min = minValue;
+  let max = maxValue;
+  let cmin = Math.ceil(min);
+  let cmax = Math.floor(max);
+  random = Math.floor(Math.random() * (cmax - cmin) + cmin);
+  let randomnumberString = random.toString();
+
+  // show the randomly generated number on header part
+  firstLine.html(
+    `<span class="black-line-mid"> Stelle die Zahl </span><span class="color-line-big">${random} </span><span class="black-line-mid"> mit den Materialien dar! </span>`
+  );
+  $("#randomNumber").html("");
+  secondLine.html("");
+
+  // reset the values of all counters clear the field
+  reset();
+
+  // select the  images ( boxes representing the place Value) and make them draggable
+
+  $("#imgEiner").draggable({
+    helper: "clone",
+    cursor: "move",
+    scroll: false,
+  });
+  $("#imgZehner").draggable({
+    helper: "clone",
+    cursor: "move",
+    scroll: false,
+  });
+  $("#imgHunderter").draggable({
+    helper: "clone",
+    cursor: "move",
+    scroll: false,
+  });
+  $("#imgTausender").draggable({
+    helper: "clone",
+    cursor: "pointer",
+    scroll: false,
+  });
+
+  // disable the start button once clicked and enable the other buttons
+  $("#checkbtn").prop("disabled", false);
+  $("#undobtn").prop("disabled", false);
+  $("#valuebtn").prop("disabled", true);
+  $(".header-mid").css({
+    "background-image": "none",
+  });
+  $("#freez").remove();
+}
+// check button function for "Überprüfen"  on click, if the value of the boxes are same as the generated random number on header turn the start button for the next round
+function check() {
+  sortElements();
+  let counter_1 = $("[id=cloneElement-1-down]").length;
+  let counter_10 = $("[id=cloneElement-10-down]").length;
+  let counter_100 = $("[id=cloneElement-100-down]").length;
+  let counter_1000 = $("[id=cloneElement-1000-down]").length;
+  let counter_1_merge = $("[id=cloneElement-1-dropbox-merge]").length;
+  let counter_10_merge = $("[id=cloneElement-10-dropbox-merge]").length;
+  let counter_100_merge = $("[id=cloneElement-100-dropbox-merge]").length;
+  let counter_1000_merge = $("[id=cloneElement-1000-dropbox-merge]").length;
+
+  let counter_1_total = counter_1 + counter_1_merge;
+  let counter_10_total = counter_10 + counter_10_merge;
+  let counter_100_total = counter_100 + counter_100_merge;
+  let counter_1000_total = counter_1000 + counter_1000_merge;
+
+  // check if the answer is optimal or not
+  //(an Answer is optimal , when the user represent a number with the least possible objects  e.g  10 can be represent with 10 "einer" objects but optimaly user can take one single "Zehner" object to represent 10)
+  let counter_array = [
+    counter_1_total,
+    counter_10_total,
+    counter_100_total,
+    counter_1000_total,
+  ];
+  let temp_random = random.toString();
+  let optimal_result = true;
+  let temp_random_lenght = temp_random.length;
+
+  if (temp_random_lenght == 1) {
+    if (temp_random.charAt(0) != counter_array[0]) {
+      optimal_result = false;
+    }
+  }
+  if (temp_random_lenght == 2) {
+    if (temp_random.charAt(0) != counter_array[1]) {
+      optimal_result = false;
+    }
+    if (temp_random.charAt(1) != counter_array[0]) {
+      optimal_result = false;
+    }
+  }
+  if (temp_random_lenght == 3) {
+    if (temp_random.charAt(0) != counter_array[2]) {
+      optimal_result = false;
+    }
+    if (temp_random.charAt(1) != counter_array[1]) {
+      optimal_result = false;
+    }
+    if (temp_random.charAt(2) != counter_array[0]) {
+      optimal_result = false;
+    }
+  }
+  if (temp_random_lenght == 4) {
+    if (temp_random.charAt(0) != counter_array[3]) {
+      optimal_result = false;
+    }
+    if (temp_random.charAt(1) != counter_array[2]) {
+      optimal_result = false;
+    }
+    if (temp_random.charAt(2) != counter_array[1]) {
+      optimal_result = false;
+    }
+    if (temp_random.charAt(3) != counter_array[0]) {
+      optimal_result = false;
+    }
+  }
+
+  let result =
+    counter_1_total +
+    counter_10_total * 10 +
+    counter_100_total * 100 +
+    counter_1000_total * 1000;
+
+  // if the answer is correct and optimal enable start button, disable other buttons, freez the screen, show winner gif
+  if (random == result && optimal_result) {
+    $("#checkbtn").prop("disabled", true);
+    $("#undobtn").prop("disabled", true);
+    $("#valuebtn").prop("disabled", false);
+    $(".header-mid").css({
+      "background-image": "url(./imgs/winner.gif)",
+    });
+    freez_screen();
+    firstLine.html(
+      `<span class="black-line-mid"> Sehr gut! du hast die richtige Zahl dargestellt.</span>`
+    );
+    random_number.html(`<span class="black-line-mid">Die Zahl <span class="color-line-big"> ${random}</span> besteht aus, </span><span class="color-line-big" id="span4">${counter_1000_total}</span> <span class="black-line-mid" id="span4">Tausender </span>
+  <span class="color-line-big" id="span3">${counter_100_total}</span> <span class="black-line-mid" id="span3">Hunderter </span>
+  <span class="color-line-big" id="span2">${counter_10_total}</span> <span class="black-line-mid" id="span2">Zehner </span> 
+  <span class="color-line-big" id="span1">${counter_1_total}</span> <span class="black-line-mid" id="span1">Einer</span>`);
+    secondLine.html(
+      `<span class="black-line-mid"> Klicke auf <span class="color-line-big"> Start</span>, um eine neue Zahl zu bekommen.</span>`
+    );
+  } else if (random == result && !optimal_result) { //if the answer is correct but not optimal let the user know it. and ask to find the optimal answer.
+    show_start_text = true;
+    firstLine.html(
+      `<span class="black-line-mid"> Du hast die richtige Zahl <span class="color-line-big"> ${random}</span> dargestellt.</span>`
+    );
+    random_number.html(`<span class="black-line-mid">Dafür hast du <span class="color-line-big" id="span4">${counter_1000_total}</span> <span class="black-line-mid" id="span4">Tausender </span>
+  <span class="color-line-big" id="span3">${counter_100_total}</span> <span class="black-line-mid" id="span3">Hunderter </span>
+  <span class="color-line-big" id="span2">${counter_10_total}</span> <span class="black-line-mid" id="span2">Zehner </span> 
+  <span class="color-line-big" id="span1">${counter_1_total}</span> <span class="black-line-mid" id="span1">Einer</span> verwendet.</span>`);
+    secondLine.html(
+      `<span class="black-line-mid">Lege die Zahl <span class="color-line-big"> ${random}</span>  mit weniger Teilen.</span>`
+    );
+  } else { // if the answer is not correct give the user a feedback and the user to try again
+    show_start_text = true;
+    firstLine.html(
+      `<span class="black-line-mid"> Du hast die Zahl <span class="color-line-big"> ${result}</span> dargestellt.</span>`
+    );
+    random_number.html(`<span class="black-line-mid">Dafür hast du </span><span class="color-line-big" id="span4">${counter_1000_total}</span> <span class="black-line-mid" id="span4">Tausender </span>
+    <span class="color-line-big" id="span3">${counter_100_total}</span> <span class="black-line-mid" id="span3">Hunderter </span>
+    <span class="color-line-big" id="span2">${counter_10_total}</span> <span class="black-line-mid" id="span2">Zehner </span>
+    <span class="color-line-big" id="span1">${counter_1_total}</span> <span class="black-line-mid" id="span1">Einer</span><span class="black-line-mid"> verwendet.</span>`);
+    secondLine.html(
+      `<span class="black-line-mid">Du solltest aber die Zahl </span><span class="color-line-big"> ${random}</span><span class="black-line-mid"> darstellen. Versuche es noch einmal.</span>`
+    );
+  }
+
+  // only show the place values which is more than 0 (eg. if there is no "1000er" box avoid writing it on screen)
+  counter_array.forEach((element, index) => {
+    if (element === 0) {
+      let temp = index + 1;
+      $(`[id=span${temp}]`).hide();
     }
   });
 }
-// hide the bottom rows (boxes)
-function row_hider() {
-  box2.css({
-    visibility: "hidden",
-    opacity: 0,
+// Reset buton "Alles löschen "
+// reset values and remove elements
+function reset() {
+  $("[id=cloneElement-1-down]").remove();
+  $("[id=cloneElement-10-down]").remove();
+  $("[id=cloneElement-100-down]").remove();
+  $("[id=cloneElement-1000-down]").remove();
+  $("[id=cloneElement-1-dropbox-merge]").remove();
+  $("[id=cloneElement-10-dropbox-merge]").remove();
+  $("[id=cloneElement-100-dropbox-merge]").remove();
+  $("[id=cloneElement-1000-dropbox-merge]").remove();
+  counter = 0;
+  counterEiner = 0;
+  counterZehner = 0;
+  counterHunderter = 0;
+  counterTausender = 0;
+}
+
+//sort functions
+// used for sorting "100" and "1000" elements
+function sort_row(
+  element,
+  element_width,
+  element_height,
+  space_x,
+  space_y,
+  arr_length,
+  gap_x,
+  box_width,
+  box_height,
+  pos_left,
+  pos_top
+) {
+  spaceX = space_x;
+  var temp = (box_width / element_width) >> 0;
+  element.each(function (index, el) {
+    if (arr_length <= temp) {
+      $(this).animate(
+        {
+          left: pos_left + spaceX,
+          top: pos_top + box_height - space_y,
+          position: "absolute",
+        },
+        "slow"
+      );
+      spaceX += element_width;
+    } else if (arr_length > temp && arr_length < temp * 2) {
+      $(this).animate(
+        {
+          left: pos_left + spaceX,
+          top: pos_top + (box_height - space_y),
+          position: "absolute",
+        },
+        "slow"
+      );
+      spaceX += element_width / gap_x;
+    } else {
+      $(this).animate(
+        {
+          left: pos_left + spaceX,
+          top: pos_top + (box_height - space_y),
+          position: "absolute",
+        },
+        "slow"
+      );
+      spaceX += 5;
+    }
   });
-  box3.css({
-    visibility: "hidden",
-    opacity: 0,
+}
+// used for sorting the "1" and "10" elements
+function sort_row2(
+  element,
+  element_width,
+  element_height,
+  space_x,
+  space_y,
+  gap_x,
+  box_width,
+  box_height,
+  pos_left,
+  pos_top
+) {
+  var spaceX = space_x;
+  var spaceY = space_y;
+  var temp = (box_width / element_width) >> 0;
+  element.each(function (index, el) {
+    if (index < 5) {
+      $(this).animate(
+        {
+          left: pos_left + spaceX,
+          top: pos_top + box_height - spaceY,
+          position: "absolute",
+        },
+        "slow"
+      );
+      spaceY -= element_height + gap_x;
+    } else if (index == 5) {
+      spaceX = element_width + 5;
+      spaceY = space_y;
+      $(this).animate(
+        {
+          left: pos_left + spaceX,
+          top: pos_top + box_height - spaceY,
+          position: "absolute",
+        },
+        "slow"
+      );
+    } else if (index > 5 && index < 10) {
+      spaceY -= element_height + gap_x;
+      $(this).animate(
+        {
+          left: pos_left + spaceX,
+          top: pos_top + (box_height - spaceY),
+          position: "absolute",
+        },
+        "slow"
+      );
+    } else if (index == 10) {
+      spaceX = element_width * 2 + 5;
+      spaceY = space_y;
+      $(this).animate(
+        {
+          left: pos_left + spaceX,
+          top: pos_top + (box_height - spaceY),
+          position: "absolute",
+        },
+        "slow"
+      );
+    } else if (index > 10 && index < 15) {
+      spaceY -= element_height + gap_x;
+      $(this).animate(
+        {
+          left: pos_left + spaceX,
+          top: pos_top + (box_height - spaceY),
+          position: "absolute",
+        },
+        "slow"
+      );
+    } else if (index == 15) {
+      spaceX = element_width * 3 + 5;
+      spaceY = space_y;
+      $(this).animate(
+        {
+          left: pos_left + spaceX,
+          top: pos_top + (box_height - spaceY),
+          position: "absolute",
+        },
+        "slow"
+      );
+    } else if (index > 15 && index < 20) {
+      spaceY -= element_height + gap_x;
+      $(this).animate(
+        {
+          left: pos_left + spaceX,
+          top: pos_top + (box_height - spaceY),
+          position: "absolute",
+        },
+        "slow"
+      );
+    }
   });
-  box4.css({
-    visibility: "hidden",
-    opacity: 0,
+}
+function sort_row4(
+  element,
+  element_width,
+  element_height,
+  space_x,
+  space_y,
+  gap_x,
+  box_width,
+  box_height,
+  pos_left,
+  pos_top
+) {
+  var spaceX = space_x;
+  var spaceY = space_y;
+  var temp = (box_width / element_width) >> 0;
+  element.each(function (index, el) {
+    if (index < 5) {
+      $(this).animate(
+        {
+          left: pos_left + spaceX,
+          top: pos_top + box_height - spaceY,
+          position: "absolute",
+        },
+        "slow"
+      );
+      spaceY -= element_height + gap_x;
+    } else if (index == 5) {
+      spaceX = element_width * 2 + 5;
+      spaceY = space_y;
+      $(this).animate(
+        {
+          left: pos_left + spaceX,
+          top: pos_top + box_height - spaceY,
+          position: "absolute",
+        },
+        "slow"
+      );
+    } else if (index > 5 && index < 10) {
+      spaceY -= element_height + gap_x;
+      $(this).animate(
+        {
+          left: pos_left + spaceX,
+          top: pos_top + (box_height - spaceY),
+          position: "absolute",
+        },
+        "slow"
+      );
+    } else if (index == 10) {
+      spaceX = element_width * 3 + 5;
+      spaceY = space_y;
+      $(this).animate(
+        {
+          left: pos_left + spaceX,
+          top: pos_top + (box_height - spaceY),
+          position: "absolute",
+        },
+        "slow"
+      );
+    } else if (index > 10 && index < 15) {
+      spaceY -= element_height + gap_x;
+      $(this).animate(
+        {
+          left: pos_left + spaceX,
+          top: pos_top + (box_height - spaceY),
+          position: "absolute",
+        },
+        "slow"
+      );
+    } else if (index == 15) {
+      spaceX = element_width * 4 + 5;
+      spaceY = space_y;
+      $(this).animate(
+        {
+          left: pos_left + spaceX,
+          top: pos_top + (box_height - spaceY),
+          position: "absolute",
+        },
+        "slow"
+      );
+    } else if (index > 15 && index < 20) {
+      spaceY -= element_height + gap_x;
+      $(this).animate(
+        {
+          left: pos_left + spaceX,
+          top: pos_top + (box_height - spaceY),
+          position: "absolute",
+        },
+        "slow"
+      );
+    }
   });
+}
+// used for sorting the "1" and "10" elements , if there are more than 20 of each kind
+function sort_row3(
+  element,
+  element_width,
+  element_height,
+  space_x,
+  space_y,
+  gap_x,
+  box_width,
+  box_height,
+  pos_left,
+  pos_top
+) {
+  var spaceX = space_x;
+  var spaceY = space_y;
+  var temp = (box_width / element_width) >> 0;
+  element.each(function (index, el) {
+    if (index < 12) {
+      $(this).animate(
+        {
+          left: pos_left + spaceX,
+          top: pos_top + box_height - spaceY,
+          position: "absolute",
+        },
+        "slow"
+      );
+      spaceY -= element_height / 2;
+    } else if (index == 12) {
+      spaceX = element_width + 5;
+      spaceY = space_y;
+      $(this).animate(
+        {
+          left: pos_left + spaceX,
+          top: pos_top + box_height - spaceY,
+          position: "absolute",
+        },
+        "slow"
+      );
+    } else if (index > 12 && index < 24) {
+      spaceY -= element_height / 2;
+      $(this).animate(
+        {
+          left: pos_left + spaceX,
+          top: pos_top + (box_height - spaceY),
+          position: "absolute",
+        },
+        "slow"
+      );
+    } else if (index == 24) {
+      spaceX = element_width * 2 + 5;
+      spaceY = space_y;
+      $(this).animate(
+        {
+          left: pos_left + spaceX,
+          top: pos_top + (box_height - spaceY),
+          position: "absolute",
+        },
+        "slow"
+      );
+    } else if (index > 24 && index < 36) {
+      spaceY -= element_height / 2;
+      $(this).animate(
+        {
+          left: pos_left + spaceX,
+          top: pos_top + (box_height - spaceY),
+          position: "absolute",
+        },
+        "slow"
+      );
+    } else if (index == 36) {
+      spaceX = element_width * 3 + 5;
+      spaceY = space_y;
+      $(this).animate(
+        {
+          left: pos_left + spaceX,
+          top: pos_top + (box_height - spaceY),
+          position: "absolute",
+        },
+        "slow"
+      );
+    } else if (index > 36 && index < 48) {
+      spaceY -= element_height / 2;
+      $(this).animate(
+        {
+          left: pos_left + spaceX,
+          top: pos_top + (box_height - spaceY),
+          position: "absolute",
+        },
+        "slow"
+      );
+    }
+    // else if(index >= 18) {
+    //   spaceY -= gap_x;
+    //   $(this).css({
+    //     left: pos_left + spaceX,
+    //     top: pos_top + (box_height - spaceY),
+    //     position: "absolute",
+    //   });
+    // }
+  });
+}
+
+// changes ID of the draggable element according to area. eg. if an element is in "merge area" change its id to "merge id"
+function change_id(element, id_new) {
+  element.each(function () {
+    element.attr("id", id_new);
+  });
+}
+
+//sorting logic
+function sortElements() {
+  // sorting happens inside "down area" so everytime we sort elements make sure all the elements have "down id"
+  // this is useful for merging elements , we dont want to merge elements which are inside "down area"
+  // after sorting elements , thoes elements which have still "merge id" needs to be change to "down id"
+  var el1_merge = $("[id=cloneElement-1-dropbox-merge]");
+  var el10_merge = $("[id=cloneElement-10-dropbox-merge]");
+  var el100_merge = $("[id=cloneElement-100-dropbox-merge]");
+  var el1000_merge = $("[id=cloneElement-1000-dropbox-merge]");
+  counterEiner -= el1_merge.length;
+  counterZehner -= el10_merge.length;
+  counterHunderter -= el100_merge.length;
+  counterTausender -= el1000_merge.length;
+  change_id(el1_merge, down_ids[0]);
+  change_id(el10_merge, down_ids[1]);
+  change_id(el100_merge, down_ids[2]);
+  change_id(el1000_merge, down_ids[3]);
+
+  var el1 = $("[id=cloneElement-1-down],[id=cloneElement-1-dropbox-merge]");
+  var el10 = $("[id=cloneElement-10-down],[id=cloneElement-10-dropbox-merge]");
+  var el100 = $(
+    "[id=cloneElement-100-down],[id=cloneElement-100-dropbox-merge]"
+  );
+  var el1000 = $(
+    "[id=cloneElement-1000-down],[id=cloneElement-1000-dropbox-merge]"
+  );
+  var dropBox = $("#dropbox");
+
+  var row1 = false;
+  var row2 = false;
+  var row3 = false;
+  var row4 = false;
+
+  var height1 = el1000_height;
+  var height2 = el1000_height * 2;
+  var height3 = down_height;
+  var height4 = el1000_height * 4;
+  
+
+  var spaceX = 5;
+  var spaceY = 5;
+
+  //  starting from bottom (row1) sort "1000" boxes
+  // as long as it fits to one row at the bottom sort them beside each others.
+  // when there are more "1000" boxes, which doesnt fit in a row, stack them on top of each other
+
+  let el1000length = el1000.length;
+  let el100length = el100.length;
+  let el10length = el10.length;
+  let el1length = el1.length;
+
+  if (el1000length >= 1) {
+    row1 = true;
+    sort_row(
+      el1000,
+      el1000_width,
+      el1000_height,
+      5,
+      height1,
+      el1000length,
+      4,
+      dropBoxWidth,
+      dropBoxHeight,
+      positionLeft,
+      positionTop
+    );
+  }
+
+  //  sort the "100" Boxes on top of the "1000" boxes only if there is atleast one "1000" Box
+  // if there is no "1000" Box than  sort them in row4
+  // as long as it fits to one row, sort them beside each others.
+  // when there are more "100" boxes, which doesnt fit in a row, stack them on top of each other
+  if (el100length >= 1 && row1) {
+    // console.log("here", row1);
+    row2 = true;
+    sort_row(
+      el100,
+      el100_width,
+      el100_height,
+      5,
+      height2,
+      el100length,
+      4,
+      dropBoxWidth,
+      dropBoxHeight,
+      positionLeft,
+      positionTop
+    );
+  } else if (el100length >= 1) {
+    row1 = true;
+    sort_row(
+      el100,
+      el100_width,
+      el100_height,
+      5,
+      height1,
+      el100length,
+      4,
+      dropBoxWidth,
+      dropBoxHeight,
+      positionLeft,
+      positionTop
+    );
+  }
+
+  // sort "10" Boxes row3 on top of "100" and "1000" boxes
+  // if there is no "100"/"1000" Boxes  sort "10" Boxes in row2/row1
+  // each column contains 5 elements
+  if (el10length > 20) {
+    sort_row3(
+      el10,
+      el10_width,
+      el10_height,
+      5,
+      height3,
+      5,
+      dropBoxWidth,
+      dropBoxHeight,
+      positionLeft,
+      positionTop
+    );
+  } else if (el10length >= 1 && row1 && row2) {
+    row3 = true;
+    sort_row4(
+      el10,
+      el10_width,
+      el10_height,
+      el10_width,
+      height3,
+      5,
+      dropBoxWidth,
+      dropBoxHeight,
+      positionLeft,
+      positionTop
+    );
+  } else if (el10length >= 1 && row1) {
+    row2 = true;
+    sort_row2(
+      el10,
+      el10_width,
+      el10_height,
+      5,
+      height2,
+      5,
+      dropBoxWidth,
+      dropBoxHeight,
+      positionLeft,
+      positionTop
+    );
+  } else if (el10length >= 1) {
+    row1 = true;
+    sort_row2(
+      el10,
+      el10_width,
+      el10_height,
+      5,
+      height1,
+      5,
+      dropBoxWidth,
+      dropBoxHeight,
+      positionLeft,
+      positionTop
+    );
+  }
+
+  // if the other rows are full sort the "1" Elements on row4
+  if (el1length > 20) {
+    sort_row3(
+      el1,
+      el1_width,
+      el1_height,
+      5,
+      height3,
+      5,
+      dropBoxWidth,
+      dropBoxHeight,
+      positionLeft,
+      positionTop
+    );
+  } else if (el1length >= 1 && row1 && row2 && row3) {
+    sort_row2(
+      el1,
+      el1_width,
+      el1_height,
+      5,
+      height3,
+      5,
+      dropBoxWidth,
+      dropBoxHeight,
+      positionLeft,
+      positionTop
+    );
+  } else if (el1length >= 1 && row1 && row2) {
+    sort_row2(
+      el1,
+      el1_width,
+      el1_height,
+      5,
+      height3,
+      5,
+      dropBoxWidth,
+      dropBoxHeight,
+      positionLeft,
+      positionTop
+    );
+  } else if (el1length >= 1 && row1) {
+    sort_row2(
+      el1,
+      el1_width,
+      el1_height,
+      5,
+      height2,
+      5,
+      dropBoxWidth,
+      dropBoxHeight,
+      positionLeft,
+      positionTop
+    );
+  } else if (el1length >= 1) {
+    sort_row2(
+      el1,
+      el1_width,
+      el1_height,
+      5,
+      height1,
+      5,
+      dropBoxWidth,
+      dropBoxHeight,
+      positionLeft,
+      positionTop
+    );
+  }
+}
+// read the random generated Number
+function read_text() {
+  msg.text =
+    $("#first-line").text() +
+    " " +
+    $("#randomNumber").text() +
+    " " +
+    $("#second-line").text();
+  speaker.speak(msg);
+}
+
+//used for delete area animation
+//prevent outside the delete area animation
+function delete_slowly(element, element_width) {
+  element.animate(
+    {
+      top: positionTop + up_height / 4,
+      left: positionLeft + dropBoxWidth - element_width,
+    },
+    "slowly"
+  );
+}
+
+// reload the page
+function refreshPage() {
+  window.location.reload();
 }
 // used to freez the screen when the user finds the correct answer
 function freez_screen() {
   let freez_filter = document.createElement("div");
   freez_filter.setAttribute("id", "freez");
   freez_filter.classList.add("freez");
-  $("#main").append(freez_filter);
+  $(".main").append(freez_filter);
   $("#freez").css({
-    left: main.position().left,
-    top: main.position().top,
-  });
-}
-
-function read_text() {
-  msg.text =
-    $("#first-line").text() +
-    " " +
-    $("#second-line").text() +
-    " " +
-    $("#third-line").text();
-  speaker.speak(msg);
-}
-
-// reload page
-function refreshPage() {
-  window.location.reload();
-}
-
-// remove all elements from svgs, used to reset for next round
-function remove_elements() {
-  $("#svg-1").empty();
-  $(`#box-1 > div`).remove();
-  $("#svg-2").empty();
-  $(`#box-2 > div`).remove();
-  $("#svg-3").empty();
-  $(`#box-3 > div`).remove();
-  $("#svg-4").empty();
-  $(`#box-4 > div`).remove();
-}
-//a small number generator function values between 0 to 9. this value will be added to the main random number ,IFF the main random number % 100 = 0
-// this is to make sure we dont generate a number which is same as first or second rows values  eg. 2000 or 6000 or 3400 or 1200 etc..
-function small_random_number_generator() {
-  let min = Math.ceil(1);
-  let max = Math.floor(10);
-  let small_random_number = Math.floor(Math.random() * (max - min) + min);
-  return small_random_number;
-}
-// boxes are hidden, when clicked on 1st box show the 2nd box, onclick on 2nd box show 3rd box ...
-row_hider();
-create_svg_elements(svg_1, box1, 1, 1);
-init(1, default_values);
-freez_screen();
-//start button function
-function start() {
-  let cmin = Math.ceil(minValue);
-  let cmax = Math.floor(maxValue);
-  random_number = Math.floor(Math.random() * (cmax - cmin) + cmin);
-
-  row3_clickable = false;
-
-  // this will make sure to exclude all numbers from the first and second rows  eg. 1000 or 4500 or 8000 etc.
-  small_number = small_random_number_generator();
-  if (random_number % 100 == 0) {
-    random_number += small_number;
-  }
-  if (random_number % 10 == 0) {
-    row3_clickable = true;
-  }
-  let randomnumberString = random_number.toString();
-  header_text_line1.html(`<span class="black-line-big">Trage die Zahl</span><span class="color-line-big"> ${random_number}</span><span class="black-line-big"> am Zahlenstrahl ein.</span>`);
-  header_text_line2.html("");
-  header_text_line3.html("");
-  //create svg elements (texts and lines), initilized the values with zeros
-  //for svg1 set the values , since they are always the same values (0 to 10000)
-  remove_elements();
-
-  create_svg_elements(svg_1, box1, 1, 1);
-  init(1, default_values);
-  create_svg_elements(svg_2, box2, 2, 2);
-  create_svg_elements(svg_3, box3, 3, 3);
-  create_svg_elements2(svg_4, box4, 4, 4);
-
-  // for the last box we dont need the mid lines or small lines so remove them
-  // I dont change the create line function because in furture we may need them for float numbers
-  $("#svg-4 > .small-lines").remove();
-  $("#svg-4 > .mid-lines").remove();
-  row_hider();
-  // stage one from box1 to box2, there are 10 options to click on each stage
-  let box1_filters = $(`#box-1 > div`);
-  box1_filters.each(function (index, el) {
-    $(this).on("click", function () {
-      //when clicked on the first box filters
-      if (level_counter == 2) {
-        box2.css({
-          visibility: "hidden",
-          opacity: 0,
-        });
-        $("[id=animated-div-box1]").remove();
-        $("[id=animated-div-box2]").remove();
-        change_filter_color(
-          filter_box2_index,
-          2,
-          "linear-gradient(0deg, #75e99c00 0%, #ffffff00 100%)"
-        );
-        header_text_line1.html(`<span class="black-line-big">Trage die Zahl</span><span class="color-line-big"> ${random_number}</span><span class="black-line-big"> am Zahlenstrahl ein.</span>`);
-        header_text_line2.html("");
-        header_text_line3.html("");
-      }
-      // if 3 boxes are visible (means aleady clicked once), hide the lower box (box3) and reset the filter color
-      if (level_counter == 3) {
-        box2.css({
-          visibility: "hidden",
-          opacity: 0,
-        });
-        box3.css({
-          visibility: "hidden",
-          opacity: 0,
-        });
-        $("[id=animated-div-box1]").remove();
-        $("[id=animated-div-box2]").remove();
-        change_filter_color(
-          filter_box2_index,
-          2,
-          "linear-gradient(0deg, #75e99c00 0%, #ffffff00 100%)"
-        );
-        header_text_line1.html(`<span class="black-line-big">Trage die Zahl</span><span class="color-line-big"> ${random_number}</span><span class="black-line-big"> am Zahlenstrahl ein.</span>`);
-        header_text_line2.html("");
-        header_text_line3.html("");
-
-        box3_texts.removeClass("wronganswer");
-        box3_texts.addClass("text");
-        box4_texts.removeClass("wronganswer");
-        box4_texts.addClass("text");
-      }
-      //if 4 boxes are visible (means aleady clicked once), hide the lower boxes (box3 and box4) and reset the filter color
-      if (level_counter == 4) {
-        box2.css({
-          visibility: "hidden",
-          opacity: 0,
-        });
-        box3.css({
-          visibility: "hidden",
-          opacity: 0,
-        });
-        box4.css({
-          visibility: "hidden",
-          opacity: 0,
-        });
-        $("[id=animated-div-box1]").remove();
-        $("[id=animated-div-box2]").remove();
-        $("[id=animated-div-box3]").remove();
-        change_filter_color(
-          filter_box2_index,
-          2,
-          "linear-gradient(0deg, #75e99c00 0%, #ffffff00 100%)"
-        );
-        change_filter_color(
-          filter_box3_index,
-          3,
-          "linear-gradient(0deg, #c399e600 0%, #ffffff00 100%)"
-        );
-        header_text_line1.html(`<span class="black-line-big">Trage die Zahl</span><span class="color-line-big"> ${random_number}</span><span class="black-line-big"> am Zahlenstrahl ein.</span>`);
-        header_text_line2.html("");
-        header_text_line3.html("");
-      }
-
-      // otherweise show box2 and change the color of "clicked filter" on box1 #c0ccf177
-      box1_values = create_values(default_values[index], 100);
-      init(2, box1_values);
-      box1.css({
-        background: "#c0ccf177",
-      });
-      box2
-        .css({
-          visibility: "visible",
-          background: "#f89f56",
-        })
-        .delay(1000)
-        .animate({ opacity: 1 }, 1000);
-      change_filter_color(index, 1, "#f89f5677");
-
-      //animated div from box1 to box2 this will help students to understand, which part of box1 is being zoomed in
-      let animated_filter = document.createElement("div");
-      animated_filter.setAttribute("id", "animated-div-box1");
-      animated_filter.classList.add("animated-div");
-      main.append(animated_filter);
-      $("#animated-div-box1")
-        .css({
-          background: "#f89f56",
-          position: "absolute",
-          top: box1.position().top + box1.height() / 1.1,
-          left: $(this).position().left,
-          height: $(this).height(),
-          width: $(this).width(),
-        })
-        .animate(
-          {
-            top: box2.position().top,
-            left: box2.position().left,
-            height: box2.height(),
-            width: box2.width(),
-            background: box2.css("background-color"),
-          },
-          {
-            duration: 1000,
-          }
-        );
-      level_counter = 2;
-    });
-  });
-
-  //stage 2 from box2 to box3
-  let box2_filters = $(`#box-2 > div`);
-  box2_filters.each(function (index, el) {
-    $(this).on("click", function () {
-      if (level_counter == 3) {
-        box3.css({
-          visibility: "hidden",
-          opacity: 0,
-        });
-        change_filter_color(
-          filter_box2_index,
-          2,
-          "linear-gradient(0deg, #c399e600 0%, #ffffff00 100%)"
-        );
-        change_filter_color(
-          filter_box3_index,
-          3,
-          "linear-gradient(0deg, #c399e600 0%, #ffffff00 100%)"
-        );
-        $("[id=animated-div-box2]").remove();
-        $("[id=animated-div-box3]").remove();
-        header_text_line1.html(`<span class="black-line-big">Trage die Zahl</span><span class="color-line-big"> ${random_number}</span><span class="black-line-big"> am Zahlenstrahl ein.</span>`);
-        header_text_line2.html("");
-        header_text_line3.html("");
-
-        box3_texts.removeClass("wronganswer");
-        box3_texts.addClass("text");
-      }
-      if (level_counter == 4) {
-        box3.css({
-          visibility: "hidden",
-          opacity: 0,
-        });
-        box4.css({
-          visibility: "hidden",
-          opacity: 0,
-        });
-        change_filter_color(
-          filter_box2_index,
-          2,
-          "linear-gradient(0deg, #c399e600 0%, #ffffff00 100%)"
-        );
-        change_filter_color(
-          filter_box3_index,
-          3,
-          "linear-gradient(0deg, #c399e600 0%, #ffffff00 100%)"
-        );
-        $("[id=animated-div-box2]").remove();
-        $("[id=animated-div-box3]").remove();
-        header_text_line1.html(`<span class="black-line-big">Trage die Zahl</span><span class="color-line-big"> ${random_number}</span><span class="black-line-big"> am Zahlenstrahl ein.</span>`);
-        header_text_line2.html("");
-        header_text_line3.html("");
-      }
-
-      filter_box2_index = index;
-      box2_values = create_values(box1_values[index], 10);
-      init(3, box2_values);
-      box2.css({
-        background: "#f89f5677",
-      });
-      box3
-        .css({
-          visibility: "visible",
-          background: "#75e99c",
-        })
-        .delay(1000)
-        .animate({ opacity: 1 }, 1000);
-
-      change_filter_color(index, 2, "#75e99c77");
-      $("[id=animated-div-box1]").remove();
-
-      let animated_filter = document.createElement("div");
-      animated_filter.setAttribute("id", "animated-div-box2");
-      animated_filter.classList.add("animated-div");
-      main.append(animated_filter);
-      $("#animated-div-box2")
-        .css({
-          background: "#75e99c",
-          position: "absolute",
-          top: box2.position().top + box2.height(),
-          left: $(this).position().left,
-          height: $(this).height(),
-          width: $(this).width(),
-        })
-        .animate(
-          {
-            top: box3.position().top,
-            left: box3.position().left,
-            height: box3.height(),
-            width: box3.width(),
-            background: box3.css("background-color"),
-          },
-          1000
-        );
-
-      level_counter = 3; // 3 boxes are visible
-    });
-  });
-
-  // stage 3 from box3 to box4
-  let box3_texts = $(`#svg-3 > text`);
-  let box3_filters = $(`#box-3 > div`);
-  box3_texts.each(function (index, el) {
-    $(this).on("click", function () {
-      if (
-        row3_clickable &&
-        randomnumberString === box3_texts[index].textContent
-      ) {
-        // make screen unclickable
-        freez_screen();
-        //change the color and font of the number which is clicked
-        $(this).css("fill", "#4ab391");
-        $(this).css("font-weight", "bold");
-
-        header_text_line1.html(`<span class="black-line-big"> Sehr gut! Du hast <span class="color-line-big"> ${random_number}</span> richtig am Zahlenstrahl eingetragen.</span>`);
-        header_text_line2.html("");
-        header_text_line3.html(`<span class="black-line-mid"> Drücke <span class="color-line-big"> Start</span>, um eine neue Zahl zu bekommen.</span>`);
-        $("#start-btn").prop("disabled", false);
-        check = true;
-        $(".header-mid").css({
-          "background-image": "url(./imgs/winner.gif)",
-        });
-        $("[id=animated-div-box3]").remove();
-        $("[id=animated-div-box2]").remove();
-      } else if (
-        row3_clickable &&
-        randomnumberString !== box3_texts[index].textContent
-      ) {
-        // user will be able to try again and again untill he/she finds the correct answer
-        $(this).addClass("wronganswer");
-        header_text_line1.html(`<span class="black-line-big">Du hast die Zahl <span class="color-line-big-red"> ${box3_texts[index].textContent}</span> eingetragen. </span>`);
-        header_text_line2.html(`<span class="black-line-big">Du solltest aber die Zahl <span class="color-line-big"> ${random_number}</span> eintragen.`);
-        header_text_line3.html(`<span class="black-line-big">Versuche es noch einmal.</span>`);
-      }
-    });
-  });
-
-  box3_filters.each(function (index, el) {
-    $(this).on("click", function () {
-      if (!row3_clickable) {
-        if (level_counter == 4) {
-          box4.css({
-            visibility: "hidden",
-            opacity: 0,
-          });
-          change_filter_color(
-            filter_box3_index,
-            3,
-            "linear-gradient(0deg, #c399e600 0%, #ffffff00 100%)"
-          );
-          $("[id=animated-div-box3]").remove();
-          header_text_line1.html(`<span class="black-line-big">Trage die Zahl</span><span class="color-line-big"> ${random_number}</span><span class="black-line-big"> am Zahlenstrahl ein.</span>`);
-          header_text_line2.html("");
-          header_text_line3.html("");
-        }
-        level_counter = 4; // 4 boxes are visible
-        filter_box3_index = index;
-        box3_values = create_values(box2_values[index], 1);
-        init(4, box3_values);
-        box3.css({
-          background: "#75e99c77",
-        });
-        box4
-          .css({
-            visibility: "visible",
-            background: "#c399e6",
-          })
-          .delay(1000)
-          .animate({ opacity: 1 }, 1000);
-
-        change_filter_color(index, 3, "#c399e677");
-        $("[id=animated-div-box2]").remove();
-
-        let animated_filter = document.createElement("div");
-        animated_filter.setAttribute("id", "animated-div-box3");
-        animated_filter.classList.add("animated-div");
-        main.append(animated_filter);
-        $("#animated-div-box3")
-          .css({
-            background: "#c399e6",
-            position: "absolute",
-            top: box3.position().top + box3.height(),
-            left: $(this).position().left,
-            height: $(this).height(),
-            width: $(this).width(),
-          })
-          .animate(
-            {
-              top: box4.position().top,
-              left: box4.position().left,
-              height: box4.height(),
-              width: box4.width(),
-              background: box4.css("background-color"),
-            },
-            1000
-          );
-
-        header_text_line2.html("");
-        header_text_line1.html(`<span class="black-line-big">Trage die Zahl</span><span class="color-line-big"> ${random_number}</span><span class="black-line-big"> am Zahlenstrahl ein.</span>`);
-        header_text_line3.html("");
-        box4_texts.removeClass("wronganswer");
-        box4_texts.addClass("text");
-      }
-    });
-  });
-
-  //stage 4 when clicked on the numbers from last box (target number) check if the random number is same as the clicked value #c399e6ad
-  let box4_texts = $(`#svg-4 > text`);
-  let box4_filters = $(`#box-4 > div`);
-  box4_filters.each(function (index, el) {
-    $(this).on("click", function () {
-      //if the user clicked on the right answer
-      if (randomnumberString === box4_texts[index].textContent) {
-        // make screen unclickable
-        freez_screen();
-        //change the color and font of the number which is clicked
-        var el = $(box4_texts[index]);
-        el.css("fill", "#4ab391");
-        el.css("font-weight", "bold");
-
-        // change the box4 color and show msg to user
-        box4.css({
-          background: "#c399e677",
-        });
-        header_text_line1.html(`<span class="black-line-big">Sehr gut! Du hast <span class="color-line-big"> ${random_number}</span> richtig am Zahlenstrahl eingetragen.</span>`);
-        header_text_line2.html("");
-        header_text_line3.html(`<span class="black-line-mid">Drücke <span class="color-line-big"> Start</span>, um eine neue Zahl zu bekommen.</span>`);
-        $("#start-btn").prop("disabled", false);
-        check = true;
-        $(".header-mid").css({
-          "background-image": "url(./imgs/winner.gif)",
-        });
-        $("[id=animated-div-box3]").remove();
-      } else {
-        // user will be able to try again and again untill he/she finds the correct answer
-        var el = $(box4_texts[index]);
-        el.addClass("wronganswer");
-
-        header_text_line1.html(`<span class="black-line-big">Du hast die Zahl <span class="color-line-big-red"> ${box4_texts[index].textContent}</span> eingetragen. </span>`);
-        header_text_line2.html(`<span class="black-line-big">Du solltest aber die Zahl <span class="color-line-big"> ${random_number}</span> eintragen.`);
-        header_text_line3.html(`<span class="black-line-big">Versuche es noch einmal.</span>`);
-        $("[id=animated-div-box3]").remove();
-      }
-    });
-  });
-
-  // disable the start button untill the user finds the correct answer
-  $("#start-btn").prop("disabled", true);
-  $("#freez").remove();
-  if (check) {
-    check = false;
-  }
-  $(".header-mid").css({
-    "background-image": "none",
+    left: $(".main").position().left,
+    top: $(".main").position().top,
   });
 }
