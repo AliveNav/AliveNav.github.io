@@ -8,9 +8,9 @@ const box1 = $("#box-1");
 const box2 = $("#box-2");
 const box3 = $("#box-3");
 const box4 = $("#box-4");
-const random = $("#randomNumber");
 const header_text_line1 = $("#first-line");
 const header_text_line2 = $("#second-line");
+const header_text_line3 = $("#third-line");
 
 // variable for namespace
 const svgns = "http://www.w3.org/2000/svg";
@@ -64,13 +64,9 @@ let filter_box3_index = 0;
 let row3_clickable = false;
 
 // welcome text
-header_text_line1.html(
-  `<span class="black-line-big">Herzlich Willkommen!</span>`
-);
-random.html("");
-header_text_line2.html(
-  `Drücke <span class="color-line-big"> Start</span> , um zu beginnen.`
-);
+header_text_line1.html(`<span class="black-line-big">Herzlich Willkommen!</span>`);
+header_text_line2.html("");
+header_text_line3.html(`<span class="black-line-mid">Drücke <span class="color-line-big"> Start</span> , um zu beginnen.</span>`);
 
 // takes an svg and an array of 11 numbers , creates a ruler with 11 values
 function create_line(svg, box_number, text_id) {
@@ -114,14 +110,14 @@ function create_line(svg, box_number, text_id) {
     }
     temp += x1 / 4.2;
   }
-  let vertical_line = document.createElementNS(svgns, "line");
-  vertical_line.setAttribute("x1", x2);
-  vertical_line.setAttribute("y1", y2);
-  vertical_line.setAttribute("x2", svg.width() - gape_x * 4.8);
-  vertical_line.setAttribute("y2", y2);
-  vertical_line.classList.add("big-lines");
-  vertical_line.setAttribute("id", `line-heigh-${box_number}`);
-  svg.append(vertical_line);
+  let horizontal_line = document.createElementNS(svgns, "line");
+  horizontal_line.setAttribute("x1", x2);
+  horizontal_line.setAttribute("y1", y2);
+  horizontal_line.setAttribute("x2", svg.width() - gape_x * 4.8);
+  horizontal_line.setAttribute("y2", y2);
+  horizontal_line.classList.add("big-lines");
+  horizontal_line.setAttribute("id", `line-heigh-${box_number}`);
+  svg.append(horizontal_line);
 }
 // initializing the values on top of the lines, used inside create_lines function to set the values
 function create_numbers(svg, x, y, id_number) {
@@ -252,9 +248,9 @@ function read_text() {
   msg.text =
     $("#first-line").text() +
     " " +
-    $("#randomNumber").text() +
+    $("#second-line").text() +
     " " +
-    $("#second-line").text();
+    $("#third-line").text();
   speaker.speak(msg);
 }
 
@@ -304,11 +300,9 @@ function start() {
     row3_clickable = true;
   }
   let randomnumberString = random_number.toString();
-  random.html("");
-  header_text_line1.html(
-    `<span class="black-line-big">Trage die Zahl</span><span class="color-line-big"> ${random_number}</span><span class="black-line-big"> am Zahlenstrahl ein.</span>`
-  );
-  header_text_line2.html(``);
+  header_text_line1.html(`<span class="black-line-big">Trage die Zahl</span><span class="color-line-big"> ${random_number}</span><span class="black-line-big"> am Zahlenstrahl ein.</span>`);
+  header_text_line2.html("");
+  header_text_line3.html("");
   //create svg elements (texts and lines), initilized the values with zeros
   //for svg1 set the values , since they are always the same values (0 to 10000)
   remove_elements();
@@ -341,11 +335,9 @@ function start() {
           2,
           "linear-gradient(0deg, #75e99c00 0%, #ffffff00 100%)"
         );
-        random.html("");
-        header_text_line1.html(
-          `<span class="black-line-big">Trage die Zahl</span><span class="color-line-big"> ${random_number}</span><span class="black-line-big"> am Zahlenstrahl ein.</span>`
-        );
-        header_text_line2.html(``);
+        header_text_line1.html(`<span class="black-line-big">Trage die Zahl</span><span class="color-line-big"> ${random_number}</span><span class="black-line-big"> am Zahlenstrahl ein.</span>`);
+        header_text_line2.html("");
+        header_text_line3.html("");
       }
       // if 3 boxes are visible (means aleady clicked once), hide the lower box (box3) and reset the filter color
       if (level_counter == 3) {
@@ -364,11 +356,9 @@ function start() {
           2,
           "linear-gradient(0deg, #75e99c00 0%, #ffffff00 100%)"
         );
-        random.html("");
-        header_text_line1.html(
-          `<span class="black-line-big">Trage die Zahl</span><span class="color-line-big"> ${random_number}</span><span class="black-line-big"> am Zahlenstrahl ein.</span>`
-        );
-        header_text_line2.html(``);
+        header_text_line1.html(`<span class="black-line-big">Trage die Zahl</span><span class="color-line-big"> ${random_number}</span><span class="black-line-big"> am Zahlenstrahl ein.</span>`);
+        header_text_line2.html("");
+        header_text_line3.html("");
 
         box3_texts.removeClass("wronganswer");
         box3_texts.addClass("text");
@@ -402,11 +392,9 @@ function start() {
           3,
           "linear-gradient(0deg, #c399e600 0%, #ffffff00 100%)"
         );
-        random.html("");
-        header_text_line1.html(
-          `<span class="black-line-big">Trage die Zahl</span><span class="color-line-big"> ${random_number}</span><span class="black-line-big"> am Zahlenstrahl ein.</span>`
-        );
-        header_text_line2.html(``);
+        header_text_line1.html(`<span class="black-line-big">Trage die Zahl</span><span class="color-line-big"> ${random_number}</span><span class="black-line-big"> am Zahlenstrahl ein.</span>`);
+        header_text_line2.html("");
+        header_text_line3.html("");
       }
 
       // otherweise show box2 and change the color of "clicked filter" on box1 #c0ccf177
@@ -475,11 +463,9 @@ function start() {
         );
         $("[id=animated-div-box2]").remove();
         $("[id=animated-div-box3]").remove();
-        random.html("");
-        header_text_line1.html(
-          `<span class="black-line-big">Trage die Zahl</span><span class="color-line-big"> ${random_number}</span><span class="black-line-big"> am Zahlenstrahl ein.</span>`
-        );
-        header_text_line2.html(``);
+        header_text_line1.html(`<span class="black-line-big">Trage die Zahl</span><span class="color-line-big"> ${random_number}</span><span class="black-line-big"> am Zahlenstrahl ein.</span>`);
+        header_text_line2.html("");
+        header_text_line3.html("");
 
         box3_texts.removeClass("wronganswer");
         box3_texts.addClass("text");
@@ -505,11 +491,9 @@ function start() {
         );
         $("[id=animated-div-box2]").remove();
         $("[id=animated-div-box3]").remove();
-        random.html("");
-        header_text_line1.html(
-          `<span class="black-line-big">Trage die Zahl</span><span class="color-line-big"> ${random_number}</span><span class="black-line-big"> am Zahlenstrahl ein.</span>`
-        );
-        header_text_line2.html(``);
+        header_text_line1.html(`<span class="black-line-big">Trage die Zahl</span><span class="color-line-big"> ${random_number}</span><span class="black-line-big"> am Zahlenstrahl ein.</span>`);
+        header_text_line2.html("");
+        header_text_line3.html("");
       }
 
       filter_box2_index = index;
@@ -572,13 +556,9 @@ function start() {
         $(this).css("fill", "#4ab391");
         $(this).css("font-weight", "bold");
 
-        random.html("");
-        header_text_line1.html(
-          `<span class="black-line-big"> Sehr gut! Du hast <span class="color-line-big"> ${random_number}</span> richtig am Zahlenstrahl eingetragen.</span>`
-        );
-        header_text_line2.html(
-          `<span class="black-line-mid"> Drücke <span class="color-line-big"> Start</span>, um eine neue Zahl zu bekommen.</span>`
-        );
+        header_text_line1.html(`<span class="black-line-big"> Sehr gut! Du hast <span class="color-line-big"> ${random_number}</span> richtig am Zahlenstrahl eingetragen.</span>`);
+        header_text_line2.html("");
+        header_text_line3.html(`<span class="black-line-mid"> Drücke <span class="color-line-big"> Start</span>, um eine neue Zahl zu bekommen.</span>`);
         $("#start-btn").prop("disabled", false);
         check = true;
         $(".header-mid").css({
@@ -592,16 +572,9 @@ function start() {
       ) {
         // user will be able to try again and again untill he/she finds the correct answer
         $(this).addClass("wronganswer");
-
-        header_text_line1.html(
-          `<span class="black-line-big"> Du hast die Zahl <span class="color-line-big-red"> ${box3_texts[index].textContent}</span> eingetragen. </span>`
-        );
-        random.html(
-          `<span class="black-line-big">DU solltest aber die Zahl <span class="color-line-big"> ${random_number}</span> eintragen.`
-        );
-        header_text_line2.html(
-          `<span class="black-line-big">Versuche es noch einmal.</span>`
-        );
+        header_text_line1.html(`<span class="black-line-big">Du hast die Zahl <span class="color-line-big-red"> ${box3_texts[index].textContent}</span> eingetragen. </span>`);
+        header_text_line2.html(`<span class="black-line-big">Du solltest aber die Zahl <span class="color-line-big"> ${random_number}</span> eintragen.`);
+        header_text_line3.html(`<span class="black-line-big">Versuche es noch einmal.</span>`);
       }
     });
   });
@@ -620,11 +593,9 @@ function start() {
             "linear-gradient(0deg, #c399e600 0%, #ffffff00 100%)"
           );
           $("[id=animated-div-box3]").remove();
-          random.html("");
-          header_text_line1.html(
-            `<span class="black-line-big">Trage die Zahl</span><span class="color-line-big"> ${random_number}</span><span class="black-line-big"> am Zahlenstrahl ein.</span>`
-          );
-          header_text_line2.html(``);
+          header_text_line1.html(`<span class="black-line-big">Trage die Zahl</span><span class="color-line-big"> ${random_number}</span><span class="black-line-big"> am Zahlenstrahl ein.</span>`);
+          header_text_line2.html("");
+          header_text_line3.html("");
         }
         level_counter = 4; // 4 boxes are visible
         filter_box3_index = index;
@@ -668,11 +639,9 @@ function start() {
             1000
           );
 
-        random.html("");
-        header_text_line1.html(
-          `<span class="black-line-big">Trage die Zahl</span><span class="color-line-big"> ${random_number}</span><span class="black-line-big"> am Zahlenstrahl ein.</span>`
-        );
-        header_text_line2.html(``);
+        header_text_line2.html("");
+        header_text_line1.html(`<span class="black-line-big">Trage die Zahl</span><span class="color-line-big"> ${random_number}</span><span class="black-line-big"> am Zahlenstrahl ein.</span>`);
+        header_text_line3.html("");
         box4_texts.removeClass("wronganswer");
         box4_texts.addClass("text");
       }
@@ -697,13 +666,9 @@ function start() {
         box4.css({
           background: "#c399e677",
         });
-        random.html("");
-        header_text_line1.html(
-          `<span class="black-line-big"> Sehr gut! Du hast <span class="color-line-big"> ${random_number}</span> richtig am Zahlenstrahl eingetragen.</span>`
-        );
-        header_text_line2.html(
-          `<span class="black-line-mid"> Drücke <span class="color-line-big"> Start</span>, um eine neue Zahl zu bekommen.</span>`
-        );
+        header_text_line1.html(`<span class="black-line-big">Sehr gut! Du hast <span class="color-line-big"> ${random_number}</span> richtig am Zahlenstrahl eingetragen.</span>`);
+        header_text_line2.html("");
+        header_text_line3.html(`<span class="black-line-mid">Drücke <span class="color-line-big"> Start</span>, um eine neue Zahl zu bekommen.</span>`);
         $("#start-btn").prop("disabled", false);
         check = true;
         $(".header-mid").css({
@@ -715,15 +680,9 @@ function start() {
         var el = $(box4_texts[index]);
         el.addClass("wronganswer");
 
-        header_text_line1.html(
-          `<span class="black-line-big"> Du hast die Zahl <span class="color-line-big-red"> ${box4_texts[index].textContent}</span> eingetragen. </span>`
-        );
-        random.html(
-          `<span class="black-line-big">Du solltest aber die Zahl <span class="color-line-big"> ${random_number}</span> eintragen.`
-        );
-        header_text_line2.html(
-          `<span class="black-line-big">Versuche es noch einmal.</span>`
-        );
+        header_text_line1.html(`<span class="black-line-big">Du hast die Zahl <span class="color-line-big-red"> ${box4_texts[index].textContent}</span> eingetragen. </span>`);
+        header_text_line2.html(`<span class="black-line-big">Du solltest aber die Zahl <span class="color-line-big"> ${random_number}</span> eintragen.`);
+        header_text_line3.html(`<span class="black-line-big">Versuche es noch einmal.</span>`);
         $("[id=animated-div-box3]").remove();
       }
     });
