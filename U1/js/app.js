@@ -37,14 +37,7 @@ if (
   );
   refreshPage();
 }
-// initialize web speech API
-const speaker = window.speechSynthesis;
-let msg = new SpeechSynthesisUtterance();
-msg.lang = "de-De";
-msg.voice = speechSynthesis
-  .getVoices()
-  .find((voice) => /de(-|_)De/.test(voice.lang));
-//msg.voice = window.speechSynthesis.getVoices()[6];
+
 
 // initial values of the first svg (unchanged values)
 let default_values = [
@@ -243,22 +236,20 @@ function freez_screen() {
     top: main.position().top,
   });
 }
-
+// read the random generated Number
 function read_text() {
-  msg.text =
-    $("#first-line").text() +
-    " " +
-    $("#second-line").text() +
-    " " +
-    $("#third-line").text();
-  speaker.speak(msg);
+  text =  $("#first-line").text() +" " + $("#randomNumber").text() +" " + $("#second-line").text();
+  // initialize web speech API
+  const speaker = new SpeechSynthesisUtterance(text);
+  speaker.lang = "de-DE";
+  speechSynthesis.speak(speaker)
+
 }
 
 // reload page
 function refreshPage() {
   window.location.reload();
 }
-
 // remove all elements from svgs, used to reset for next round
 function remove_elements() {
   $("#svg-1").empty();
@@ -289,6 +280,17 @@ function start() {
   let cmax = Math.floor(maxValue);
   random_number = Math.floor(Math.random() * (cmax - cmin) + cmin);
 
+ //create svg elements (texts and lines), initilized the values with zeros
+  //for svg1 set the values , since they are always the same values (0 to 10000)
+  remove_elements();
+
+  create_svg_elements(svg_1, box1, 1, 1);
+  init(1, default_values);
+  create_svg_elements(svg_2, box2, 2, 2);
+  create_svg_elements(svg_3, box3, 3, 3);
+  create_svg_elements2(svg_4, box4, 4, 4);
+
+
   row3_clickable = false;
 
   // this will make sure to exclude all numbers from the first and second rows  eg. 1000 or 4500 or 8000 etc.
@@ -298,20 +300,14 @@ function start() {
   }
   if (random_number % 10 == 0) {
     row3_clickable = true;
+    console.log("good")
+    $(`#box-3 > div`).remove()
   }
   let randomnumberString = random_number.toString();
   header_text_line1.html(`<span class="black-line-big">Trage die Zahl</span><span class="color-line-big"> ${random_number}</span><span class="black-line-big"> am Zahlenstrahl ein.</span>`);
   header_text_line2.html("");
   header_text_line3.html("");
-  //create svg elements (texts and lines), initilized the values with zeros
-  //for svg1 set the values , since they are always the same values (0 to 10000)
-  remove_elements();
-
-  create_svg_elements(svg_1, box1, 1, 1);
-  init(1, default_values);
-  create_svg_elements(svg_2, box2, 2, 2);
-  create_svg_elements(svg_3, box3, 3, 3);
-  create_svg_elements2(svg_4, box4, 4, 4);
+ 
 
   // for the last box we dont need the mid lines or small lines so remove them
   // I dont change the create line function because in furture we may need them for float numbers
@@ -541,9 +537,41 @@ function start() {
     });
   });
 
-  // stage 3 from box3 to box4
+  // stage 3 from box3 to box4 big-lines
+  let box3_big_lines = $("#svg-3 > .big-lines");
   let box3_texts = $(`#svg-3 > text`);
   let box3_filters = $(`#box-3 > div`);
+  box3_big_lines.each(function(index,el){
+    $(this).on('click', function(){
+      if(row3_clickable && randomnumberString === box3_texts[index].textContent){
+        console.log("clicked on big line")
+         // make screen unclickable
+         freez_screen();
+         //change the color and font of the number which is clicked
+         $(box3_texts[index]).css("fill", "#4ab391");
+         $(box3_texts[index]).css("font-weight", "bold");
+  
+         header_text_line1.html(`<span class="black-line-big"> Sehr gut! Du hast <span class="color-line-big"> ${random_number}</span> richtig am Zahlenstrahl eingetragen.</span>`);
+         header_text_line2.html("");
+         header_text_line3.html(`<span class="black-line-mid"> Drücke <span class="color-line-big"> Start</span>, um eine neue Zahl zu bekommen.</span>`);
+         $("#start-btn").prop("disabled", false);
+         check = true;
+         $(".header-mid").css({
+           "background-image": "url(./imgs/winner.gif)",
+         });
+         $("[id=animated-div-box3]").remove();
+         $("[id=animated-div-box2]").remove();
+      }else if(row3_clickable && randomnumberString !== box3_texts[index].textContent ){
+         // user will be able to try again and again untill he/she finds the correct answer
+         var el = $(box3_texts[index]);
+         el.addClass("wronganswer");
+         header_text_line1.html(`<span class="black-line-big">Du hast die Zahl <span class="color-line-big-red"> ${box3_texts[index].textContent}</span> eingetragen. </span>`);
+         header_text_line2.html(`<span class="black-line-big">Du solltest aber die Zahl <span class="color-line-big"> ${random_number}</span> eintragen.`);
+         header_text_line3.html(`<span class="black-line-big">Versuche es noch einmal.</span>`);
+        
+      }
+    })
+  })
   box3_texts.each(function (index, el) {
     $(this).on("click", function () {
       if (
