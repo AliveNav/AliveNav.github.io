@@ -224,6 +224,7 @@ button {
   align-items: center;
 }
 .dropBox {
+  background-color: var(--theme-color2);
   width: 100%;
   height: 100%;
   display: flex;
@@ -238,7 +239,7 @@ button {
   width: var(--left-up-width);
 }
 .dropBox-merge{
-  background-color: var(--dropBox-merge-area);
+  background-color:var(--dropBox-merge-area);
   height: var(--left-merge-height);
   width: var(--left-merge-width);
   border-top-left-radius: 2em;
