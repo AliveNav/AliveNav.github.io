@@ -238,7 +238,7 @@ function freez_screen() {
 }
 // read the random generated Number
 function read_text() {
-  text =  $("#first-line").text() +" " + $("#randomNumber").text() +" " + $("#second-line").text();
+  text =  $("#first-line").text() +" " + $("#second-line").text() +" " + $("#third-line").text();
   // initialize web speech API
   const speaker = new SpeechSynthesisUtterance(text);
   speaker.lang = "de-DE";
